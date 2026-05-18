@@ -8,13 +8,58 @@ spec:
   source:
     repoURL: 'https://prometheus-community.github.io/helm-charts'
     chart: kube-prometheus-stack
-    targetRevision: 58.2.2 # Стабільна версія чарту
+    targetRevision: 58.2.2
     helm:
       releaseName: monitoring
       values: |
         grafana:
-          adminPassword: "prom-operator" # Можеш змінити на свій пароль
-          # Тут у майбутньому ми зможемо прописувати наші алерти для Telegram!
+          adminPassword: "prom-operator"
+          
+          # Дістаємо секрети з кластера і перетворюємо їх на змінні оточення
+          envValueFrom:
+            TG_BOT_TOKEN:
+              secretKeyRef:
+                name: tg-secret
+                key: bottoken
+            TG_CHAT_ID:
+              secretKeyRef:
+                name: tg-secret
+                key: chatid
+          
+          alerting:
+            contactpoints.yaml:
+              apiVersion: 1
+              contactPoints:
+                - orgId: 1
+                  name: Telegram
+                  receivers:
+                    - uid: tg_bot
+                      type: telegram
+                      settings:
+                        # Графана підставить сюди значення зі змінних
+                        bottoken: $TG_BOT_TOKEN
+                        chatid: $TG_CHAT_ID
+                        message: '{{ template "custom_tg_alert" . }}'
+                        parseMode: "HTML"
+            policies.yaml:
+              apiVersion: 1
+              policies:
+                - orgId: 1
+                  receiver: Telegram
+            templates.yaml:
+              apiVersion: 1
+              templates:
+                - orgId: 1
+                  name: custom_tg_alert
+                  template: |
+                    {{ define "custom_tg_alert" }}
+                    {{ range .Alerts }}
+                    {{ if eq .Status "firing" }}🚨 <b>ALERT: FIRING!</b> 🚨{{ else }}✅ <b>ALERT: RESOLVED!</b> ✅{{ end }}
+                    <b>Alert:</b> {{ .Labels.alertname }}
+                    <b>App:</b> {{ .Labels.deployment }}
+                    <b>Namespace:</b> {{ .Labels.namespace }}
+                    {{ end }}
+                    {{ end }}
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
@@ -24,4 +69,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true # Це важливо для великих налаштувань Prometheus
+      - ServerSideApply=true
