@@ -54,6 +54,10 @@ spec:
               policies:
                 - orgId: 1
                   receiver: Telegram
+                  group_by: ['alertname', 'namespace']
+                  group_wait: 10s
+                  group_interval: 1m
+                  repeat_interval: 10m
             templates.yaml:
               apiVersion: 1
               templates:
