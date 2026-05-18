@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: flask-app-alert
+  namespace: monitoring
+  labels:
+    # ЦЯ ЛІБЛА ВАЖЛИВА: вона каже Прометеусу звернути увагу на цей файл
+    release: monitoring 
+spec:
+  groups:
+    - name: custom.rules
+      rules:
+        - alert: FlaskAppDown
+          expr: kube_deployment_status_replicas_available{deployment="flask-app", namespace="apps"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "🚨 Flask App is down in apps namespace!"
