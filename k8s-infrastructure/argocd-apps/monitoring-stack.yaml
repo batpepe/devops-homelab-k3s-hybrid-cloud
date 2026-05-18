@@ -14,6 +14,14 @@ spec:
       values: |
         grafana:
           adminPassword: "prom-operator"
+
+additionalDataSources:
+            - name: Prometheus
+              type: prometheus
+              uid: prometheus
+              url: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+              access: proxy
+              isDefault: true
           
           # Дістаємо секрети з кластера і перетворюємо їх на змінні оточення
           envValueFrom:
