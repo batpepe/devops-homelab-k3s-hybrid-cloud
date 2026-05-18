@@ -14,16 +14,17 @@ spec:
       values: |
         grafana:
           adminPassword: "prom-operator"
-
-additionalDataSources:
+          
+          additionalDataSources:
             - name: Prometheus
               type: prometheus
               uid: prometheus
               url: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
               access: proxy
               isDefault: true
-          
-          # Дістаємо секрети з кластера і перетворюємо їх на змінні оточення
+              jsonData:
+                httpMethod: POST
+
           envValueFrom:
             TG_BOT_TOKEN:
               secretKeyRef:
@@ -33,7 +34,7 @@ additionalDataSources:
               secretKeyRef:
                 name: tg-secret
                 key: chatid
-          
+
           alerting:
             contactpoints.yaml:
               apiVersion: 1
@@ -44,9 +45,8 @@ additionalDataSources:
                     - uid: tg_bot
                       type: telegram
                       settings:
-                        # Графана підставить сюди значення зі змінних
-                        bottoken: $TG_BOT_TOKEN
-                        chatid: $TG_CHAT_ID
+                        bottoken: "${TG_BOT_TOKEN}"
+                        chatid: "${TG_CHAT_ID}"
                         message: '{{ template "custom_tg_alert" . }}'
                         parseMode: "HTML"
             policies.yaml:
