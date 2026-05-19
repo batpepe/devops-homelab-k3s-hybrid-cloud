@@ -14,8 +14,8 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write # Дозвіл на запис у сховище образів
+      contents: write # ВАЖЛИВО: Змінили read на write, щоб бот міг робити коміти
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -33,4 +33,20 @@ jobs:
         with:
           context: ./apps/flask-app
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # Пушимо ДВА теги: latest (для історії) і унікальний SHA коміту (для ArgoCD)
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Update Kubernetes manifest with new image tag
+        run: |
+          # Ця команда знаходить рядок з image: і замінює старий тег на новий унікальний
+          sed -i -E "s|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s-infrastructure/apps/flask/flask-app.yaml
+
+      - name: Commit and push changes to GitOps repo
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add k8s-infrastructure/apps/flask/flask-app.yaml
+          git commit -m "gitops: update flask-app image tag to ${{ github.sha }}"
+          git push
