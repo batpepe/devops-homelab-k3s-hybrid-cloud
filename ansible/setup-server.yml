@@ -1,0 +1,31 @@
+---
+- name: Setup Cloud Web Server with Docker
+  hosts: webservers
+  become: yes # Це означає "виконувати всі команди через sudo (від імені root)"
+
+  tasks:
+    - name: Оновлюємо систему та встановлюємо Docker і необхідні пакети
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - docker.io
+          - python3-docker # Це потрібно, щоб Ansible міг керувати Докером
+        state: present
+        update_cache: yes
+
+    - name: Переконуємося, що Docker запущений і доданий в автозавантаження
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Запускаємо наш крутий хмарний веб-сайт (Nginx)
+      docker_container:
+        name: my_cloud_website
+        image: nginx:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
