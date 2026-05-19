@@ -4,7 +4,7 @@ metadata:
   name: flask-app
   namespace: apps
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: flask-app
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: ghcr.io/batpepe/flask-app:BROKEN-123
+        image: ghcr.io/batpepe/flask-app:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
