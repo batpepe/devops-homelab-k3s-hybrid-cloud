@@ -13,8 +13,7 @@ This repository contains a complete, production-ready DevOps infrastructure proj
 
 ## 🏗️ Architecture & Tech Stack
 
-</pre>
-
+```mermaid
 flowchart LR
     subgraph Local_Dev [DevOps Engineer]
         Mac[MacBook Terminal]
@@ -22,7 +21,7 @@ flowchart LR
 
     subgraph GitHub [GitHub Repository]
         Manifests[K8s Manifests]
-        IaC[Terraform &amp; Ansible Code]
+        IaC[Terraform & Ansible Code]
     end
 
     subgraph AWS [AWS Cloud Environment]
@@ -33,24 +32,22 @@ flowchart LR
 
     subgraph Homelab [Local K3s GitOps Cluster]
         Argo[ArgoCD]
-        Prom[Prometheus &amp; Grafana]
+        Prom[Prometheus & Grafana]
         Apps[Microservices]
     end
 
     %% Connections
-    Mac --&gt;|git push| GitHub
-    Mac --&gt;|terraform apply| EC2
-    Mac --&gt;|ansible-playbook| Docker
+    Mac -->|git push| GitHub
+    Mac -->|terraform apply| EC2
+    Mac -->|ansible-playbook| Docker
 
-    Argo --&gt;|Auto-syncs| Manifests
-    Argo --&gt;|Deploys| Apps
-    Prom --&gt;|Monitors| Apps
-    Prom --&gt;|Alerts| Telegram((Telegram Bot))
+    Argo -->|Auto-syncs| Manifests
+    Argo -->|Deploys| Apps
+    Prom -->|Monitors| Apps
+    Prom -->|Alerts| Telegram((Telegram Bot))
 
-    EC2 --&gt; Docker
-    Docker --&gt; Web
-
-</pre>
+    EC2 --> Docker
+    Docker --> Web
 
 * **Infrastructure as Code (IaC):** Terraform (AWS EC2, Security Groups, Key Pairs).
 * **Configuration Management:** Ansible (Automated Docker & Nginx provisioning).
