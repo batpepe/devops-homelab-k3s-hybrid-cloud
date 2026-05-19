@@ -13,6 +13,45 @@ This repository contains a complete, production-ready DevOps infrastructure proj
 
 ## 🏗️ Architecture & Tech Stack
 
+</pre>
+
+flowchart LR
+    subgraph Local_Dev [DevOps Engineer]
+        Mac[MacBook Terminal]
+    end
+
+    subgraph GitHub [GitHub Repository]
+        Manifests[K8s Manifests]
+        IaC[Terraform &amp; Ansible Code]
+    end
+
+    subgraph AWS [AWS Cloud Environment]
+        EC2[EC2 Instance t3.micro]
+        Docker[Docker Engine]
+        Web[Nginx Website]
+    end
+
+    subgraph Homelab [Local K3s GitOps Cluster]
+        Argo[ArgoCD]
+        Prom[Prometheus &amp; Grafana]
+        Apps[Microservices]
+    end
+
+    %% Connections
+    Mac --&gt;|git push| GitHub
+    Mac --&gt;|terraform apply| EC2
+    Mac --&gt;|ansible-playbook| Docker
+
+    Argo --&gt;|Auto-syncs| Manifests
+    Argo --&gt;|Deploys| Apps
+    Prom --&gt;|Monitors| Apps
+    Prom --&gt;|Alerts| Telegram((Telegram Bot))
+
+    EC2 --&gt; Docker
+    Docker --&gt; Web
+
+</pre>
+
 * **Infrastructure as Code (IaC):** Terraform (AWS EC2, Security Groups, Key Pairs).
 * **Configuration Management:** Ansible (Automated Docker & Nginx provisioning).
 * **Container Orchestration:** Kubernetes (K3s).
