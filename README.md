@@ -48,4 +48,63 @@ flowchart LR
 
     EC2 --> Docker
     Docker --> Web
+```
 
+## 🛠️ Tech Stack
+
+* **Infrastructure as Code (IaC):** Terraform (AWS EC2, Security Groups, Key Pairs).
+* **Configuration Management:** Ansible (Automated Docker & Nginx provisioning).
+* **Container Orchestration:** Kubernetes (K3s).
+* **Continuous Deployment (GitOps):** ArgoCD (Automated syncing, Self-healing, Zero-downtime deployments).
+* **Observability & Alerting:** Kube-Prometheus-Stack, Grafana, custom HTML Telegram Bot Alerts.
+* **Microservices:** Flask, Node.js (Echo Server), Nginx.
+
+## 📂 Repository Structure
+
+```text
+.
+├── ansible/                 # Configuration management playbooks
+│   ├── inventory.ini        # Target AWS EC2 instances
+│   └── setup-server.yml     # Playbook to install Docker & run containers
+├── argocd-apps/             # ArgoCD Application definitions (The "App of Apps")
+│   ├── monitoring-stack.yaml
+│   └── my-apps.yaml
+├── k8s-infrastructure/      # Kubernetes manifests for microservices
+│   ├── apps/
+│   │   ├── flask/           # Python Flask application
+│   │   ├── nginx/           # Web server
+│   │   └── nodejs/          # Echo server for network testing
+├── terraform/               # Infrastructure as Code for AWS
+│   ├── main.tf              # AWS Provider, EC2, Security Groups
+│   └── .gitignore           # Protecting Terraform state files
+└── README.md
+```
+
+## 🚀 Key Features Implemented
+
+1.  **GitOps Single Source of Truth:** All Kubernetes deployments are strictly managed by ArgoCD. Manual cluster changes are automatically overridden (Self-Healing).
+2.  **Zero-Downtime Deployments:** Kubernetes ensures that broken image tags or failed updates do not affect the currently running application.
+3.  **Automated Cloud Provisioning:** One-click AWS infrastructure creation using Terraform, followed by seamless OS configuration using Ansible.
+4.  **Advanced Observability:** * Full resource monitoring (CPU, Memory, Network) via Grafana dashboards.
+    * Custom metric queries (`kube_deployment_status_replicas_available`).
+    * Automated Telegram alerting with recovery notifications.
+
+## ⚙️ How to Run
+
+**1. Cloud Infrastructure (AWS)**
+```bash
+cd terraform
+terraform init && terraform apply -auto-approve
+```
+
+**2. Configuration Management**
+```bash
+cd ansible
+ansible-playbook -i inventory.ini setup-server.yml
+```
+
+**3. GitOps (Kubernetes)**
+Apply the root ArgoCD application, and it will automatically sync the rest of the cluster:
+```bash
+kubectl apply -f argocd-apps/my-apps.yaml
+```
