@@ -11,7 +11,7 @@
 ## 📌 Overview
 This repository contains a complete, production-ready DevOps infrastructure project demonstrating a Hybrid Cloud approach. It combines a local GitOps-managed Kubernetes (K3s) cluster with cloud infrastructure provisioned on AWS using Infrastructure as Code (IaC) principles.
 
-## 🏗️ Architecture & Tech Stack
+## 🏗️ Architecture Diagram
 
 ```mermaid
 flowchart LR
@@ -49,29 +49,3 @@ flowchart LR
     EC2 --> Docker
     Docker --> Web
 
-* **Infrastructure as Code (IaC):** Terraform (AWS EC2, Security Groups, Key Pairs).
-* **Configuration Management:** Ansible (Automated Docker & Nginx provisioning).
-* **Container Orchestration:** Kubernetes (K3s).
-* **Continuous Deployment (GitOps):** ArgoCD (Automated syncing, Self-healing, Zero-downtime deployments).
-* **Observability & Alerting:** Kube-Prometheus-Stack, Grafana, custom HTML Telegram Bot Alerts.
-* **Microservices:** Flask, Node.js (Echo Server), Nginx.
-
-## 📂 Repository Structure
-
-```text
-.
-├── ansible/                 # Configuration management playbooks
-│   ├── inventory.ini        # Target AWS EC2 instances
-│   └── setup-server.yml     # Playbook to install Docker & run containers
-├── argocd-apps/             # ArgoCD Application definitions (The "App of Apps")
-│   ├── monitoring-stack.yaml
-│   └── my-apps.yaml
-├── k8s-infrastructure/      # Kubernetes manifests for microservices
-│   ├── apps/
-│   │   ├── flask/           # Python Flask application
-│   │   ├── nginx/           # Web server
-│   │   └── nodejs/          # Echo server for network testing
-├── terraform/               # Infrastructure as Code for AWS
-│   ├── main.tf              # AWS Provider, EC2, Security Groups
-│   └── .gitignore           # Protecting Terraform state files
-└── README.md
