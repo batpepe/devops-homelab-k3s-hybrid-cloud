@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud' # Переконайся, що лінк правильний
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/nginx
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nodejs-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/nodejs
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
