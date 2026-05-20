@@ -38,15 +38,12 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Update Kubernetes manifest with new image tag
+      - name: Update K8s manifest
         run: |
-          # Ця команда знаходить рядок з image: і замінює старий тег на новий унікальний
-          sed -i -E "s|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s-infrastructure/apps/flask/flask-app.yaml
-
-      - name: Commit and push changes to GitOps repo
-        run: |
+          sed -i -E "s|image: .*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s-infrastructure/apps/nginx/nginx-app.yaml
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add k8s-infrastructure/apps/flask/flask-app.yaml
-          git commit -m "gitops: update flask-app image tag to ${{ github.sha }}"
+          git add k8s-infrastructure/apps/nginx/nginx-app.yaml
+          git commit -m "gitops: update nginx-app image to ${{ github.sha }}" || echo "No changes"
+          git pull --rebase origin main  # <-- Ось магічний рядок, який рятує від Race Condition
           git push
