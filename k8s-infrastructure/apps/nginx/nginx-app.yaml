@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-app
+  name: nginx-service
   namespace: apps
 spec:
   replicas: 1
