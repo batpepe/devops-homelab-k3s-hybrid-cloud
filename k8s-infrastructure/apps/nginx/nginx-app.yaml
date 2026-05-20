@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:alpine
+          image: ghcr.io/batpepe/nginx-app:7ace84f551c3677adf39ddc3c57521ac1695be68
           ports:
             - containerPort: 80
 ---
