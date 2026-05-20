@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nodejs
-          image: ealen/echo-server:latest
+          image: ghcr.io/batpepe/nodejs-app:735c30ff9f1cbc7b2eda45b6c3179899f9916f1e
           ports:
             - containerPort: 80
 ---
