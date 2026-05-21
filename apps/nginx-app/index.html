@@ -10,6 +10,9 @@
         .btn { display: inline-block; padding: 12px 24px; background-color: #a6e3a1; color: #11111b; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
         .btn:hover { background-color: #94e2d5; transform: scale(1.05); }
         .footer { margin-top: 60px; font-size: 0.8em; color: #6c7086; }
+        /* Style for the view counter */
+        .counter-box { margin-top: 30px; padding: 10px; border-radius: 6px; background-color: #313244; display: inline-block; }
+        .counter-text { color: #f9e2af; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -19,9 +22,25 @@
     <p>Welcome to my automated GitOps infrastructure!</p>
     <p>This page is running on a self-hosted Kubernetes (k3s) cluster, deployed via ArgoCD.</p>
     
-    <a href="CV_Kostiantyn_Osmakov.pdf" class="btn" target="_blank">📄 Відкрити моє CV</a>
+    <a href="CV_Kostiantyn_Osmakov.pdf" class="btn" target="_blank">📄 Open my CV</a>
 
-    <div class="footer">Version: 1.1.0 | CI/CD powered by GitHub Actions</div>
+    <div class="counter-box">
+        Page Views: <span id="visit-counter" class="counter-text">Loading...</span>
+    </div>
+
+    <div class="footer">Version: 1.2.0 | CI/CD powered by GitHub Actions</div>
+
+    <script>
+        // Fetch data from our Node.js microservice
+        fetch('http://nodejs.local')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('visit-counter').innerText = data.total_visits;
+            })
+            .catch(error => {
+                console.error('Error fetching counter:', error);
+                document.getElementById('visit-counter').innerText = "API Offline";
+            });
+    </script>
 </body>
 </html>
-
