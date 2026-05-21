@@ -30,7 +30,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-      - name: Update K8s manifest
+             - name: Update K8s manifest
           run: |
             sed -i -E "s|image: .*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s-infrastructure/apps/nodejs/nodejs-app.yaml
             git config user.name "GitHub Actions Bot"
@@ -38,4 +38,5 @@ jobs:
             git add k8s-infrastructure/apps/nodejs/nodejs-app.yaml
             git commit -m "gitops: update nodejs-app image to ${{ github.sha }}" || echo "No changes"
             git pull --rebase origin main
+            git push
             git push
