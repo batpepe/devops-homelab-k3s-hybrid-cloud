@@ -1,7 +1,7 @@
 const http = require('http');
 const { Client } = require('pg');
 
-// Налаштування підключення до БД через внутрішній DNS Kubernetes
+// Configure DB connection via Kubernetes internal DNS
 const client = new Client({
     host: 'postgres-service',
     port: 5432,
@@ -10,7 +10,7 @@ const client = new Client({
     database: 'homelab_db'
 });
 
-// Підключаємось до БД і створюємо таблицю, якщо її ще немає
+// Connect to PostgreSQL and create table if it does not exist
 client.connect()
     .then(() => {
         console.log("Connected to PostgreSQL!");
@@ -19,15 +19,29 @@ client.connect()
     .catch(err => console.error("Database connection error:", err.stack));
 
 const server = http.createServer(async (req, res) => {
+    // CORS Headers - The Magic Fix!
+    const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', /* Allows requests from any frontend */
+        'Access-Control-Allow-Methods': 'GET',
+    };
+
+    // Handle CORS preflight requests
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204, headers);
+        return res.end();
+    }
+
+    // Ignore favicon requests
     if (req.url === '/favicon.ico') { res.writeHead(204); return res.end(); }
 
     try {
-        // Додаємо запис про новий візит
+        // Insert a new visit record
         await client.query('INSERT INTO visits DEFAULT VALUES');
-        // Отримуємо загальну кількість візитів
+        // Fetch the total number of visits
         const result = await client.query('SELECT COUNT(*) AS total FROM visits');
 
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, headers);
         res.end(JSON.stringify({
             service: "Node.js + PostgreSQL API",
             status: "Healthy",
@@ -36,7 +50,7 @@ const server = http.createServer(async (req, res) => {
             timestamp: new Date().toISOString()
         }));
     } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.writeHead(500, headers);
         res.end(JSON.stringify({ error: "Database error", details: err.message }));
     }
 });
@@ -44,6 +58,3 @@ const server = http.createServer(async (req, res) => {
 server.listen(80, () => {
     console.log("Node.js microservice listening on port 80");
 });
-// trigger ci
-// trigger rebuild after yaml fix
-// trigger rebuild after yaml fix
