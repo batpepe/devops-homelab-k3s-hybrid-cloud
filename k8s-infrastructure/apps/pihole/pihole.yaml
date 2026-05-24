@@ -25,7 +25,7 @@ spec:
         - name: TZ
           value: "Europe/Kyiv"
         - name: WEBPASSWORD
-          value: "admin123" # Можеш змінити на свій пароль
+          value: "admin123" # You can change this to your own password
         ports:
         - containerPort: 80
           name: pihole-web
