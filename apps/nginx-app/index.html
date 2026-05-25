@@ -32,7 +32,7 @@
 
     <script>
         // Fetch data from our Node.js microservice
-        fetch('http://nodejs.local')
+        fetch('https://api.batpepe.online')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('visit-counter').innerText = data.total_visits;
