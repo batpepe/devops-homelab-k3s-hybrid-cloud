@@ -1,110 +1,70 @@
 # ☁️ Hybrid Cloud DevOps Homelab & GitOps Automation
 
-![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
-![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
-![ArgoCD](https://img.shields.io/badge/ArgoCD-%23EF7B4D.svg?style=for-the-badge&logo=argo&logoColor=white)
-![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
-![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+[![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
+[![ArgoCD](https://img.shields.io/badge/ArgoCD-%23EF7B4D.svg?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)
+[![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-%23F38020.svg?style=for-the-badge&logo=Cloudflare&logoColor=white)](https://www.cloudflare.com/)
+[![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)](https://prometheus.io/)
 
 ## 📌 Overview
-This repository contains a complete, production-ready DevOps infrastructure project demonstrating a Hybrid Cloud approach. It combines a local GitOps-managed Kubernetes (K3s) cluster with cloud infrastructure provisioned on AWS using Infrastructure as Code (IaC) principles.
+
+This repository contains a complete, production-ready DevOps infrastructure project. It combines a self-hosted GitOps-managed Kubernetes (k3s) cluster with cloud integrations, CI/CD automation, and a custom-built 3-tier microservice application serving as a dynamic CV.
+
+**Live Demo:** [https://batpepe.online](https://batpepe.online) *(Securely tunneled via Cloudflare Zero Trust)*
 
 ## 🏗️ Architecture Diagram
 
 ```mermaid
 flowchart LR
-    subgraph Local_Dev [DevOps Engineer]
-        Mac[MacBook Terminal]
+    subgraph Users [External Traffic]
+        Internet[Public Internet]
     end
 
-    subgraph GitHub [GitHub Repository]
-        Manifests[K8s Manifests]
-        IaC[Terraform & Ansible Code]
+    subgraph GitHub [CI/CD Pipeline]
+        Code[Source Code] --> CI[GitHub Actions: Build & Push]
+        CI --> GHCR[GitHub Container Registry]
+        Code --> CD[GitOps Manifests Update]
     end
 
-    subgraph AWS [AWS Cloud Environment]
-        EC2[EC2 Instance t3.micro]
-        Docker[Docker Engine]
-        Web[Nginx Website]
+    subgraph Cloudflare [Cloudflare Edge]
+        DNS[DNS & SSL]
+        WAF[Cloudflare WAF]
     end
 
-    subgraph Homelab [Local K3s GitOps Cluster]
+    subgraph K3s_Cluster [Local k3s Kubernetes Cluster]
+        Tunnel[Cloudflared Pod]
         Argo[ArgoCD]
-        Prom[Prometheus & Grafana]
-        Apps[Microservices]
+        
+        subgraph Three_Tier_App [3-Tier CV Application]
+            Nginx[Nginx Frontend: 80]
+            Node[Node.js Backend API: 80]
+            DB[(PostgreSQL + PV)]
+        end
+
+        subgraph Monitoring [Observability]
+            Prom[Prometheus]
+            Grafana[Grafana]
+        end
+        
+        subgraph Network [Local Net]
+            Pihole[Pi-hole DNS]
+        end
     end
 
     %% Connections
-    Mac -->|git push| GitHub
-    Mac -->|terraform apply| EC2
-    Mac -->|ansible-playbook| Docker
-
-    Argo -->|Auto-syncs| Manifests
-    Argo -->|Deploys| Apps
-    Prom -->|Monitors| Apps
+    Internet --> DNS
+    DNS --> WAF
+    WAF -->|Encrypted Tunnel| Tunnel
+    Tunnel -->|Ingress| Nginx
+    Tunnel -->|Ingress| Node
+    
+    Nginx -->|Fetch API| Node
+    Node -->|Read/Write| DB
+    
+    CD -->|Auto-syncs| Argo
+    Argo -->|Deploys| Three_Tier_App
+    Argo -->|Deploys| Tunnel
+    
+    Prom -->|Scrapes| Three_Tier_App
     Prom -->|Alerts| Telegram((Telegram Bot))
-
-    EC2 --> Docker
-    Docker --> Web
-```
-
-## 🛠️ Tech Stack
-
-* **Infrastructure as Code (IaC):** Terraform (AWS EC2, Security Groups, Key Pairs).
-* **Configuration Management:** Ansible (Automated Docker & Nginx provisioning).
-* **Container Orchestration:** Kubernetes (K3s).
-* **Continuous Deployment (GitOps):** ArgoCD (Automated syncing, Self-healing, Zero-downtime deployments).
-* **Observability & Alerting:** Kube-Prometheus-Stack, Grafana, custom HTML Telegram Bot Alerts.
-* **Microservices:** Flask, Node.js (Echo Server), Nginx.
-
-## 📂 Repository Structure
-
-```text
-.
-├── ansible/                 # Configuration management playbooks
-│   ├── inventory.ini        # Target AWS EC2 instances
-│   └── setup-server.yml     # Playbook to install Docker & run containers
-├── argocd-apps/             # ArgoCD Application definitions (The "App of Apps")
-│   ├── monitoring-stack.yaml
-│   └── my-apps.yaml
-├── k8s-infrastructure/      # Kubernetes manifests for microservices
-│   ├── apps/
-│   │   ├── flask/           # Python Flask application
-│   │   ├── nginx/           # Web server
-│   │   └── nodejs/          # Echo server for network testing
-├── terraform/               # Infrastructure as Code for AWS
-│   ├── main.tf              # AWS Provider, EC2, Security Groups
-│   └── .gitignore           # Protecting Terraform state files
-└── README.md
-```
-
-## 🚀 Key Features Implemented
-
-1.  **GitOps Single Source of Truth:** All Kubernetes deployments are strictly managed by ArgoCD. Manual cluster changes are automatically overridden (Self-Healing).
-2.  **Zero-Downtime Deployments:** Kubernetes ensures that broken image tags or failed updates do not affect the currently running application.
-3.  **Automated Cloud Provisioning:** One-click AWS infrastructure creation using Terraform, followed by seamless OS configuration using Ansible.
-4.  **Advanced Observability:** * Full resource monitoring (CPU, Memory, Network) via Grafana dashboards.
-    * Custom metric queries (`kube_deployment_status_replicas_available`).
-    * Automated Telegram alerting with recovery notifications.
-
-## ⚙️ How to Run
-
-**1. Cloud Infrastructure (AWS)**
-```bash
-cd terraform
-terraform init && terraform apply -auto-approve
-```
-
-**2. Configuration Management**
-```bash
-cd ansible
-ansible-playbook -i inventory.ini setup-server.yml
-```
-
-**3. GitOps (Kubernetes)**
-Apply the root ArgoCD application, and it will automatically sync the rest of the cluster:
-```bash
-kubectl apply -f argocd-apps/my-apps.yaml
-```
