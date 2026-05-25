@@ -1,15 +1,17 @@
 # ☁️ Hybrid Cloud DevOps Homelab & GitOps Automation
 
-[![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
-[![ArgoCD](https://img.shields.io/badge/ArgoCD-%23EF7B4D.svg?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)
-[![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![Cloudflare](https://img.shields.io/badge/Cloudflare-%23F38020.svg?style=for-the-badge&logo=Cloudflare&logoColor=white)](https://www.cloudflare.com/)
-[![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)](https://prometheus.io/)
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
+![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![ArgoCD](https://img.shields.io/badge/ArgoCD-%23EF7B4D.svg?style=for-the-badge&logo=argo&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-%23F38020.svg?style=for-the-badge&logo=Cloudflare&logoColor=white)
 
 ## 📌 Overview
-
-This repository contains a complete, production-ready DevOps infrastructure project. It combines a self-hosted GitOps-managed Kubernetes (k3s) cluster with cloud integrations, CI/CD automation, and a custom-built 3-tier microservice application serving as a dynamic CV.
+This repository contains a complete, production-ready DevOps infrastructure project demonstrating a Hybrid Cloud approach. It combines a local GitOps-managed Kubernetes (K3s) cluster with cloud infrastructure provisioned on AWS using Infrastructure as Code (IaC) principles.
 
 **Live Demo:** [https://batpepe.online](https://batpepe.online) *(Securely tunneled via Cloudflare Zero Trust)*
 
@@ -17,54 +19,60 @@ This repository contains a complete, production-ready DevOps infrastructure proj
 
 ```mermaid
 flowchart LR
-    subgraph Users [External Traffic]
-        Internet[Public Internet]
+    subgraph Local_Dev [DevOps Engineer]
+        Mac[MacBook Terminal]
     end
 
-    subgraph GitHub [CI/CD Pipeline]
-        Code[Source Code] --> CI[GitHub Actions: Build & Push]
-        CI --> GHCR[GitHub Container Registry]
-        Code --> CD[GitOps Manifests Update]
+    subgraph GitHub [GitHub Repository]
+        Manifests[K8s Manifests]
+        IaC[Terraform & Ansible Code]
+        Actions[GitHub Actions CI]
+    end
+
+    subgraph AWS [AWS Cloud Environment]
+        EC2[EC2 Instance t3.micro]
+        Docker[Docker Engine]
     end
 
     subgraph Cloudflare [Cloudflare Edge]
-        DNS[DNS & SSL]
-        WAF[Cloudflare WAF]
+        WAF[Cloudflare WAF / DNS]
     end
 
-    subgraph K3s_Cluster [Local k3s Kubernetes Cluster]
-        Tunnel[Cloudflared Pod]
+    subgraph Homelab [Local K3s GitOps Cluster]
         Argo[ArgoCD]
+        Prom[Prometheus & Grafana]
+        Tunnel[Cloudflared Tunnel]
         
         subgraph Three_Tier_App [3-Tier CV Application]
-            Nginx[Nginx Frontend: 80]
-            Node[Node.js Backend API: 80]
-            DB[(PostgreSQL + PV)]
-        end
-
-        subgraph Monitoring [Observability]
-            Prom[Prometheus]
-            Grafana[Grafana]
+            Nginx[Nginx Frontend]
+            Node[Node.js Backend]
+            DB[(PostgreSQL)]
         end
         
-        subgraph Network [Local Net]
-            Pihole[Pi-hole DNS]
-        end
+        Pihole[Pi-hole Local DNS]
+        Apps[Other Microservices]
     end
 
     %% Connections
-    Internet --> DNS
-    DNS --> WAF
-    WAF -->|Encrypted Tunnel| Tunnel
-    Tunnel -->|Ingress| Nginx
-    Tunnel -->|Ingress| Node
-    
-    Nginx -->|Fetch API| Node
-    Node -->|Read/Write| DB
-    
-    CD -->|Auto-syncs| Argo
+    Mac -->|git push| GitHub
+    Mac -->|terraform apply| EC2
+    Mac -->|ansible-playbook| Docker
+
+    GitHub -->|Triggers| Actions
+    Actions -->|Updates Image| Manifests
+
+    Argo -->|Auto-syncs| Manifests
     Argo -->|Deploys| Three_Tier_App
     Argo -->|Deploys| Tunnel
+    Argo -->|Deploys| Apps
     
-    Prom -->|Scrapes| Three_Tier_App
+    Prom -->|Monitors| Homelab
     Prom -->|Alerts| Telegram((Telegram Bot))
+
+    Users((External Users)) --> WAF
+    WAF -->|Encrypted Tunnel| Tunnel
+    Tunnel --> Nginx
+    Tunnel --> Node
+    
+    Nginx --> Node
+    Node --> DB
