@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: batman
-        image: ghcr.io/batpepe/batman-app:d49f6807098e19e045e367f78c4b53554ad8159a
+        image: ghcr.io/batpepe/batman-app:f90f3088f34aa76c7a97e3020045bcec1c5a84ef
         ports:
         - containerPort: 80
 ---
