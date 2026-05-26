@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batman: Gotham Runner</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0a0a0a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 50px;
+        }
+        h1 { color: #e5a910; text-transform: uppercase; letter-spacing: 2px; }
+        #gameCanvas {
+            background-color: #1a1b26;
+            background-image: url('img/bg.jpg'); /* Optional: Add a Gotham background image */
+            background-size: cover;
+            border: 3px solid #333;
+            border-bottom: 5px solid #444;
+            box-shadow: 0 0 20px rgba(229, 169, 16, 0.2);
+            border-radius: 8px;
+        }
+        #scoreBoard { font-size: 28px; margin-bottom: 20px; color: #e5a910; font-weight: bold; }
+        .instructions { margin-top: 15px; color: #888; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>Gotham Runner</h1>
+    <div id="scoreBoard">Score: 0</div>
+    <canvas id="gameCanvas" width="800" height="300"></canvas>
+    <div class="instructions">Press <b>SPACE</b> or <b>LEFT CLICK</b> to jump. Avoid the Joker's bombs!</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let score = 0;
+        let isGameOver = false;
+
+        // Load graphical assets
+        const batImg = new Image();
+        batImg.src = 'img/batman.png'; // Make sure this file exists in the img folder
+        const bombImg = new Image();
+        bombImg.src = 'img/bomb.png';  // Make sure this file exists in the img folder
+
+        // Batman physics and properties
+        const bat = { 
+            x: 50, 
+            y: 250, 
+            width: 50, 
+            height: 50, 
+            dy: 0, 
+            gravity: 0.6, 
+            jumpPower: -11, 
+            grounded: true 
+        };
+
+        let obstacles = [];
+        let frameCount = 0;
+        let gameSpeed = 5;
+
+        function drawBat() {
+            // Draw the Batman image instead of a rectangle
+            if (batImg.complete) {
+                ctx.drawImage(batImg, bat.x, bat.y, bat.width, bat.height);
+            } else {
+                // Fallback square if image is missing
+                ctx.fillStyle = '#222';
+                ctx.fillRect(bat.x, bat.y, bat.width, bat.height);
+            }
+        }
+
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                if (bombImg.complete) {
+                    ctx.drawImage(bombImg, obs.x, obs.y, obs.width, obs.height);
+                } else {
+                    // Fallback circle if image is missing
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+        }
+
+        function update() {
+            if (isGameOver) return;
+
+            // Handle jump physics
+            bat.y += bat.dy;
+            if (bat.y + bat.height < canvas.height) {
+                bat.dy += bat.gravity;
+                bat.grounded = false;
+            } else {
+                bat.dy = 0;
+                bat.y = canvas.height - bat.height;
+                bat.grounded = true;
+            }
+
+            // Generate new obstacles
+            frameCount++;
+            if (frameCount % Math.floor(100 / (gameSpeed / 5)) === 0) {
+                let size = 40 + Math.random() * 20; // Random bomb size
+                obstacles.push({ x: canvas.width, y: canvas.height - size, width: size, height: size });
+            }
+
+            // Move obstacles and check collisions
+            obstacles.forEach((obs, index) => {
+                obs.x -= gameSpeed;
+
+                // Collision detection logic
+                // Made bounding box slightly smaller than image for fairer gameplay
+                const hitBoxOffset = 10; 
+                if (bat.x + hitBoxOffset < obs.x + obs.width && 
+                    bat.x + bat.width - hitBoxOffset > obs.x &&
+                    bat.y + hitBoxOffset < obs.y + obs.height && 
+                    bat.y + bat.height - hitBoxOffset > obs.y) {
+
+                    isGameOver = true;
+                    setTimeout(() => {
+                        alert('💥 BOOM! Joker wins. Your score: ' + score);
+                        document.location.reload();
+                    }, 50);
+                }
+
+                // Increase score when passing an obstacle
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(index, 1);
+                    score++;
+                    document.getElementById('scoreBoard').innerText = 'Score: ' + score;
+
+                    // Gradually increase game speed
+                    if (score % 5 === 0) gameSpeed += 0.5; 
+                }
+            });
+
+            // Clear canvas and render next frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBat();
+            drawObstacles();
+
+            requestAnimationFrame(update);
+        }
+
+        // Event listeners for controls
+        window.addEventListener('keydown', (e) => {
+            if ((e.code === 'Space' || e.code === 'ArrowUp') && bat.grounded) {
+                bat.dy = bat.jumpPower;
+            }
+        });
+        window.addEventListener('mousedown', () => {
+            if (bat.grounded) {
+                bat.dy = bat.jumpPower;
+            }
+        });
+
+        // Start the game loop
+        update();
+    </script>
+</body>
+</html>

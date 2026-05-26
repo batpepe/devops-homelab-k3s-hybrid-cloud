@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batman-app
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batman
+  template:
+    metadata:
+      labels:
+        app: batman
+    spec:
+      containers:
+      - name: batman
+        image: ghcr.io/batpepe/batman-app:latest # CI will update this tag
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: batman-svc
+  namespace: apps
+spec:
+  selector:
+    app: batman
+  ports:
+  - port: 80
+    targetPort: 80
