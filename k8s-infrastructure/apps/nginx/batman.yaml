@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: batman
-        image: ghcr.io/batpepe/batman-app:latest # CI will update this tag
+        image: ghcr.io/batpepe/batman-app:e243d8a26e094b12823c41231683d88dbd7d5fdd
         ports:
         - containerPort: 80
 ---
