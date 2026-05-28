@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nodejs
-          image: ghcr.io/batpepe/nodejs-app:d4a2b7528d9b1a3a842081b972e21826b41d643a
+          image: ghcr.io/batpepe/nodejs-app:c0c5d367b9024761dbd6e78ee68d9250b0ea4fb1
           ports:
             - containerPort: 80
 ---
