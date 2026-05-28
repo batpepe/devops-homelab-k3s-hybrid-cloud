@@ -31,16 +31,19 @@
     <div class="footer">Version: 1.2.0 | CI/CD powered by GitHub Actions</div>
 
     <script>
-        // Fetch data from our Node.js microservice
-        fetch('https://api.batpepe.online')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('visit-counter').innerText = data.total_visits;
-            })
-            .catch(error => {
-                console.error('Error fetching counter:', error);
-                document.getElementById('visit-counter').innerText = "API Offline";
-            });
-    </script>
-</body>
-</html>
+	// Fetch stats from the live backend API
+fetch('https://api.batpepe.online/api/visit')
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      // Update main page views counter
+      document.getElementById('viewCounter').innerText = data.totalViews;
+      
+      // Optional: Display dynamic info to the recruiter
+      console.log(`Hello visitor from ${data.yourIp} using ${data.yourOs} with ${data.yourBrowser}`);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching analytics:', error);
+    document.getElementById('viewCounter').innerText = 'API Offline';
+  });
