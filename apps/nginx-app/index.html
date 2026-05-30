@@ -30,20 +30,21 @@
 
     <div class="footer">Version: 1.2.0 | CI/CD powered by GitHub Actions</div>
 
-    <script>
-		// Fetch stats from the live backend API
-		fetch('https://api.batpepe.online/api/visit')
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'Healthy') {
-      // Update main page views counter with the correct ID
-      document.getElementById('visit-counter').innerText = data.totalViews;
-      
-      // Display dynamic info to the recruiter in the console
-      console.log(`Hello visitor from ${data.yourIp} using ${data.yourOs} with ${data.yourBrowser}`);
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching analytics:', error);
-    document.getElementById('visit-counter').innerText = 'API Offline';
-  });
+<script>
+  // Fetch stats from the live backend API
+  fetch('https://api.batpepe.online/api/visit')
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'Healthy') {
+        document.getElementById('visit-counter').innerText = data.total_visits;
+        console.log('API Response Success. Total visits:', data.total_visits);
+      } else {
+        document.getElementById('visit-counter').innerText = 'API Error';
+        console.log('API returned unknown status:', data);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching analytics:', error);
+      document.getElementById('visit-counter').innerText = 'API Offline';
+    });
+</script>
