@@ -35,7 +35,7 @@
 		fetch('https://api.batpepe.online/api/visit')
   .then(response => response.json())
   .then(data => {
-    if (data.status === 'success') {
+    if (data.status === 'Healthy') {
       // Update main page views counter with the correct ID
       document.getElementById('visit-counter').innerText = data.totalViews;
       
