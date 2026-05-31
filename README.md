@@ -13,7 +13,7 @@
 ## 📌 Overview
 This repository contains a complete, production-ready DevOps infrastructure project demonstrating a Hybrid Cloud approach. It combines a local GitOps-managed Kubernetes (K3s) cluster with cloud infrastructure provisioned on AWS using Infrastructure as Code (IaC) principles.
 
-**Live Demo:** [https://cv.batpepe.online](https://cv.batpepe.online) *(Securely tunneled via Cloudflare Zero Trust)*
+**Live Demo:** [https://cv.batpepe.online](https://cv.batpepe.online https://game.batpepe.online) *(Securely tunneled via Cloudflare Zero Trust)*
 
 ## 🏗️ Architecture Diagram
 
