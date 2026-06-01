@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batman: Gotham Runner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Batman: Gotham Runner🦇</title>
     <style>
         body {
             margin: 0;
@@ -14,8 +14,11 @@
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding-top: 50px;
+            /* Prevent accidental scrolling on mobile when tapping rapidly */
+            overflow: hidden; 
         }
         h1 { color: #e5a910; text-transform: uppercase; letter-spacing: 2px; }
+        
         #gameCanvas {
             background-color: #1a1b26;
             background-image: url('img/bg.jpg'); /* Optional: Add a Gotham background image */
@@ -24,16 +27,23 @@
             border-bottom: 5px solid #444;
             box-shadow: 0 0 20px rgba(229, 169, 16, 0.2);
             border-radius: 8px;
+            
+            /* Make canvas responsive for mobile screens */
+            max-width: 100%;
+            height: auto;
+            /* Critical for mobile: prevent browser gestures like scrolling or zooming on canvas */
+            touch-action: none; 
         }
+        
         #scoreBoard { font-size: 28px; margin-bottom: 20px; color: #e5a910; font-weight: bold; }
-        .instructions { margin-top: 15px; color: #888; font-size: 14px; }
+        .instructions { margin-top: 15px; color: #888; font-size: 14px; text-align: center; padding: 0 10px; }
     </style>
 </head>
 <body>
     <h1>Gotham Runner</h1>
     <div id="scoreBoard">Score: 0</div>
     <canvas id="gameCanvas" width="800" height="300"></canvas>
-    <div class="instructions">Press <b>SPACE</b> or <b>LEFT CLICK</b> to jump. Avoid the Joker's bombs!</div>
+    <div class="instructions">Press <b>SPACE</b>, <b>LEFT CLICK</b>, or <b>TAP</b> to jump. Avoid the Joker's bombs!</div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -147,17 +157,29 @@
             requestAnimationFrame(update);
         }
 
-        // Event listeners for controls
-        window.addEventListener('keydown', (e) => {
-            if ((e.code === 'Space' || e.code === 'ArrowUp') && bat.grounded) {
-                bat.dy = bat.jumpPower;
+        // Universal jump handler for cross-platform support
+        function handleJump(e) {
+            // Check if it's a keyboard event, allow only Space or ArrowUp
+            if (e.type === 'keydown' && (e.code !== 'Space' && e.code !== 'ArrowUp')) {
+                return;
             }
-        });
-        window.addEventListener('mousedown', () => {
+            
+            // Prevent default touch behavior (like screen scrolling) on mobile
+            if (e.type === 'touchstart') {
+                e.preventDefault();
+            }
+
+            // Execute jump if grounded
             if (bat.grounded) {
                 bat.dy = bat.jumpPower;
             }
-        });
+        }
+
+        // Event listeners for controls
+        window.addEventListener('keydown', handleJump);
+        window.addEventListener('mousedown', handleJump);
+        // { passive: false } is required so e.preventDefault() works to block scrolling
+        window.addEventListener('touchstart', handleJump, { passive: false });
 
         // Start the game loop
         update();
