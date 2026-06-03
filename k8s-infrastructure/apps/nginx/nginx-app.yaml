@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: ghcr.io/batpepe/flask-app:1788f816bd9a1230f3cfef6025328b22b0dfa222
+          image: ghcr.io/batpepe/flask-app:eae0bc7597807b1a6e414719557e9074373ee2ba
           ports:
             - containerPort: 80
 ---
