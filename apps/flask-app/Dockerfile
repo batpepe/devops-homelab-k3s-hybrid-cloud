@@ -1,17 +1,17 @@
-# Використовуємо легку базову версію Python
+# using a lightweight version of Python
 FROM python:3.9-alpine
 
 # Створюємо робочу папку
 WORKDIR /app
 
-# Копіюємо список залежностей і встановлюємо їх
+# Creating a working folder
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копіюємо сам код
+# Copy the code itself
 COPY app.py .
 
-# Відкриваємо порт 8080
+# Open port 8080
 EXPOSE 8080
 
 # Запускаємо додаток
