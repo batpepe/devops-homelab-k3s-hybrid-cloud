@@ -1,10 +1,10 @@
 # using a lightweight version of Python
 FROM python:3.9-alpine
 
-# Створюємо робочу папку
+# Creating a working folder
 WORKDIR /app
 
-# Creating a working folder
+# Copy the list of dependencies and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -14,5 +14,5 @@ COPY app.py .
 # Open port 8080
 EXPOSE 8080
 
-# Запускаємо додаток
+# Launch the app
 CMD ["python", "app.py"]
