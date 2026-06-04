@@ -7,10 +7,10 @@ variable "allowed_ssh_cidr" {
   type        = string
 }
 
-# 1. Знаходимо найсвіжіший офіційний образ Ubuntu 22.04
+# Look up the latest official Ubuntu 22.04 AMI
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"] # Офіційний ID Canonical
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"
@@ -18,13 +18,13 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# 2. Завантажуємо наш замок (публічний SSH ключ) в AWS
+# Import our SSH public key so EC2 can accept our connections
 resource "aws_key_pair" "deployer" {
   key_name   = "devops-aws-key"
   public_key = file("~/.ssh/aws_ec2_key.pub")
 }
 
-# 3. Налаштовуємо Файрвол (Security Group): Відкриваємо порти 22 та 80
+# Security group: SSH from our IP only, HTTP open for the web app
 resource "aws_security_group" "web_sg" {
   name        = "allow_web_and_ssh"
   description = "Allow SSH and HTTP traffic"
@@ -48,15 +48,14 @@ resource "aws_security_group" "web_sg" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1" # Дозволяємо серверу виходити в інтернет
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-# 4. Замовляємо сам сервер!
 resource "aws_instance" "web_server" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro" # Той самий БЕЗКОШТОВНИЙ рівень
+  instance_type = "t3.micro"
   key_name      = aws_key_pair.deployer.key_name
 
   vpc_security_group_ids = [aws_security_group.web_sg.id]
@@ -66,7 +65,6 @@ resource "aws_instance" "web_server" {
   }
 }
 
-# 5. Кажемо Terraform показати нам IP-адресу після створення
 output "server_public_ip" {
   value       = aws_instance.web_server.public_ip
   description = "Public IP of our new AWS server"

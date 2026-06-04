@@ -1,8 +1,7 @@
 const http = require('http');
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-// Configure DB connection via Kubernetes internal DNS
-const client = new Client({
+const pool = new Pool({
     host: process.env.DB_HOST || 'postgres-service',
     port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USER || 'devops',
@@ -10,36 +9,28 @@ const client = new Client({
     database: process.env.DB_NAME || 'homelab_db'
 });
 
-// Connect to PostgreSQL and create table if it does not exist
-client.connect()
-    .then(() => {
-        console.log("Connected to PostgreSQL!");
-        return client.query('CREATE TABLE IF NOT EXISTS visits (id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
-    })
-    .catch(err => console.error("Database connection error:", err.stack));
+pool.query('CREATE TABLE IF NOT EXISTS visits (id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
+    .then(() => console.log("Connected to PostgreSQL - visits table ready"))
+    .catch(err => console.error("Database initialization error:", err.stack));
 
 const server = http.createServer(async (req, res) => {
-    // CORS Headers - The Magic Fix!
+    const allowedOrigin = process.env.ALLOWED_ORIGIN || '*';
     const headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', /* Allows requests from any frontend */
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'GET',
     };
 
-    // Handle CORS preflight requests
     if (req.method === 'OPTIONS') {
         res.writeHead(204, headers);
         return res.end();
     }
 
-    // Ignore favicon requests
     if (req.url === '/favicon.ico') { res.writeHead(204); return res.end(); }
 
     try {
-        // Insert a new visit record
-        await client.query('INSERT INTO visits DEFAULT VALUES');
-        // Fetch the total number of visits
-        const result = await client.query('SELECT COUNT(*) AS total FROM visits');
+        await pool.query('INSERT INTO visits DEFAULT VALUES');
+        const result = await pool.query('SELECT COUNT(*) AS total FROM visits');
 
         res.writeHead(200, headers);
         res.end(JSON.stringify({
