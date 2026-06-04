@@ -18,25 +18,42 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v3
-      
-      - uses: docker/login-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
-      - uses: docker/build-push-action@v4
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
         with:
           context: ./apps/batman-app
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-            
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
       - name: Update K8s manifest
         run: |
-          sed -i -E "s|image: .*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s-infrastructure/apps/nginx/batman.yaml
+          sed -i -E "s|image: ghcr.io/batpepe/batman-app:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" k8s-infrastructure/apps/nginx/batman.yaml
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add k8s-infrastructure/apps/nginx/batman.yaml
