@@ -13,7 +13,13 @@ spec:
       releaseName: monitoring
       values: |
         grafana:
-          adminPassword: "prom-operator"
+          # Create the secret manually:
+          # kubectl create secret generic grafana-admin-secret -n monitoring \
+          #   --from-literal=admin-password=<your-password>
+          adminPasswordFrom:
+            secretKeyRef:
+              name: grafana-admin-secret
+              key: admin-password
           
           additionalDataSources:
             - name: Prometheus

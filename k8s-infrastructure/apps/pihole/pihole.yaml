@@ -3,6 +3,17 @@ kind: Namespace
 metadata:
   name: pihole
 ---
+# Do NOT commit real values here. Create this secret manually:
+# kubectl create secret generic pihole-secret -n pihole \
+#   --from-literal=WEBPASSWORD=<your-password>
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pihole-secret
+  namespace: pihole
+stringData:
+  WEBPASSWORD: CHANGE_ME
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +36,10 @@ spec:
         - name: TZ
           value: "Europe/Kyiv"
         - name: WEBPASSWORD
-          value: "admin123" # You can change this to your own password
+          valueFrom:
+            secretKeyRef:
+              name: pihole-secret
+              key: WEBPASSWORD
         ports:
         - containerPort: 80
           name: pihole-web

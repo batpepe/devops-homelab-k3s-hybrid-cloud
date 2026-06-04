@@ -1,5 +1,10 @@
 provider "aws" {
-  region = "eu-central-1" # Наш регіон - Франкфурт
+  region = "eu-central-1"
+}
+
+variable "allowed_ssh_cidr" {
+  description = "Your public IP in CIDR notation (e.g. 203.0.113.5/32). Run: curl -s ifconfig.me"
+  type        = string
 }
 
 # 1. Знаходимо найсвіжіший офіційний образ Ubuntu 22.04
@@ -25,11 +30,11 @@ resource "aws_security_group" "web_sg" {
   description = "Allow SSH and HTTP traffic"
 
   ingress {
-    description = "SSH from anywhere"
+    description = "SSH from your IP only"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.allowed_ssh_cidr]
   }
 
   ingress {

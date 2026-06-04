@@ -1,0 +1,5 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored and must never be committed.
+#
+# Find your public IP: curl -s ifconfig.me
+allowed_ssh_cidr = "YOUR_PUBLIC_IP/32"

@@ -3,11 +3,11 @@ const { Client } = require('pg');
 
 // Configure DB connection via Kubernetes internal DNS
 const client = new Client({
-    host: 'postgres-service',
-    port: 5432,
-    user: 'devops',
-    password: 'supersecretpassword',
-    database: 'homelab_db'
+    host: process.env.DB_HOST || 'postgres-service',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_USER || 'devops',
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME || 'homelab_db'
 });
 
 // Connect to PostgreSQL and create table if it does not exist

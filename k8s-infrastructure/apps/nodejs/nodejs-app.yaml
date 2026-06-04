@@ -18,6 +18,22 @@ spec:
           image: ghcr.io/batpepe/nodejs-app:b3be9618ce277ce653312ad933600ab5d9e849c8
           ports:
             - containerPort: 80
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
 ---
 apiVersion: v1
 kind: Service
