@@ -49,6 +49,23 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "devops", "-d", "homelab_db"]
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "devops", "-d", "homelab_db"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

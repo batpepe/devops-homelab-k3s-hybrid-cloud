@@ -21,6 +21,13 @@ spec:
         - tunnel
         - --no-autoupdate
         - run
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
         env:
         - name: TUNNEL_TOKEN
           valueFrom:

@@ -35,3 +35,79 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flask-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/flask
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/postgres
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/cloudflared
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pihole
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/pihole
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
