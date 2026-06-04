@@ -1,19 +1,10 @@
 ---
-# Do NOT commit real values here. Create this secret manually:
+# postgres-secret is NOT managed by ArgoCD. Create it manually before applying:
 # kubectl create secret generic postgres-secret -n apps \
 #   --from-literal=POSTGRES_USER=devops \
 #   --from-literal=POSTGRES_PASSWORD=<your-password> \
-#   --from-literal=POSTGRES_DB=homelab_db
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-secret
-  namespace: apps
-stringData:
-  POSTGRES_USER: devops
-  POSTGRES_PASSWORD: CHANGE_ME
-  POSTGRES_DB: homelab_db
----
+#   --from-literal=POSTGRES_DB=homelab_db \
+#   --dry-run=client -o yaml | kubectl apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

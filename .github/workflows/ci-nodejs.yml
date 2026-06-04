@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'apps/nodejs-app/**'
+      - '.github/workflows/ci-nodejs.yml'
 
 env:
   REGISTRY: ghcr.io

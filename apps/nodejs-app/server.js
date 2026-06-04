@@ -1,6 +1,7 @@
 const http = require('http');
 const { Pool } = require('pg');
 
+
 const pool = new Pool({
     host: process.env.DB_HOST || 'postgres-service',
     port: parseInt(process.env.DB_PORT || '5432'),

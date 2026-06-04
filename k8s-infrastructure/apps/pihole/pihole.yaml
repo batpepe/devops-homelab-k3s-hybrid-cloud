@@ -3,17 +3,10 @@ kind: Namespace
 metadata:
   name: pihole
 ---
-# Do NOT commit real values here. Create this secret manually:
+# pihole-secret is NOT managed by ArgoCD. Create it manually before applying:
 # kubectl create secret generic pihole-secret -n pihole \
-#   --from-literal=WEBPASSWORD=<your-password>
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pihole-secret
-  namespace: pihole
-stringData:
-  WEBPASSWORD: CHANGE_ME
----
+#   --from-literal=WEBPASSWORD=<your-password> \
+#   --dry-run=client -o yaml | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:

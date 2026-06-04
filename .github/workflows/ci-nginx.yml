@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'apps/nginx-app/**'
+      - '.github/workflows/ci-nginx.yml'
 
 env:
   REGISTRY: ghcr.io
