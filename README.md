@@ -195,6 +195,9 @@ ArgoCD now owns every workload listed under `k8s-infrastructure/`.
 ## 🛡️ Security
 See [SECURITY.md](./SECURITY.md) for the threat model, secrets policy, and how to report a vulnerability.
 
+## 🗺️ Roadmap
+See [ROADMAP.md](./ROADMAP.md) for the prioritized DevOps backlog — quick wins, supply-chain hardening, observability, and policy-as-code items, each tagged with effort and value.
+
 ## 📜 License
 This project is shared for educational and portfolio purposes. No license is granted beyond viewing the source; contact the author before reusing it in production.
 
