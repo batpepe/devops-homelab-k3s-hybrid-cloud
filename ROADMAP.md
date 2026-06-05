@@ -5,12 +5,13 @@ Prioritized backlog of DevOps practices to add. Effort tags: `S` (under 1h), `M`
 Pick items independently - they are not strictly sequential, but the order within each section is a sensible default.
 
 ## This week - quick wins
-- [ ] Add `Makefile` with `lint`, `validate`, `apply`, `diff`, `help` targets - `S, quick-win`
-- [ ] Pin every `actions/*` step in `.github/workflows/*.yml` to a commit SHA - `S, hardening`
-- [ ] Add `hadolint` step per CI workflow - `S, quick-win`
-- [ ] Add `kube-linter` step against `k8s-infrastructure/` - `S, quick-win`
+- [x] Add `Makefile` with `lint`, `validate`, `apply`, `diff`, `help` targets - `S, quick-win`
+- [x] Pin every `actions/*` step in `.github/workflows/*.yml` to a commit SHA - `S, hardening`
+- [x] Add `hadolint` step (matrix over every Dockerfile) - `S, quick-win`
+- [x] Add `kube-linter` step against `k8s-infrastructure/` - `S, quick-win`
 - [ ] Flip Trivy `exit-code` from `'0'` to `'1'` on `HIGH+` to actually gate the pipeline - `S, hardening`
 - [ ] Add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled - `S, quick-win`
+- [ ] Drop `continue-on-error: true` on `lint.yml` once existing violations are cleaned up - `S, hardening`
 
 ## Next sprint - supply chain and GitOps
 - [ ] Enable Renovate (or Dependabot) for Docker, Terraform, GitHub Actions, npm, pip - `S, hardening`

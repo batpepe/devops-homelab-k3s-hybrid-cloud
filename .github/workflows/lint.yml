@@ -1,0 +1,51 @@
+name: Lint
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'apps/**/Dockerfile'
+      - 'k8s-infrastructure/**'
+      - '.github/workflows/lint.yml'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hadolint:
+    name: Dockerfile lint (hadolint)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile:
+          - apps/nginx-app/Dockerfile
+          - apps/nodejs-app/Dockerfile
+          - apps/flask-app/Dockerfile
+          - apps/batman-app/Dockerfile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: hadolint ${{ matrix.dockerfile }}
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        continue-on-error: true
+        with:
+          dockerfile: ${{ matrix.dockerfile }}
+          failure-threshold: error
+          format: tty
+
+  kube-linter:
+    name: Kubernetes manifest lint (kube-linter)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: kube-linter k8s-infrastructure/
+        uses: stackrox/kube-linter-action@87802a2f4e01abebb3ee3c67a3002fea71f6eae5 # v1.0.7
+        continue-on-error: true
+        with:
+          directory: k8s-infrastructure
+          format: plain
