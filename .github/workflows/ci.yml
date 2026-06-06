@@ -58,5 +58,10 @@ jobs:
           git config user.email "actions@github.com"
           git add k8s-infrastructure/apps/flask/flask-app.yaml
           git commit -m "gitops: update flask-app image to ${{ github.sha }}" || echo "No changes"
-          git pull --rebase origin main
-          git push
+          for i in $(seq 1 5); do
+            git pull --rebase origin main && git push && exit 0
+            echo "manifest push attempt $i failed; retrying" >&2
+            sleep $((RANDOM % 5 + 1))
+          done
+          echo "manifest push failed after 5 attempts" >&2
+          exit 1
