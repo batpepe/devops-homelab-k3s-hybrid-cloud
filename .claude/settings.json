@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make lint)",
+      "Bash(make validate)",
+      "Bash(make diff)",
+      "Bash(make help)",
+      "Bash(kubectl rollout status:*)"
+    ],
+    "ask": [
+      "Bash(argocd app sync:*)",
+      "Bash(git push:*)",
+      "Bash(make apply)"
+    ]
+  }
+}
