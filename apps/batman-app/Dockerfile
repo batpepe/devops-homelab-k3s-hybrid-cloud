@@ -1,3 +1,4 @@
-FROM nginx:1.27-alpine
+FROM nginx:stable-alpine
+RUN apk upgrade --no-cache
 COPY . /usr/share/nginx/html
 EXPOSE 80
