@@ -1,0 +1,103 @@
+:root { --gold: #e5a910; --neon: #3fb7ff; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #05060d;
+  color: #e8edf7;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Pin the viewport so mobile cannot rubber-band scroll while playing */
+body { position: fixed; inset: 0; }
+
+#game-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fixed 16:9 internal resolution, scaled to fit either dimension */
+#game {
+  display: block;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #05060d;
+  touch-action: none;
+  box-shadow: 0 0 40px rgba(63, 183, 255, 0.15);
+}
+
+/* ---- HUD ---- */
+#hud { position: absolute; inset: 0; pointer-events: none; }
+
+.hud-tl { position: absolute; top: 16px; left: 16px; display: flex; gap: 5px; }
+.seg {
+  width: 30px; height: 12px;
+  background: var(--gold);
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 0 8px rgba(229, 169, 16, 0.6);
+  transform: skewX(-20deg);
+}
+.seg.empty { background: #222a3a; box-shadow: none; }
+
+.hud-tr { position: absolute; top: 14px; right: 16px; display: flex; gap: 10px; }
+.dial {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #0b0e18;
+  /* --cd is the cooldown fraction (1 = just used, 0 = ready); neon fills as it readies */
+  background: conic-gradient(#222a3a calc(var(--cd, 0) * 360deg), var(--neon) 0);
+}
+.dial span {
+  font-size: 11px; font-weight: bold; color: #0b0e18;
+  background: #cfe6ff; border-radius: 3px; padding: 1px 3px;
+}
+
+#hud-combo {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  text-align: right; color: var(--gold); font-weight: bold;
+}
+#hud-combo span { font-size: 34px; text-shadow: 0 0 12px rgba(229, 169, 16, 0.7); }
+.combo-bar { width: 120px; height: 6px; background: #222a3a; margin-top: 4px; }
+#combo-fill { height: 100%; width: 0; background: var(--gold); transition: width 0.1s; }
+
+.hidden { display: none !important; }
+
+/* ---- Menus ---- */
+.menu {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(10, 14, 28, 0.85), rgba(5, 6, 13, 0.97));
+}
+.menu-box { text-align: center; padding: 30px 40px; }
+.menu-box h1 {
+  margin: 0; font-size: 64px; letter-spacing: 10px; color: var(--gold);
+  text-shadow: 0 0 24px rgba(229, 169, 16, 0.5);
+}
+.menu-box h2 {
+  margin: 0 0 24px; font-weight: 300; letter-spacing: 6px;
+  color: #9fb4d8; text-transform: uppercase; font-size: 18px;
+}
+.menu-box button {
+  background: transparent; color: var(--gold);
+  border: 2px solid var(--gold); border-radius: 4px;
+  padding: 12px 28px; font-size: 18px; letter-spacing: 3px; cursor: pointer;
+  transition: all 0.15s;
+}
+.menu-box button:hover {
+  background: var(--gold); color: #05060d;
+  box-shadow: 0 0 24px rgba(229, 169, 16, 0.6);
+}
+.controls { margin-top: 26px; color: #8ea3c6; font-size: 14px; line-height: 1.9; }
+.controls .dim { color: #56688a; margin-top: 8px; }
