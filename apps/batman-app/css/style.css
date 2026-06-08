@@ -70,6 +70,13 @@ body { position: fixed; inset: 0; }
 .pop { animation: pop 0.18s ease-out; }
 @keyframes pop { 0% { transform: scale(1.6); } 100% { transform: scale(1); } }
 
+/* Score readout */
+#hud-score {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  color: var(--gold); font-weight: bold; font-size: 26px; letter-spacing: 2px;
+  text-shadow: 0 0 12px rgba(229, 169, 16, 0.7);
+}
+
 /* Boss bar */
 #boss-ui { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 46%; text-align: center; }
 #boss-name { color: #ff6a5a; letter-spacing: 4px; font-size: 13px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 60, 60, 0.6); }
@@ -121,5 +128,10 @@ body { position: fixed; inset: 0; }
   background: var(--gold); color: #05060d;
   box-shadow: 0 0 24px rgba(229, 169, 16, 0.6);
 }
+.menu-box button + button { margin-left: 12px; }
 .controls { margin-top: 26px; color: #8ea3c6; font-size: 14px; line-height: 1.9; }
 .controls .dim { color: #56688a; margin-top: 8px; }
+
+/* Results stats */
+#over-stats { margin: 4px 0 22px; color: #cfe0ff; font-size: 18px; letter-spacing: 2px; line-height: 1.8; }
+#over-stats .over-newbest { color: var(--gold); font-weight: bold; text-shadow: 0 0 12px rgba(229, 169, 16, 0.7); }

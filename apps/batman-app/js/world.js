@@ -47,3 +47,25 @@ export function makeArena() {
 }
 
 export const ROOMS = { arena: makeArena };
+
+// Procedural survival wave: a pure function of the wave index. Count and type mix harden
+// with `i`; enemies spawn offscreen on either side of the player, clamped to the arena.
+// Same {x, y, type} shape Enemy consumes (enemy.js). All numbers are tunable.
+export function makeEndlessWave(i, room, playerX) {
+  const count = Math.min(8, 3 + Math.floor(i * 0.7));
+  // weighted type table, hardening with i
+  let pool;
+  if (i < 3) pool = ['thug', 'thug', 'blade'];
+  else if (i < 6) pool = ['thug', 'blade', 'blade', 'thrower', 'brute'];
+  else pool = ['blade', 'thrower', 'brute', 'brute', 'thug'];
+
+  const spawns = [];
+  for (let k = 0; k < count; k++) {
+    const side = k % 2 === 0 ? -1 : 1; // alternate sides of the player
+    const dist = 600 + Math.random() * 300;
+    const x = Math.max(40, Math.min(room.width - 60, playerX + side * dist));
+    const type = pool[Math.floor(Math.random() * pool.length)];
+    spawns.push({ x, y: room.groundY, type });
+  }
+  return spawns;
+}

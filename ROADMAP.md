@@ -53,3 +53,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 1. **Makefile + pinned action SHAs + hadolint/kube-linter** - one PR, ~1h, massive DX and supply-chain story for the resume.
 2. **sealed-secrets + Kyverno baseline policies** - one PR, ~3h, removes the biggest missing GitOps pattern (secrets in Git) and shows admission control.
 3. **Loki + 2 SLOs** - one PR, ~4h, lifts observability from "metrics-only" to "logs + reliability targets".
+
+## Game backlog (apps/batman-app)
+Tracked separately from the DevOps backlog above; same effort/value tags.
+- [ ] Metroidvania multi-room structure: turn the single `makeArena()` into interconnected rooms with traversal gating and exploration. The seam already exists but is unused (`ROOMS` and `exits: []` in `js/world.js`); needs a room graph, camera/room transitions on `exits`, and per-room state (cleared, persistent enemies). Was the one real gap vs the original "2.5D Metroidvania" brief - `L, feature`
