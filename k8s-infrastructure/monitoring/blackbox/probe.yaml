@@ -1,0 +1,25 @@
+# Blackbox HTTP probe of the public-facing sites, scraped by the kube-prometheus-stack
+# Prometheus operator. The `release: monitoring` label is REQUIRED: the operator's
+# default probeSelector (probeSelectorNilUsesHelmValues=true) only selects Probes
+# labelled with the kube-prometheus-stack release name ("monitoring"); without it the
+# Probe is silently ignored. prober.url is the exporter Service as host:port (no scheme).
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: public-endpoints
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  jobName: blackbox-http
+  interval: 60s
+  module: http_2xx
+  prober:
+    url: prometheus-blackbox-exporter.monitoring.svc:9115
+  targets:
+    staticConfig:
+      static:
+        - https://game.batpepe.online
+        - https://cv.batpepe.online
+      labels:
+        probe_group: public

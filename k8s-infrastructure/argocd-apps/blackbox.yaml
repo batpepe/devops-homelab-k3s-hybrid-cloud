@@ -1,0 +1,50 @@
+# Synthetic monitoring (ROADMAP): probe the public sites from inside the cluster and
+# surface uptime/latency/TLS in Grafana. Two Applications:
+#  - blackbox-exporter: the Helm chart (Deployment + Service on :9115).
+#  - blackbox-monitoring: the Probe CR + Grafana dashboard from this repo.
+# Bootstrap once (matches README convention): kubectl apply -f this file.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blackbox-exporter
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    chart: prometheus-blackbox-exporter
+    targetRevision: 11.11.0
+    helm:
+      releaseName: blackbox
+      values: |
+        # Deterministic Service name so the Probe's prober.url is stable:
+        # prometheus-blackbox-exporter.monitoring.svc:9115
+        fullnameOverride: prometheus-blackbox-exporter
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blackbox-monitoring
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/monitoring/blackbox
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
