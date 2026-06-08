@@ -1,7 +1,7 @@
 // hud.js
-// DOM overlay HUD + menus. Reads the player each frame and updates element state:
-// segmented armor (top-left), gadget cooldown dials (top-right), combo meter
-// (center-right). Menu buttons fire the callbacks passed to bind().
+// DOM overlay HUD + menus. Each frame it reflects player + game state: segmented armor,
+// gadget cooldown dials, a combo meter that pops as it climbs, a boss health bar, and an
+// objective banner. Menu + mute buttons fire the callbacks passed to bind().
 
 export class Hud {
   constructor() {
@@ -14,38 +14,59 @@ export class Hud {
     this.menuStart = document.getElementById('menu-start');
     this.menuOver = document.getElementById('menu-over');
     this.overText = document.getElementById('over-text');
-    this._segs = -1;
+    this.bossUi = document.getElementById('boss-ui');
+    this.bossFill = document.getElementById('boss-fill');
+    this.objective = document.getElementById('objective');
+    this.muteBtn = document.getElementById('btn-mute');
+    this._segs = -1; this._lastCombo = 0; this._objText = '';
   }
 
-  bind(onStart, onRestart) {
+  bind(onStart, onRestart, onMute) {
     document.getElementById('btn-start').addEventListener('click', onStart);
     document.getElementById('btn-restart').addEventListener('click', onRestart);
+    if (this.muteBtn) this.muteBtn.addEventListener('click', onMute);
   }
 
   showStart() { this.menuStart.classList.remove('hidden'); this.menuOver.classList.add('hidden'); }
   showOver(text) { this.overText.textContent = text; this.menuOver.classList.remove('hidden'); }
   hideMenus() { this.menuStart.classList.add('hidden'); this.menuOver.classList.add('hidden'); }
+  setMuteLabel(muted) { if (this.muteBtn) this.muteBtn.textContent = muted ? 'SOUND: OFF' : 'SOUND: ON'; }
 
-  update(p) {
-    if (this._segs !== p.maxHealth) {
+  setObjective(text) {
+    if (text === this._objText) return;
+    this._objText = text;
+    if (!text) { this.objective.classList.add('hidden'); return; }
+    this.objective.textContent = text;
+    this.objective.classList.remove('hidden');
+    this.objective.classList.remove('flash'); void this.objective.offsetWidth; this.objective.classList.add('flash');
+  }
+
+  update(player, info) {
+    if (this._segs !== player.maxHealth) {
       this.health.innerHTML = '';
-      for (let i = 0; i < p.maxHealth; i++) {
-        const s = document.createElement('div'); s.className = 'seg'; this.health.appendChild(s);
-      }
-      this._segs = p.maxHealth;
+      for (let i = 0; i < player.maxHealth; i++) { const s = document.createElement('div'); s.className = 'seg'; this.health.appendChild(s); }
+      this._segs = player.maxHealth;
     }
     const segs = this.health.children;
-    for (let i = 0; i < segs.length; i++) segs[i].classList.toggle('empty', i >= p.health);
+    for (let i = 0; i < segs.length; i++) segs[i].classList.toggle('empty', i >= player.health);
 
-    this.batarang.style.setProperty('--cd', String(p.batarangCdFrac));
-    this.dash.style.setProperty('--cd', String(p.dashCdFrac));
+    this.batarang.style.setProperty('--cd', String(player.batarangCdFrac));
+    this.dash.style.setProperty('--cd', String(player.dashCdFrac));
 
-    if (p.combo > 1) {
+    if (player.combo > 1) {
       this.combo.classList.remove('hidden');
-      this.comboNum.textContent = p.combo + 'x';
-      this.comboFill.style.width = Math.min(100, p.combo * 12) + '%';
+      this.comboNum.textContent = player.combo + 'x';
+      this.comboFill.style.width = Math.min(100, player.combo * 12) + '%';
+      this.comboNum.style.color = player.combo >= 8 ? '#ff5a4a' : player.combo >= 4 ? '#ffd23f' : '#cfe6ff';
+      if (player.combo !== this._lastCombo) { this.comboNum.classList.remove('pop'); void this.comboNum.offsetWidth; this.comboNum.classList.add('pop'); }
     } else {
       this.combo.classList.add('hidden');
     }
+    this._lastCombo = player.combo;
+
+    if (info && info.bossHpFrac != null) { this.bossUi.classList.remove('hidden'); this.bossFill.style.width = (info.bossHpFrac * 100) + '%'; }
+    else this.bossUi.classList.add('hidden');
+
+    this.setObjective(info ? info.objective : '');
   }
 }

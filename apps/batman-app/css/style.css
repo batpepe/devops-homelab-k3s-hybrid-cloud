@@ -14,8 +14,6 @@ html, body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-
-/* Pin the viewport so mobile cannot rubber-band scroll while playing */
 body { position: fixed; inset: 0; }
 
 #game-root {
@@ -27,7 +25,6 @@ body { position: fixed; inset: 0; }
   justify-content: center;
 }
 
-/* Fixed 16:9 internal resolution, scaled to fit either dimension */
 #game {
   display: block;
   width: min(100vw, calc(100vh * 16 / 9));
@@ -56,7 +53,6 @@ body { position: fixed; inset: 0; }
   width: 48px; height: 48px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid #0b0e18;
-  /* --cd is the cooldown fraction (1 = just used, 0 = ready); neon fills as it readies */
   background: conic-gradient(#222a3a calc(var(--cd, 0) * 360deg), var(--neon) 0);
 }
 .dial span {
@@ -68,9 +64,35 @@ body { position: fixed; inset: 0; }
   position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
   text-align: right; color: var(--gold); font-weight: bold;
 }
-#hud-combo span { font-size: 34px; text-shadow: 0 0 12px rgba(229, 169, 16, 0.7); }
+#hud-combo span { display: inline-block; font-size: 34px; text-shadow: 0 0 12px rgba(229, 169, 16, 0.7); }
 .combo-bar { width: 120px; height: 6px; background: #222a3a; margin-top: 4px; }
 #combo-fill { height: 100%; width: 0; background: var(--gold); transition: width 0.1s; }
+.pop { animation: pop 0.18s ease-out; }
+@keyframes pop { 0% { transform: scale(1.6); } 100% { transform: scale(1); } }
+
+/* Boss bar */
+#boss-ui { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 46%; text-align: center; }
+#boss-name { color: #ff6a5a; letter-spacing: 4px; font-size: 13px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 60, 60, 0.6); }
+#boss-bar { height: 12px; margin-top: 4px; background: #2a121a; border: 1px solid #5a1a26; }
+#boss-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #ff3b3b, #ff7a4a); transition: width 0.12s; }
+
+/* Objective banner */
+#objective {
+  position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+  color: #cfe0ff; font-size: 14px; letter-spacing: 2px;
+  background: rgba(8, 12, 24, 0.6); padding: 5px 14px; border-left: 2px solid var(--neon);
+}
+#objective.flash { animation: objflash 0.5s ease-out; }
+@keyframes objflash { 0% { background: rgba(63, 183, 255, 0.5); } 100% { background: rgba(8, 12, 24, 0.6); } }
+
+/* Mute button */
+#btn-mute {
+  position: absolute; bottom: 14px; left: 14px;
+  background: rgba(8, 12, 24, 0.6); color: #8ea3c6;
+  border: 1px solid #2a3550; border-radius: 4px;
+  padding: 6px 10px; font-size: 12px; letter-spacing: 1px; cursor: pointer;
+}
+#btn-mute:hover { color: #cfe0ff; border-color: var(--neon); }
 
 .hidden { display: none !important; }
 

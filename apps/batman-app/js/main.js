@@ -1,19 +1,21 @@
 // main.js
-// Entry point: builds the game, runs a fixed-timestep loop, drives the top-level
-// state machine (MENU / PLAYING / GAMEOVER), and resolves combat between the player,
-// enemies, and gadgets. Simulation updates at a fixed 60Hz; rendering runs every
-// animation frame, so physics is identical regardless of display refresh rate.
+// Entry point: builds the game, runs a fixed-timestep loop with HITSTOP (impact freeze),
+// drives the MENU/PLAYING/GAMEOVER + wave/objective state machines, and resolves combat
+// (with juice + audio) between player, enemies, boss, projectiles, shockwaves, hazards,
+// and pickups. The attack-token manager lets only 1-2 enemies attack at once.
 
 import { Input } from './input.js';
 import { Camera } from './camera.js';
 import { makeArena } from './world.js';
 import { Player } from './player.js';
 import { Enemy } from './enemy.js';
+import { Boss } from './boss.js';
 import { Gadgets } from './gadgets.js';
 import { Effects } from './render/fx.js';
 import { Parallax } from './render/parallax.js';
 import { renderWorld } from './render/render.js';
 import { Hud } from './hud.js';
+import { AudioEngine } from './audio.js';
 import { aabb } from './physics.js';
 
 const canvas = document.getElementById('game');
@@ -22,104 +24,226 @@ const ctx = canvas.getContext('2d');
 
 const input = new Input(canvas);
 const hud = new Hud();
+const audio = new AudioEngine();
 
 let game = newGame();
 let mode = 'MENU';
 
 function newGame() {
   const room = makeArena();
-  return {
+  room.solids = room.platforms.slice();
+  const g = {
     room,
     player: new Player(room.playerStart),
-    enemies: room.spawns.map((s) => new Enemy(s)),
+    enemies: [],
     gadgets: new Gadgets(),
     fx: new Effects(),
     camera: new Camera(canvas.width, canvas.height),
     parallax: new Parallax(canvas.width, canvas.height, room.width),
-    input,
-    time: 0,
+    input, audio, time: 0,
+    boss: null, enemyProjectiles: [], pickups: [], shockwaves: [],
+    hitstop: 0, phase: 'WAVES', waveIndex: 0,
+    objective: 'Clear the courtyard',
   };
+  spawnWave(g, 0);
+  return g;
 }
 
-function start() { game = newGame(); mode = 'PLAYING'; hud.hideMenus(); }
+function spawnWave(g, i) { for (const s of g.room.waves[i]) g.enemies.push(new Enemy(s)); }
+
+function start() { audio.ensure(); audio.startMusic(); hud.setMuteLabel(audio.muted); game = newGame(); mode = 'PLAYING'; hud.hideMenus(); }
 function gameOver(won) { mode = 'GAMEOVER'; hud.showOver(won ? 'GOTHAM SECURED' : 'YOU FELL'); }
 
-hud.bind(start, start);
+hud.bind(start, start, () => { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); });
 hud.showStart();
+hud.setMuteLabel(audio.muted);
+window.addEventListener('keydown', (e) => { if (e.code === 'KeyM') { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); } });
 
 const DT = 1 / 60;
 let acc = 0, last = performance.now();
 
 function frame(now) {
-  let elapsed = (now - last) / 1000;
-  last = now;
-  if (elapsed > 0.25) elapsed = 0.25; // avoid a spiral of death after tab-out
+  let elapsed = (now - last) / 1000; last = now;
+  if (elapsed > 0.25) elapsed = 0.25;
   acc += elapsed;
 
-  // Space / Attack also starts or restarts from a menu
   if (mode !== 'PLAYING' && (input.justPressed('jump') || input.justPressed('attack'))) start();
 
   while (acc >= DT) {
-    if (mode === 'PLAYING') update(DT);
+    if (mode === 'PLAYING') { if (game.hitstop > 0) game.hitstop -= DT; else update(DT); }
     acc -= DT;
   }
 
   renderWorld(ctx, game, DT);
-  hud.update(game.player);
+  hud.update(game.player, { bossHpFrac: game.boss && !game.boss.dead ? game.boss.hpFrac : null, objective: game.objective });
   input.lateUpdate();
   requestAnimationFrame(frame);
 }
 
 function update(dt) {
-  const g = game;
-  g.time += dt;
-  g.player.update(dt, input, g.room, g.enemies, g.gadgets, g.fx, g.camera, g.time);
+  const g = game; g.time += dt;
+  if (g.parallax.update(dt)) g.audio.thunder();
+  g.room.solids = g.room.gate.open ? g.room.platforms : g.room.platforms.concat(g.room.gate);
+
+  manageTokens(g);
+  g.player.update(dt, input, g.room, g.enemies, g.gadgets, g.fx, g.camera, g.time, g.audio);
   if (g.player.justThrewBatarang) g.camera.addShake(2);
 
-  for (const e of g.enemies) e.update(dt, g.player, g.room.platforms);
-  g.gadgets.update(dt, g.enemies, g.fx);
+  const sink = { enemyProjectiles: g.enemyProjectiles, audio: g.audio, fx: g.fx, camera: g.camera, shockwaves: g.shockwaves, addEnemy: (e) => g.enemies.push(e) };
+  for (const e of g.enemies) e.update(dt, g.player, g.room.solids, sink);
+  if (g.boss && !g.boss.dead) g.boss.update(dt, g.player, g.room.solids, sink);
 
+  g.gadgets.update(dt, g.enemies, g.fx, g.enemyProjectiles, g.audio, g.boss);
+  updateProjectiles(g, dt);
+  updateShockwaves(g, dt);
+  updatePickups(g, dt);
   resolveCombat(g);
+  checkHazards(g);
+
+  if (g.enemies.length > 40) g.enemies = g.enemies.filter((e) => !e.dead);
 
   g.fx.update(dt);
   g.camera.follow(g.player, g.room, dt);
+  progress(g);
 
   if (g.player.dead) gameOver(false);
-  else if (g.enemies.every((e) => e.dead)) gameOver(true);
+}
+
+function manageTokens(g) {
+  const live = g.enemies.filter((e) => !e.dead);
+  const attacking = live.filter((e) => e.state === 'WINDUP' || e.state === 'ATTACK').length;
+  let budget = Math.max(0, 2 - attacking);
+  for (const e of live) e.attackAllowed = false;
+  const idle = live
+    .filter((e) => e.state !== 'WINDUP' && e.state !== 'ATTACK' && e.state !== 'STUNNED' && e.staggerTimer <= 0)
+    .sort((a, b) => Math.abs(a.x - g.player.x) - Math.abs(b.x - g.player.x));
+  for (const e of idle) { if (budget <= 0) break; e.attackAllowed = true; budget--; }
+}
+
+function updateProjectiles(g, dt) {
+  const p = g.player;
+  for (let i = g.enemyProjectiles.length - 1; i >= 0; i--) {
+    const pr = g.enemyProjectiles[i];
+    pr.vy += 600 * dt; pr.x += pr.vx * dt; pr.y += pr.vy * dt; pr.life -= dt;
+    let rm = false;
+    if (pr.deflected) {
+      for (const e of g.enemies) { if (e.dead) continue; if (Math.abs(e.x + e.w / 2 - pr.x) < e.w * 0.6 && Math.abs(e.y + e.h / 2 - pr.y) < e.h * 0.6) { e.takeDamage(1, Math.sign(pr.vx)); g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); g.audio.enemyHurt(); rm = true; break; } }
+      if (!rm && g.boss && !g.boss.dead) { const b = g.boss; if (Math.abs(b.x + b.w / 2 - pr.x) < b.w * 0.6 && Math.abs(b.y + b.h / 2 - pr.y) < b.h * 0.6) { b.takeDamage(1); g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); rm = true; } }
+    } else if (!p.isInvulnerable() && !p.isParryActive() && Math.abs(p.x + p.w / 2 - pr.x) < p.w * 0.6 && Math.abs(p.y + p.h / 2 - pr.y) < p.h * 0.6) {
+      p.takeDamage(1); g.audio.playerHurt(); g.camera.addShake(5); g.fx.setFlash(0.2, '255,60,60'); rm = true;
+    }
+    if (rm || pr.life <= 0 || pr.x < -60 || pr.x > g.room.width + 60) g.enemyProjectiles.splice(i, 1);
+  }
+}
+
+function updateShockwaves(g, dt) {
+  const p = g.player;
+  for (let i = g.shockwaves.length - 1; i >= 0; i--) {
+    const s = g.shockwaves[i];
+    s.life -= dt; s.r += (s.maxR - s.r) * Math.min(1, dt * 6);
+    if (!s.hit && p.onGround && !p.isInvulnerable() && Math.abs(p.x + p.w / 2 - s.x) < s.r) {
+      p.takeDamage(1); g.audio.playerHurt(); g.camera.addShake(6); g.fx.setFlash(0.2, '255,60,60'); s.hit = true;
+    }
+    if (s.life <= 0) g.shockwaves.splice(i, 1);
+  }
+}
+
+function updatePickups(g, dt) {
+  const p = g.player;
+  for (let i = g.pickups.length - 1; i >= 0; i--) {
+    const pk = g.pickups[i];
+    pk.vy += 1200 * dt; pk.y += pk.vy * dt;
+    if (pk.y + pk.h >= g.room.groundY) { pk.y = g.room.groundY - pk.h; pk.vy = 0; }
+    pk.life -= dt;
+    if (aabb(p, pk)) { if (p.health < p.maxHealth) p.health++; g.audio.pickup(); g.fx.burst(pk.x + pk.w / 2, pk.y, '#3fb7ff', 10); g.pickups.splice(i, 1); continue; }
+    if (pk.life <= 0) g.pickups.splice(i, 1);
+  }
+}
+
+function dropPickup(g, e) { g.pickups.push({ x: e.x + e.w / 2 - 9, y: e.y, w: 18, h: 18, vy: -150, life: 9 }); }
+
+function checkHazards(g) {
+  const p = g.player;
+  if (p.isInvulnerable()) return;
+  for (const hz of g.room.hazards) {
+    if (aabb(p, hz)) { p.takeDamage(1); g.audio.playerHurt(); g.fx.setFlash(0.25, '255,60,60'); g.camera.addShake(5); break; }
+  }
 }
 
 function resolveCombat(g) {
   const p = g.player;
-
-  // Batman's blade -> enemies (once per swing via hitSet)
   const ph = p.attackHitbox();
   if (ph) {
     for (const e of g.enemies) {
       if (e.dead || p.hitSet.has(e)) continue;
       if (aabb(ph, e)) {
-        e.takeDamage(1); p.hitSet.add(e); p.addCombo();
-        g.fx.sparks(e.x + e.w / 2, e.y + e.h * 0.4, '#ffffff', 8);
-        g.camera.addShake(4);
+        const dir = Math.sign((e.x + e.w / 2) - (p.x + p.w / 2)) || p.facing;
+        e.takeDamage(1, dir); p.hitSet.add(e); p.addCombo();
+        g.fx.impact(e.x + e.w / 2, e.y + e.h * 0.4); g.audio.hit(); g.audio.enemyHurt();
+        g.camera.addShake(4); g.hitstop = Math.max(g.hitstop, 0.045);
+        if (e.dead && Math.random() < 0.4) dropPickup(g, e);
+      }
+    }
+    if (g.boss && !g.boss.dead && !p.hitSet.has(g.boss) && aabb(ph, g.boss)) {
+      g.boss.takeDamage(1); p.hitSet.add(g.boss); p.addCombo();
+      g.fx.impact(g.boss.x + g.boss.w / 2, g.boss.y + g.boss.h * 0.4); g.audio.hit();
+      g.camera.addShake(5); g.hitstop = Math.max(g.hitstop, 0.05);
+    }
+  }
+
+  if (p.isParryActive()) {
+    for (const pr of g.enemyProjectiles) {
+      if (pr.deflected) continue;
+      if (Math.sign(pr.x - (p.x + p.w / 2)) === p.facing && Math.abs(pr.x - (p.x + p.w / 2)) < 70 && Math.abs(pr.y - (p.y + p.h / 2)) < 60) {
+        pr.deflected = true; pr.vx = p.facing * Math.max(520, Math.abs(pr.vx)); pr.vy = -120;
+        g.audio.parry(); g.fx.sparks(pr.x, pr.y, '#ffd23f', 14); g.hitstop = Math.max(g.hitstop, 0.06);
       }
     }
   }
 
-  // Enemy strikes -> Batman (parry beats it, dash i-frames ignore it)
   for (const e of g.enemies) {
     if (e.dead) continue;
     const eh = e.attackHitbox();
     if (eh && aabb(eh, p)) {
       if (p.isParryActive()) {
-        e.stun();
-        g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 18);
-        g.camera.addShake(8);
-        p.invulnTimer = Math.max(p.invulnTimer, 0.2);
+        e.stun(); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 18); g.fx.setFlash(0.3);
+        g.audio.parry(); g.camera.addShake(8); g.hitstop = Math.max(g.hitstop, 0.09); p.invulnTimer = Math.max(p.invulnTimer, 0.2);
       } else if (!p.isInvulnerable()) {
-        p.takeDamage(e.cfg.dmg);
-        g.camera.addShake(6);
-        e.attackActive = false;
+        p.takeDamage(e.cfg.dmg); g.audio.playerHurt(); g.fx.setFlash(0.25, '255,60,60');
+        g.camera.addShake(6); g.hitstop = Math.max(g.hitstop, 0.05); e.attackActive = false;
       }
     }
+  }
+
+  if (g.boss && !g.boss.dead) {
+    const bh = g.boss.attackHitbox();
+    if (bh && aabb(bh, p)) {
+      if (p.isParryActive() && g.boss.isComboAttack()) {
+        g.boss.stun(); g.boss.takeDamage(3); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 24); g.fx.setFlash(0.35);
+        g.audio.parry(); g.camera.addShake(12); g.hitstop = Math.max(g.hitstop, 0.12); p.invulnTimer = Math.max(p.invulnTimer, 0.25);
+      } else if (!p.isInvulnerable()) {
+        p.takeDamage(2); g.audio.playerHurt(); g.fx.setFlash(0.3, '255,60,60');
+        g.camera.addShake(9); g.hitstop = Math.max(g.hitstop, 0.06); if (g.boss.isComboAttack()) g.boss.attackActive = false;
+      }
+    }
+  }
+}
+
+function progress(g) {
+  if (g.phase === 'WAVES') {
+    if (g.enemies.every((e) => e.dead)) {
+      g.waveIndex++;
+      if (g.waveIndex < g.room.waves.length) { spawnWave(g, g.waveIndex); g.objective = 'Clear the courtyard'; }
+      else { g.room.gate.open = true; g.audio.gate(); g.phase = 'TOBOSS'; g.objective = 'Breach the gate, hunt the Enforcer'; }
+    }
+  } else if (g.phase === 'TOBOSS') {
+    if (g.player.x > g.room.bossTrigger) {
+      g.boss = new Boss(g.room.bossSpawn.x, g.room.groundY);
+      g.phase = 'BOSS'; g.objective = 'Defeat the Enforcer';
+      g.audio.bossRoar(); g.camera.addShake(8);
+    }
+  } else if (g.phase === 'BOSS') {
+    if (g.boss && g.boss.dead) { g.phase = 'WON'; gameOver(true); }
   }
 }
 
