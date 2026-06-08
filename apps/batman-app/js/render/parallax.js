@@ -16,7 +16,7 @@ export class Parallax {
     ];
     this.fg = this._bakeForeground();
     this.rain = [];
-    for (let i = 0; i < 180; i++) this.rain.push({ x: Math.random() * vw, y: Math.random() * vh, len: 8 + Math.random() * 10, sp: 720 + Math.random() * 420 });
+    for (let i = 0; i < 120; i++) this.rain.push({ x: Math.random() * vw, y: Math.random() * vh, len: 8 + Math.random() * 10, sp: 720 + Math.random() * 420 });
     this.flash = 0; this.nextBolt = 3 + Math.random() * 4; this.fog = 0;
   }
 
@@ -77,7 +77,7 @@ export class Parallax {
 
   draw(ctx, camera) {
     ctx.drawImage(this.sky, 0, 0);
-    if (this.flash > 0) { ctx.globalAlpha = Math.min(0.7, this.flash); ctx.fillStyle = '#9fb4e0'; ctx.fillRect(0, 0, this.vw, this.vh); ctx.globalAlpha = 1; }
+    if (this.flash > 0) { ctx.globalAlpha = Math.min(0.55, this.flash); ctx.fillStyle = '#9fb4e0'; ctx.fillRect(0, 0, this.vw, this.vh); ctx.globalAlpha = 1; }
     for (const L of this.layers) ctx.drawImage(L.canvas, -camera.x * L.factor, 0);
     const fy = this.vh * 0.62;
     ctx.globalAlpha = 0.10;
@@ -88,13 +88,13 @@ export class Parallax {
   }
 
   drawForeground(ctx, camera) {
-    ctx.globalAlpha = 0.92;
+    ctx.globalAlpha = 0.85;
     ctx.drawImage(this.fg.canvas, -camera.x * this.fg.factor, 0);
     ctx.globalAlpha = 1;
   }
 
   drawRain(ctx, dt) {
-    ctx.strokeStyle = 'rgba(150,180,220,0.22)'; ctx.lineWidth = 1; ctx.beginPath();
+    ctx.strokeStyle = 'rgba(150,180,220,0.14)'; ctx.lineWidth = 1; ctx.beginPath();
     for (const d of this.rain) {
       d.y += d.sp * dt; d.x -= d.sp * 0.2 * dt;
       if (d.y > this.vh) { d.y = -10; d.x = Math.random() * this.vw; }

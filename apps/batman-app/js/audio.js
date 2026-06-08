@@ -18,35 +18,40 @@ export class AudioEngine {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     this.ctx = new AC();
+    // master -> compressor -> out; SFX and music ride separate sub-buses off master so
+    // music sits under the hits and a big fight cannot clip into harshness.
     this.master = this.ctx.createGain();
     this.master.gain.value = this.muted ? 0 : this.vol;
-    this.master.connect(this.ctx.destination);
+    const comp = this.ctx.createDynamicsCompressor();
+    this.master.connect(comp); comp.connect(this.ctx.destination);
+    this.sfxBus = this.ctx.createGain(); this.sfxBus.gain.value = 0.9; this.sfxBus.connect(this.master);
+    this.musicBus = this.ctx.createGain(); this.musicBus.gain.value = 0.5; this.musicBus.connect(this.master);
   }
 
   get t() { return this.ctx ? this.ctx.currentTime : 0; }
 
-  _env(node, gain, attack, dur) {
+  _env(node, gain, attack, dur, bus) {
     const g = this.ctx.createGain();
     const t = this.t;
     g.gain.setValueAtTime(0.0001, t);
     g.gain.linearRampToValueAtTime(gain, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + attack + dur);
-    node.connect(g); g.connect(this.master);
+    node.connect(g); g.connect(bus || this.sfxBus);
     return g;
   }
 
-  _tone(freq, dur, type = 'sine', gain = 0.3, glideTo = null) {
+  _tone(freq, dur, type = 'sine', gain = 0.3, glideTo = null, bus = null) {
     if (!this.ctx || this.muted) return;
     const o = this.ctx.createOscillator();
     o.type = type;
     const t = this.t;
     o.frequency.setValueAtTime(freq, t);
     if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur);
-    this._env(o, gain, 0.005, dur);
+    this._env(o, gain, 0.005, dur, bus);
     o.start(t); o.stop(t + dur + 0.05);
   }
 
-  _noise(dur, gain = 0.3, filterType = 'lowpass', f0 = 2000, f1 = null) {
+  _noise(dur, gain = 0.3, filterType = 'lowpass', f0 = 2000, f1 = null, bus = null) {
     if (!this.ctx || this.muted) return;
     const len = Math.max(1, Math.floor(this.ctx.sampleRate * dur));
     const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
@@ -58,7 +63,7 @@ export class AudioEngine {
     filt.frequency.setValueAtTime(f0, t);
     if (f1) filt.frequency.exponentialRampToValueAtTime(f1, t + dur);
     s.connect(filt);
-    this._env(filt, gain, 0.002, dur);
+    this._env(filt, gain, 0.002, dur, bus);
     s.start(t); s.stop(t + dur + 0.05);
   }
 
@@ -87,8 +92,8 @@ export class AudioEngine {
     const step = () => {
       if (!this.muted) {
         const f = scale[i % scale.length];
-        this._tone(f, 1.7, 'triangle', 0.05);
-        this._tone(f / 2, 1.7, 'sine', 0.05);
+        this._tone(f, 1.7, 'triangle', 0.14, null, this.musicBus);
+        this._tone(f / 2, 1.7, 'sine', 0.14, null, this.musicBus);
       }
       i++;
     };

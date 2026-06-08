@@ -35,11 +35,12 @@ export class Effects {
 
   ring(x, y, color = '#ffffff', maxR = 70) { this.rings.push({ x, y, r: 6, maxR, life: 0.35, max: 0.35, color }); }
 
-  impact(x, y, color = '#ffffff') { this.sparks(x, y, color, 10); this.ring(x, y, color, 70); this.setFlash(0.22, '255,255,255'); }
+  impact(x, y, color = '#ffffff') { this.sparks(x, y, color, 14); this.ring(x, y, color, 84); this.setFlash(0.12, '255,255,255'); }
 
   setFlash(a, color = '255,255,255') { this.flash = Math.max(this.flash, a); this.flashColor = color; }
 
   update(dt) {
+    if (this.particles.length > 280) this.particles.splice(0, this.particles.length - 280);
     for (let i = this.particles.length - 1; i >= 0; i--) {
       const p = this.particles[i];
       p.life -= dt;
@@ -77,10 +78,10 @@ export class Effects {
       ctx.globalAlpha = 1;
     }
     if (player && player.health <= 1 && !player.dead) {
-      const pulse = 0.28 + 0.18 * Math.sin(performance.now() / 200);
-      const g = ctx.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, h * 0.78);
+      const pulse = 0.20 + 0.14 * Math.sin(performance.now() / 200);
+      const g = ctx.createRadialGradient(w / 2, h / 2, h * 0.34, w / 2, h / 2, h * 0.82);
       g.addColorStop(0, 'rgba(255,0,0,0)');
-      g.addColorStop(1, 'rgba(255,0,0,' + pulse + ')');
+      g.addColorStop(1, 'rgba(255,0,0,' + pulse.toFixed(3) + ')');
       ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
     }
   }

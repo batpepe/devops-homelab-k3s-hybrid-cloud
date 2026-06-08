@@ -13,7 +13,7 @@ export class Boss {
     this.w = 92; this.h = 120;
     this.x = x; this.y = groundY - this.h;
     this.vx = 0; this.vy = 0;
-    this.maxHp = 44; this.hp = this.maxHp;
+    this.maxHp = 30; this.hp = this.maxHp;
     this.facing = -1;
     this.state = 'INTRO'; this.timer = 1.2;
     this.cd = 0; this.hurtTimer = 0; this.stunTimer = 0;

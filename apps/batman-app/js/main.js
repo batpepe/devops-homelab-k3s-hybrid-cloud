@@ -181,13 +181,13 @@ function resolveCombat(g) {
         e.takeDamage(1, dir); p.hitSet.add(e); p.addCombo();
         g.fx.impact(e.x + e.w / 2, e.y + e.h * 0.4); g.audio.hit(); g.audio.enemyHurt();
         g.camera.addShake(4); g.hitstop = Math.max(g.hitstop, 0.045);
-        if (e.dead && Math.random() < 0.4) dropPickup(g, e);
+        if (e.dead) { g.camera.addShake(7); g.hitstop = Math.max(g.hitstop, 0.07); g.fx.burst(e.x + e.w / 2, e.y + e.h * 0.4, '#ff5a4a', 14); if (Math.random() < 0.4) dropPickup(g, e); }
       }
     }
     if (g.boss && !g.boss.dead && !p.hitSet.has(g.boss) && aabb(ph, g.boss)) {
       g.boss.takeDamage(1); p.hitSet.add(g.boss); p.addCombo();
       g.fx.impact(g.boss.x + g.boss.w / 2, g.boss.y + g.boss.h * 0.4); g.audio.hit();
-      g.camera.addShake(5); g.hitstop = Math.max(g.hitstop, 0.05);
+      g.camera.addShake(6); g.hitstop = Math.max(g.hitstop, 0.06);
     }
   }
 
@@ -219,7 +219,7 @@ function resolveCombat(g) {
     const bh = g.boss.attackHitbox();
     if (bh && aabb(bh, p)) {
       if (p.isParryActive() && g.boss.isComboAttack()) {
-        g.boss.stun(); g.boss.takeDamage(3); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 24); g.fx.setFlash(0.35);
+        g.boss.stun(); g.boss.takeDamage(4); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 24); g.fx.setFlash(0.35);
         g.audio.parry(); g.camera.addShake(12); g.hitstop = Math.max(g.hitstop, 0.12); p.invulnTimer = Math.max(p.invulnTimer, 0.25);
       } else if (!p.isInvulnerable()) {
         p.takeDamage(2); g.audio.playerHurt(); g.fx.setFlash(0.3, '255,60,60');
@@ -232,6 +232,7 @@ function resolveCombat(g) {
 function progress(g) {
   if (g.phase === 'WAVES') {
     if (g.enemies.every((e) => e.dead)) {
+      g.pickups.push({ x: g.player.x + g.player.w / 2 - 9, y: g.player.y - 40, w: 18, h: 18, vy: -150, life: 12 });
       g.waveIndex++;
       if (g.waveIndex < g.room.waves.length) { spawnWave(g, g.waveIndex); g.objective = 'Clear the courtyard'; }
       else { g.room.gate.open = true; g.audio.gate(); g.phase = 'TOBOSS'; g.objective = 'Breach the gate, hunt the Enforcer'; }

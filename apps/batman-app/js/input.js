@@ -46,15 +46,18 @@ export class Input {
 
   _layout() {
     const W = this.canvas.width, H = this.canvas.height;
-    this.joystick.baseX = 130; this.joystick.baseY = H - 120;
+    // Joystick floats to the first touch in the left half; this is its resting/hint spot.
+    this.joystick.restX = 130; this.joystick.restY = H - 120;
+    this.joystick.baseX = this.joystick.restX; this.joystick.baseY = this.joystick.restY;
     this.joystick.knobX = this.joystick.baseX; this.joystick.knobY = this.joystick.baseY;
+    // Spaced so fat fingers don't trigger neighbours (no overlapping hit circles).
     this.buttons = [
-      { action: 'jump', label: 'JUMP', x: W - 80, y: H - 90, r: 46 },
-      { action: 'attack', label: 'ATK', x: W - 175, y: H - 120, r: 42 },
-      { action: 'parry', label: 'PRY', x: W - 150, y: H - 220, r: 38 },
-      { action: 'dash', label: 'DSH', x: W - 255, y: H - 95, r: 38 },
-      { action: 'batarang', label: 'BTR', x: W - 70, y: H - 200, r: 34 },
-      { action: 'grapple', label: 'GRP', x: W - 250, y: H - 195, r: 34 },
+      { action: 'jump', label: 'JUMP', x: W - 85, y: H - 85, r: 48 },
+      { action: 'attack', label: 'ATK', x: W - 185, y: H - 110, r: 44 },
+      { action: 'dash', label: 'DSH', x: W - 280, y: H - 95, r: 40 },
+      { action: 'parry', label: 'PRY', x: W - 120, y: H - 200, r: 40 },
+      { action: 'batarang', label: 'BTR', x: W - 235, y: H - 205, r: 36 },
+      { action: 'grapple', label: 'GRP', x: W - 330, y: H - 185, r: 36 },
     ];
   }
 
@@ -120,6 +123,7 @@ export class Input {
       } else if (p.x < this.canvas.width * 0.5) {
         this.touches.set(t.identifier, { control: 'joystick' });
         this.joystick.active = true;
+        this.joystick.baseX = p.x; this.joystick.baseY = p.y; // float the stick to the thumb
         this._updateJoystick(p);
       }
     }
@@ -141,6 +145,7 @@ export class Input {
       if (rec.control === 'button') this._release(rec.action);
       else {
         this.joystick.active = false;
+        this.joystick.baseX = this.joystick.restX; this.joystick.baseY = this.joystick.restY;
         this.joystick.knobX = this.joystick.baseX;
         this.joystick.knobY = this.joystick.baseY;
         this._release('left'); this._release('right'); this._release('up'); this._release('down');

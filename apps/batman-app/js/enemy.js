@@ -71,7 +71,7 @@ export class Enemy {
       if (this.timer <= 0) {
         if (this.cfg.ranged) {
           const dir = this.facing;
-          sink.enemyProjectiles.push({ x: cx + dir * 20, y: this.y + this.h * 0.4, vx: dir * 430, vy: -130, life: 2.4, deflected: false });
+          sink.enemyProjectiles.push({ x: cx + dir * 20, y: this.y + this.h * 0.4, vx: dir * 380, vy: -120, life: 2.4, deflected: false });
           sink.audio.batarang();
           this.state = 'CHASE'; this.cdTimer = this.cfg.cd;
         } else {

@@ -21,11 +21,18 @@ function limb(ctx, x1, y1, x2, y2, w, color) {
   ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
 }
-function glow(ctx, x, y, r, color, a = 1) {
-  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-  g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.globalAlpha = a; ctx.fillStyle = g;
-  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+const _glowCache = new Map(); // radial gradients are positional, so cache them at the
+function glow(ctx, x, y, r, color, a = 1) { // origin (keyed by radius+colour) and translate
+  const key = r + '|' + color;
+  let g = _glowCache.get(key);
+  if (!g) {
+    g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+    g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+    _glowCache.set(key, g);
+  }
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
 }
 
 export function drawShadow(ctx, e) {
@@ -112,7 +119,7 @@ export function drawTrail(ctx, player) {
 
 export function drawBatman(ctx, p, time) {
   const cx = p.x + p.w / 2, top = p.y, hw = p.w / 2, h = p.h;
-  glow(ctx, cx, top + h * 0.5, 64, 'rgba(63,183,255,0.10)', 0.7);
+  glow(ctx, cx, top + h * 0.5, 70, 'rgba(63,183,255,0.18)', 0.85);
   ctx.save(); ctx.translate(cx, top); ctx.scale(p.facing, 1);
   if (p.invulnTimer > 0 && Math.floor(time * 30) % 2 === 0) ctx.globalAlpha = 0.45;
 
@@ -131,6 +138,7 @@ export function drawBatman(ctx, p, time) {
 
   // Torso
   ctx.fillStyle = '#1a1d27'; roundRect(ctx, -hw * 0.42, shoulderY, hw * 0.84, hipY - shoulderY + 6, 6); ctx.fill();
+  ctx.strokeStyle = 'rgba(96,128,178,0.5)'; ctx.lineWidth = 1.5; ctx.stroke(); // edge so he reads on busy bg
   // Emblem
   ctx.fillStyle = GOLD; ctx.globalAlpha = 0.9;
   ctx.beginPath(); ctx.ellipse(0, shoulderY + (hipY - shoulderY) * 0.4, hw * 0.2, hw * 0.12, 0, 0, Math.PI * 2); ctx.fill();
@@ -141,6 +149,7 @@ export function drawBatman(ctx, p, time) {
   // Head + cowl ears
   ctx.fillStyle = '#15171f';
   ctx.beginPath(); ctx.arc(0, headY, hw * 0.46, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(96,128,178,0.5)'; ctx.lineWidth = 1.3; ctx.stroke();
   ctx.beginPath(); ctx.moveTo(-hw * 0.4, headY - hw * 0.1); ctx.lineTo(-hw * 0.28, headY - hw * 0.95); ctx.lineTo(-hw * 0.12, headY - hw * 0.05); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(hw * 0.4, headY - hw * 0.1); ctx.lineTo(hw * 0.28, headY - hw * 0.95); ctx.lineTo(hw * 0.12, headY - hw * 0.05); ctx.closePath(); ctx.fill();
   // Lenses + rim light
@@ -194,10 +203,16 @@ export function drawEnemy(ctx, e, time) {
   limb(ctx, 0, h * 0.6, sw, h, 7, '#0e0e14');
   limb(ctx, 0, h * 0.6, -sw, h, 7, '#0e0e14');
   ctx.fillStyle = body; roundRect(ctx, -hw * 0.8, h * 0.2, e.w * 0.8, h * 0.45, 5); ctx.fill();
-  ctx.beginPath(); ctx.arc(0, h * 0.16, hw * 0.55, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(200,210,230,0.30)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.arc(0, h * 0.16, hw * 0.55, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   ctx.fillStyle = '#ff5a5a'; ctx.fillRect(hw * 0.1, h * 0.1, hw * 0.3, 3);
   if (e.type === 'blade') limb(ctx, hw * 0.2, h * 0.4, hw * 1.15, h * 0.3, 3, '#9fe0ff');
   if (e.type === 'thrower' && e.state === 'WINDUP') { ctx.fillStyle = '#ffcf5a'; ctx.beginPath(); ctx.arc(hw * 0.8, h * 0.35, 6, 0, Math.PI * 2); ctx.fill(); }
+  if (e.state === 'WINDUP' && e.cfg.reach > 0) { // melee strike telegraph: red arc that intensifies as the hit lands
+    const tw = e.timer / (e.cfg.windup || 0.5);
+    ctx.strokeStyle = 'rgba(255,70,60,' + (0.35 + 0.45 * (1 - tw)).toFixed(2) + ')'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(hw * 0.2, h * 0.42, e.cfg.reach * 0.9, -0.7, 0.7); ctx.stroke();
+  }
   if (e.state === 'STUNNED') { ctx.fillStyle = GOLD; ctx.font = 'bold 14px sans-serif'; for (let i = 0; i < 3; i++) { const a = time * 6 + i * 2.1; ctx.fillText('*', Math.cos(a) * 14 - 4, -8); } }
   ctx.restore();
 }
@@ -220,6 +235,10 @@ export function drawBoss(ctx, b, time) {
   ctx.stroke();
   ctx.fillStyle = body; ctx.beginPath(); ctx.arc(0, h * 0.12, hw * 0.4, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = '#ff3030'; ctx.fillRect(-hw * 0.2, h * 0.08, hw * 0.4, 4);
+  // Attack telegraphs (danger cues): combo swing, charge lane, ground-pound zone
+  if (b.state === 'COMBO_TELE') { ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(hw * 0.2, h * 0.4, hw * 1.6, -0.7, 0.7); ctx.stroke(); }
+  if (b.state === 'CHARGE_TELE') { ctx.strokeStyle = 'rgba(255,60,50,0.7)'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(hw * 0.6, h * 0.5); ctx.lineTo(hw * 3.4, h * 0.5); ctx.stroke(); }
+  if (b.state === 'POUND_TELE') { ctx.strokeStyle = 'rgba(255,80,60,' + (0.4 + 0.4 * Math.sin(time * 30)).toFixed(2) + ')'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, h, hw * 1.6, Math.PI, 0); ctx.stroke(); }
   if (b.state === 'STUNNED') { ctx.fillStyle = GOLD; ctx.font = 'bold 20px sans-serif'; for (let i = 0; i < 4; i++) { const a = time * 5 + i * 1.57; ctx.fillText('*', Math.cos(a) * 22 - 6, -10); } }
   ctx.restore();
 }

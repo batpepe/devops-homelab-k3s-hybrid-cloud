@@ -41,16 +41,24 @@ export function renderWorld(ctx, game, dt) {
 
 function drawTouchControls(ctx, input) {
   ctx.save();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const j = input.joystick;
-  ctx.globalAlpha = 0.22; ctx.fillStyle = '#ffffff';
+  // Joystick: faint base disc + ring (dim at rest, brighter when active), then the knob.
+  ctx.globalAlpha = j.active ? 0.20 : 0.12; ctx.fillStyle = '#ffffff';
   ctx.beginPath(); ctx.arc(j.baseX, j.baseY, j.radius, 0, Math.PI * 2); ctx.fill();
-  ctx.globalAlpha = 0.5;
-  ctx.beginPath(); ctx.arc(j.active ? j.knobX : j.baseX, j.active ? j.knobY : j.baseY, 32, 0, Math.PI * 2); ctx.fill();
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 13px sans-serif';
+  ctx.globalAlpha = j.active ? 0.45 : 0.25; ctx.strokeStyle = '#cfe0ff'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(j.baseX, j.baseY, j.radius, 0, Math.PI * 2); ctx.stroke();
+  ctx.globalAlpha = j.active ? 0.6 : 0.35; ctx.fillStyle = '#ffffff';
+  ctx.beginPath(); ctx.arc(j.knobX, j.knobY, 34, 0, Math.PI * 2); ctx.fill();
+  // Action buttons: disc + ring, lit blue while held for clear press feedback.
+  ctx.font = 'bold 14px sans-serif';
   for (const b of input.buttons) {
-    ctx.globalAlpha = input.held[b.action] ? 0.55 : 0.2; ctx.fillStyle = '#ffffff';
+    const on = input.held[b.action];
+    ctx.globalAlpha = on ? 0.6 : 0.22; ctx.fillStyle = on ? '#cfe0ff' : '#ffffff';
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 0.9; ctx.fillStyle = '#0b0e18'; ctx.fillText(b.label, b.x, b.y);
+    ctx.globalAlpha = on ? 0.95 : 0.5; ctx.strokeStyle = '#cfe0ff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = 1; ctx.fillStyle = '#0b0e18'; ctx.fillText(b.label, b.x, b.y);
   }
   ctx.restore();
 }
