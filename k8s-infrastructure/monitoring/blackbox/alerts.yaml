@@ -1,0 +1,31 @@
+# Alerting rules for the blackbox probes. Like the Probe, the `release: monitoring`
+# label is what the kube-prometheus-stack operator's ruleSelector matches. Firing
+# alerts route to the existing Telegram contact point via the catch-all policy defined
+# in monitoring-stack.yaml - no new secrets or routing needed.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: blackbox-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: blackbox.rules
+      rules:
+        - alert: BlackboxProbeDown
+          expr: probe_success == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Synthetic probe down: {{ $labels.instance }}"
+            description: "Blackbox HTTP probe to {{ $labels.instance }} has been failing for over 2 minutes."
+        - alert: BlackboxSSLCertExpiringSoon
+          expr: (probe_ssl_earliest_cert_expiry > 0) and ((probe_ssl_earliest_cert_expiry - time()) / 86400 < 14)
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "TLS cert expiring soon: {{ $labels.instance }}"
+            description: "The certificate for {{ $labels.instance }} expires in less than 14 days."
