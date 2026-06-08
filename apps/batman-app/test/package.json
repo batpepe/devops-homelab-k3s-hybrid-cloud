@@ -1,0 +1,12 @@
+{
+  "name": "batman-app-smoke",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Playwright smoke test that boots the built image and asserts the game runs. Never shipped in the image (excluded by ../.dockerignore).",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

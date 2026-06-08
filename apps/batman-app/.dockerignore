@@ -1,0 +1,12 @@
+# Keep test tooling and build files out of the runtime image so the Trivy scan
+# surface stays nginx + static game assets only. None of this is needed to serve
+# the game, and the test/ harness must never ship in the published image.
+test/
+node_modules/
+package.json
+package-lock.json
+*.spec.*
+playwright-report/
+test-results/
+Dockerfile
+.dockerignore

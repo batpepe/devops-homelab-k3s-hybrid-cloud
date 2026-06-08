@@ -51,6 +51,19 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 
+      - name: Smoke test the built image
+        working-directory: apps/batman-app/test
+        env:
+          BASE_URL: http://localhost:8080
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          docker run -d --rm --name batman-smoke -p 8080:80 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          for i in $(seq 1 30); do curl -sf http://localhost:8080/ >/dev/null && break; sleep 1; done
+          set +e; npx playwright test; status=$?; set -e
+          docker stop batman-smoke >/dev/null 2>&1 || true
+          exit $status
+
       - name: Update K8s manifest
         run: |
           sed -i -E "s|image: ghcr.io/batpepe/batman-app:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" k8s-infrastructure/apps/nginx/batman.yaml
