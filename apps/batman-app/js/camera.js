@@ -6,6 +6,8 @@
 
 import { clamp } from './physics.js';
 
+const REDUCED_MOTION = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export class Camera {
   constructor(width, height) {
     this.w = width; this.h = height;
@@ -13,7 +15,7 @@ export class Camera {
     this.shakeMag = 0; this.shakeX = 0; this.shakeY = 0;
   }
 
-  addShake(mag) { this.shakeMag = Math.min(this.shakeMag + mag, 30); }
+  addShake(mag) { if (REDUCED_MOTION) mag *= 0.25; this.shakeMag = Math.min(this.shakeMag + mag, 30); }
 
   follow(target, room, dt) {
     const look = (target.facing || 1) * 90;

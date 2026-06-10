@@ -92,14 +92,15 @@ body { position: fixed; inset: 0; }
 #objective.flash { animation: objflash 0.5s ease-out; }
 @keyframes objflash { 0% { background: rgba(63, 183, 255, 0.5); } 100% { background: rgba(8, 12, 24, 0.6); } }
 
-/* Mute button */
-#btn-mute {
+/* Corner buttons (mute, pause) */
+#btn-mute, #btn-pause {
   position: absolute; bottom: 14px; left: 14px;
   background: rgba(8, 12, 24, 0.6); color: #8ea3c6;
   border: 1px solid #2a3550; border-radius: 4px;
   padding: 6px 10px; font-size: 12px; letter-spacing: 1px; cursor: pointer;
 }
-#btn-mute:hover { color: #cfe0ff; border-color: var(--neon); }
+#btn-pause { left: auto; right: 14px; }
+#btn-mute:hover, #btn-pause:hover { color: #cfe0ff; border-color: var(--neon); }
 
 .hidden { display: none !important; }
 

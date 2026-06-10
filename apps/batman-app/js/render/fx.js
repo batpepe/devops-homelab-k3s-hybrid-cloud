@@ -4,10 +4,13 @@
 // combat code calls camera.addShake() at the impact site. draw() runs in world space;
 // drawOverlay() runs in screen space (flash + vignette) after the camera transform ends.
 
+const REDUCED_MOTION = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export class Effects {
   constructor() {
     this.particles = [];
     this.rings = [];
+    this.floaters = [];
     this.flash = 0;
     this.flashColor = '255,255,255';
   }
@@ -37,7 +40,12 @@ export class Effects {
 
   impact(x, y, color = '#ffffff') { this.sparks(x, y, color, 14); this.ring(x, y, color, 84); this.setFlash(0.12, '255,255,255'); }
 
-  setFlash(a, color = '255,255,255') { this.flash = Math.max(this.flash, a); this.flashColor = color; }
+  setFlash(a, color = '255,255,255') { this.flash = Math.max(this.flash, REDUCED_MOTION ? a * 0.4 : a); this.flashColor = color; }
+
+  score(x, y, amount) {
+    if (this.floaters.length > 40) this.floaters.shift();
+    this.floaters.push({ x, y, vy: -46, life: 0.8, max: 0.8, text: '+' + amount });
+  }
 
   update(dt) {
     if (this.particles.length > 280) this.particles.splice(0, this.particles.length - 280);
@@ -53,6 +61,12 @@ export class Effects {
       if (r.life <= 0) { this.rings.splice(i, 1); continue; }
       r.r += (r.maxR - r.r) * Math.min(1, dt * 8);
     }
+    for (let i = this.floaters.length - 1; i >= 0; i--) {
+      const f = this.floaters[i];
+      f.life -= dt;
+      if (f.life <= 0) { this.floaters.splice(i, 1); continue; }
+      f.y += f.vy * dt; f.vy *= Math.pow(0.25, dt);
+    }
     if (this.flash > 0) this.flash -= dt * 2.2;
   }
 
@@ -66,6 +80,15 @@ export class Effects {
       ctx.globalAlpha = Math.max(0, r.life / r.max);
       ctx.strokeStyle = r.color; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2); ctx.stroke();
+    }
+    if (this.floaters.length) {
+      ctx.font = 'bold 15px sans-serif'; ctx.textAlign = 'center';
+      for (const f of this.floaters) {
+        ctx.globalAlpha = Math.max(0, f.life / f.max);
+        ctx.fillStyle = '#e5a910';
+        ctx.fillText(f.text, f.x, f.y);
+      }
+      ctx.textAlign = 'left';
     }
     ctx.globalAlpha = 1;
   }

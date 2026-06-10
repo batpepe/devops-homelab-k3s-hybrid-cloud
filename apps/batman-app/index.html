@@ -30,6 +30,7 @@
     </div>
 
     <button id="btn-mute" title="Mute (M)">SOUND: ON</button>
+  <button id="btn-pause" title="Pause (P / Esc)">PAUSE</button>
 
     <!-- Start menu -->
     <div id="menu-start" class="menu">
@@ -41,7 +42,7 @@
         <div class="controls">
           <p><b>Move</b> WASD / Arrows &nbsp;&nbsp; <b>Jump</b> Space (double)</p>
           <p><b>Attack</b> J / Left-Click &nbsp;&nbsp; <b>Parry</b> K / Right-Click</p>
-          <p><b>Dash</b> Shift &nbsp;&nbsp; <b>Batarang</b> Q &nbsp;&nbsp; <b>Grapple</b> E</p>
+          <p><b>Dash</b> Shift &nbsp;&nbsp; <b>Batarang</b> Q &nbsp;&nbsp; <b>Grapple</b> E &nbsp;&nbsp; <b>Pause</b> P</p>
           <p class="dim">Parry the red flash. Dodge charges and ground pounds. Mute: M</p>
         </div>
       </div>
@@ -53,6 +54,16 @@
         <h1 id="over-text">YOU FELL</h1>
         <div id="over-stats"></div>
         <button id="btn-restart">RETRY</button>
+        <button id="btn-menu">MAIN MENU</button>
+      </div>
+    </div>
+
+    <!-- Pause -->
+    <div id="menu-pause" class="menu hidden">
+      <div class="menu-box">
+        <h1>PAUSED</h1>
+        <button id="btn-resume">RESUME</button>
+        <button id="btn-pause-menu">MAIN MENU</button>
       </div>
     </div>
   </div>

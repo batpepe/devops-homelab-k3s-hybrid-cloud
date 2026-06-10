@@ -14,6 +14,7 @@ export class Hud {
     this.score = document.getElementById('hud-score');
     this.menuStart = document.getElementById('menu-start');
     this.menuOver = document.getElementById('menu-over');
+    this.menuPause = document.getElementById('menu-pause');
     this.overText = document.getElementById('over-text');
     this.overStats = document.getElementById('over-stats');
     this.bossUi = document.getElementById('boss-ui');
@@ -31,7 +32,8 @@ export class Hud {
     if (endlessBtn && onEndless) endlessBtn.addEventListener('click', onEndless);
   }
 
-  showStart() { this.menuStart.classList.remove('hidden'); this.menuOver.classList.add('hidden'); }
+  showStart() { this.menuStart.classList.remove('hidden'); this.menuOver.classList.add('hidden'); this.showPause(false); }
+  showPause(on) { if (this.menuPause) this.menuPause.classList.toggle('hidden', !on); }
   showOver(text, stats) {
     this.overText.textContent = text;
     if (this.overStats) {
@@ -52,7 +54,7 @@ export class Hud {
     }
     this.menuOver.classList.remove('hidden');
   }
-  hideMenus() { this.menuStart.classList.add('hidden'); this.menuOver.classList.add('hidden'); }
+  hideMenus() { this.menuStart.classList.add('hidden'); this.menuOver.classList.add('hidden'); this.showPause(false); }
   setMuteLabel(muted) { if (this.muteBtn) this.muteBtn.textContent = muted ? 'SOUND: OFF' : 'SOUND: ON'; }
 
   setObjective(text) {

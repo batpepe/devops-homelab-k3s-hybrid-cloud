@@ -29,6 +29,7 @@ const audio = new AudioEngine();
 let runMode = 'campaign';
 let game = newGame(runMode);
 let mode = 'MENU';
+let paused = false;
 
 const BOSS_EVERY = 5;
 
@@ -36,7 +37,10 @@ function newGame(kind) {
   const endless = kind === 'endless';
   const room = makeArena();
   if (endless) room.gate.open = true;
-  room.solids = room.platforms.slice();
+  // Both collision sets are built once; update() just picks one (no per-frame concat).
+  room.solidsOpen = room.platforms;
+  room.solidsClosed = room.platforms.concat(room.gate);
+  room.solids = room.gate.open ? room.solidsOpen : room.solidsClosed;
   const g = {
     room,
     player: new Player(room.playerStart),
@@ -60,7 +64,7 @@ function newGame(kind) {
 function spawnWave(g, i) { for (const s of g.room.waves[i]) g.enemies.push(new Enemy(s)); }
 function spawnEndless(g) { for (const s of makeEndlessWave(g.endlessWave, g.room, g.player.x)) g.enemies.push(new Enemy(s)); }
 
-function start(kind) { runMode = kind || 'campaign'; audio.ensure(); audio.startMusic(); hud.setMuteLabel(audio.muted); game = newGame(runMode); mode = 'PLAYING'; hud.hideMenus(); }
+function start(kind) { runMode = kind || 'campaign'; paused = false; audio.ensure(); audio.startMusic(); hud.setMuteLabel(audio.muted); game = newGame(runMode); mode = 'PLAYING'; hud.hideMenus(); }
 function gameOver(won) {
   mode = 'GAMEOVER';
   const g = game;
@@ -80,10 +84,22 @@ function gameOver(won) {
 function readBest(key) { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; } }
 function writeBest(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* private mode */ } }
 
+function togglePause() { if (mode !== 'PLAYING') return; paused = !paused; hud.showPause(paused); }
+// Always a way back to mode select; before this, survival could only be left by reloading.
+function goMenu() { paused = false; runMode = 'campaign'; mode = 'MENU'; hud.showStart(); }
+
 hud.bind(() => start('campaign'), () => start(runMode), () => { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); }, () => start('endless'));
+document.getElementById('btn-menu').addEventListener('click', goMenu);
+document.getElementById('btn-resume').addEventListener('click', togglePause);
+document.getElementById('btn-pause-menu').addEventListener('click', goMenu);
+const pauseBtn = document.getElementById('btn-pause');
+pauseBtn.addEventListener('click', () => { pauseBtn.blur(); togglePause(); }); // blur: a focused button would re-fire on Enter mid-game
 hud.showStart();
 hud.setMuteLabel(audio.muted);
-window.addEventListener('keydown', (e) => { if (e.code === 'KeyM') { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); } });
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'KeyM') { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); }
+  if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
+});
 
 const DT = 1 / 60;
 let acc = 0, last = performance.now();
@@ -93,10 +109,12 @@ function frame(now) {
   if (elapsed > 0.25) elapsed = 0.25;
   acc += elapsed;
 
-  if (mode !== 'PLAYING' && (input.justPressed('jump') || input.justPressed('attack'))) start(runMode);
+  // Quick retry on game over only; the start menu is a real mode select now, so a
+  // stray jump/attack press can no longer skip it.
+  if (mode === 'GAMEOVER' && (input.justPressed('jump') || input.justPressed('attack'))) start(runMode);
 
   while (acc >= DT) {
-    if (mode === 'PLAYING') { if (game.hitstop > 0) game.hitstop -= DT; else update(DT); }
+    if (mode === 'PLAYING' && !paused) { if (game.hitstop > 0) game.hitstop -= DT; else update(DT); }
     acc -= DT;
   }
 
@@ -109,7 +127,7 @@ function frame(now) {
 function update(dt) {
   const g = game; g.time += dt;
   if (g.parallax.update(dt)) g.audio.thunder();
-  g.room.solids = g.room.gate.open ? g.room.platforms : g.room.platforms.concat(g.room.gate);
+  g.room.solids = g.room.gate.open ? g.room.solidsOpen : g.room.solidsClosed;
 
   manageTokens(g);
   g.player.update(dt, input, g.room, g.enemies, g.gadgets, g.fx, g.camera, g.time, g.audio);
@@ -153,8 +171,8 @@ function updateProjectiles(g, dt) {
     pr.vy += 600 * dt; pr.x += pr.vx * dt; pr.y += pr.vy * dt; pr.life -= dt;
     let rm = false;
     if (pr.deflected) {
-      for (const e of g.enemies) { if (e.dead) continue; if (Math.abs(e.x + e.w / 2 - pr.x) < e.w * 0.6 && Math.abs(e.y + e.h / 2 - pr.y) < e.h * 0.6) { e.takeDamage(1, Math.sign(pr.vx)); g.score += 20; g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); g.audio.enemyHurt(); rm = true; break; } }
-      if (!rm && g.boss && !g.boss.dead) { const b = g.boss; if (Math.abs(b.x + b.w / 2 - pr.x) < b.w * 0.6 && Math.abs(b.y + b.h / 2 - pr.y) < b.h * 0.6) { b.takeDamage(1); g.score += 15; g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); rm = true; } }
+      for (const e of g.enemies) { if (e.dead) continue; if (Math.abs(e.x + e.w / 2 - pr.x) < e.w * 0.6 && Math.abs(e.y + e.h / 2 - pr.y) < e.h * 0.6) { e.takeDamage(1, Math.sign(pr.vx)); g.score += 20; g.fx.score(pr.x, pr.y - 14, 20); g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); g.audio.enemyHurt(); rm = true; break; } }
+      if (!rm && g.boss && !g.boss.dead) { const b = g.boss; if (Math.abs(b.x + b.w / 2 - pr.x) < b.w * 0.6 && Math.abs(b.y + b.h / 2 - pr.y) < b.h * 0.6) { b.takeDamage(1); g.score += 15; g.fx.score(pr.x, pr.y - 14, 15); g.fx.sparks(pr.x, pr.y, '#3fb7ff', 8); rm = true; } }
     } else if (!p.isInvulnerable() && !p.isParryActive() && Math.abs(p.x + p.w / 2 - pr.x) < p.w * 0.6 && Math.abs(p.y + p.h / 2 - pr.y) < p.h * 0.6) {
       p.takeDamage(1); g.audio.playerHurt(); g.camera.addShake(5); g.fx.setFlash(0.2, '255,60,60'); rm = true;
     }
@@ -209,7 +227,7 @@ function resolveCombat(g) {
         g.score += 10 * mult;
         g.fx.impact(e.x + e.w / 2, e.y + e.h * 0.4); g.audio.hit(); g.audio.enemyHurt();
         g.camera.addShake(4); g.hitstop = Math.max(g.hitstop, 0.045);
-        if (e.dead) { g.score += 50 * mult; g.camera.addShake(7); g.hitstop = Math.max(g.hitstop, 0.07); g.fx.burst(e.x + e.w / 2, e.y + e.h * 0.4, '#ff5a4a', 14); if (Math.random() < 0.4) dropPickup(g, e); }
+        if (e.dead) { g.score += 50 * mult; g.fx.score(e.x + e.w / 2, e.y - 6, 50 * mult); g.camera.addShake(7); g.hitstop = Math.max(g.hitstop, 0.07); g.fx.burst(e.x + e.w / 2, e.y + e.h * 0.4, '#ff5a4a', 14); if (Math.random() < 0.4) dropPickup(g, e); }
       }
     }
     if (g.boss && !g.boss.dead && !p.hitSet.has(g.boss) && aabb(ph, g.boss)) {
@@ -236,7 +254,7 @@ function resolveCombat(g) {
     const eh = e.attackHitbox();
     if (eh && aabb(eh, p)) {
       if (p.isParryActive()) {
-        e.stun(); g.score += 30; g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 18); g.fx.setFlash(0.3);
+        e.stun(); g.score += 30; g.fx.score(p.x + p.w / 2, p.y - 12, 30); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 18); g.fx.setFlash(0.3);
         g.audio.parry(); g.camera.addShake(8); g.hitstop = Math.max(g.hitstop, 0.09); p.invulnTimer = Math.max(p.invulnTimer, 0.2);
       } else if (!p.isInvulnerable()) {
         p.takeDamage(e.cfg.dmg); g.audio.playerHurt(); g.fx.setFlash(0.25, '255,60,60');
@@ -249,7 +267,7 @@ function resolveCombat(g) {
     const bh = g.boss.attackHitbox();
     if (bh && aabb(bh, p)) {
       if (p.isParryActive() && g.boss.isComboAttack()) {
-        g.boss.stun(); g.boss.takeDamage(4); g.score += 30; g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 24); g.fx.setFlash(0.35);
+        g.boss.stun(); g.boss.takeDamage(4); g.score += 30; g.fx.score(p.x + p.w / 2, p.y - 12, 30); g.fx.sparks(p.x + (p.facing > 0 ? p.w : 0), p.y + p.h * 0.4, '#ffd23f', 24); g.fx.setFlash(0.35);
         g.audio.parry(); g.camera.addShake(12); g.hitstop = Math.max(g.hitstop, 0.12); p.invulnTimer = Math.max(p.invulnTimer, 0.25);
       } else if (!p.isInvulnerable()) {
         p.takeDamage(2); g.audio.playerHurt(); g.fx.setFlash(0.3, '255,60,60');
@@ -274,11 +292,13 @@ function progress(g) {
       g.audio.bossRoar(); g.camera.addShake(8);
     }
   } else if (g.phase === 'BOSS') {
-    if (g.boss && g.boss.dead) { if (!g.bossScored) { g.score += 500; g.bossScored = true; } g.phase = 'WON'; gameOver(true); }
+    if (g.boss && g.boss.dead) { if (!g.bossScored) { g.score += 500; g.bossScored = true; g.fx.score(g.boss.x + g.boss.w / 2, g.boss.y - 10, 500); } g.phase = 'WON'; gameOver(true); }
   } else if (g.phase === 'ENDLESS') {
     if (g.enemies.every((e) => e.dead) && (!g.boss || g.boss.dead)) {
-      if (g.boss && g.boss.dead && !g.bossScored) { g.score += 500; g.bossScored = true; }
-      g.score += 100 + g.endlessWave * 25;
+      if (g.boss && g.boss.dead && !g.bossScored) { g.score += 500; g.bossScored = true; g.fx.score(g.boss.x + g.boss.w / 2, g.boss.y - 10, 500); }
+      const bonus = 100 + g.endlessWave * 25;
+      g.score += bonus;
+      g.fx.score(g.player.x + g.player.w / 2, g.player.y - 34, bonus);
       g.pickups.push({ x: g.player.x + g.player.w / 2 - 9, y: g.player.y - 40, w: 18, h: 18, vy: -150, life: 12 });
       g.boss = null;
       g.endlessWave++;
