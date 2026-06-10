@@ -99,7 +99,9 @@ body { position: fixed; inset: 0; }
   border: 1px solid #2a3550; border-radius: 4px;
   padding: 6px 10px; font-size: 12px; letter-spacing: 1px; cursor: pointer;
 }
-#btn-pause { left: auto; right: 14px; }
+/* Top-right under the cooldown dials: the bottom corners belong to the canvas
+   touch controls (JUMP zone), and a DOM button would steal those taps. */
+#btn-pause { left: auto; bottom: auto; right: 16px; top: 76px; }
 #btn-mute:hover, #btn-pause:hover { color: #cfe0ff; border-color: var(--neon); }
 
 .hidden { display: none !important; }
