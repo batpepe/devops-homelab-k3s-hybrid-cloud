@@ -9,7 +9,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Pin every `actions/*` step in `.github/workflows/*.yml` to a commit SHA - `S, hardening`
 - [x] Add `hadolint` step (matrix over every Dockerfile) - `S, quick-win`
 - [x] Add `kube-linter` step against `k8s-infrastructure/` - `S, quick-win`
-- [ ] Flip Trivy `exit-code` from `'0'` to `'1'` on `HIGH+` to actually gate the pipeline - `S, hardening`
+- [x] Flip Trivy `exit-code` from `'0'` to `'1'` on `HIGH+` to actually gate the pipeline (done in fd879da; gate proved itself by catching CVE-2026-45447, see 8ecbaa7/50081dd for the cache fix it forced) - `S, hardening`
 - [ ] Add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled - `S, quick-win`
 - [ ] Drop `continue-on-error: true` on `lint.yml` once existing violations are cleaned up - `S, hardening`
 
