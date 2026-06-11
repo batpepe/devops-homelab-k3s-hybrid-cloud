@@ -14,6 +14,7 @@ const ATTACK_DUR = 0.26, COMBO_WINDOW = 0.45;
 const PARRY_ACTIVE = 0.20, PARRY_TOTAL = 0.42, PARRY_CD = 0.25;
 const BATARANG_CD = 0.7, GRAPPLE_CD = 0.6, HURT_INVULN = 0.8;
 const MAX_HEALTH = 5, COYOTE = 0.1, JUMP_BUF = 0.12;
+const ATTACK_BUF = 0.16, PARRY_BUF = 0.16; // forgiveness: presses landed mid-swing or mid-hitstop still fire
 
 export class Player {
   constructor(start) { this.w = 44; this.h = 70; this.reset(start); }
@@ -28,6 +29,7 @@ export class Player {
     this.dashTimer = 0; this.dashCd = 0; this.invulnTimer = 0;
     this.attackTimer = 0; this.attackDur = ATTACK_DUR; this.attackHit = false;
     this.comboStep = 0; this.comboTimer = 0; this.hitSet = new Set();
+    this.attackBuf = 0; this.parryBuf = 0;
     this.parryTimer = 0; this.parryCd = 0;
     this.batarangCd = 0; this.grappleCd = 0; this.grappleTimer = 0; this.grappleTarget = null;
     this.combo = 0; this.comboDecay = 0;
@@ -67,7 +69,7 @@ export class Player {
       return;
     }
 
-    for (const k of ['dashCd', 'invulnTimer', 'parryCd', 'batarangCd', 'grappleCd', 'coyote', 'jumpBuf']) if (this[k] > 0) this[k] -= dt;
+    for (const k of ['dashCd', 'invulnTimer', 'parryCd', 'batarangCd', 'grappleCd', 'coyote', 'jumpBuf', 'attackBuf', 'parryBuf']) if (this[k] > 0) this[k] -= dt;
     if (this.comboDecay > 0) { this.comboDecay -= dt; if (this.comboDecay <= 0) this.combo = 0; }
 
     const locked = this.state === 'DASH' || this.state === 'ATTACK' || this.state === 'PARRY' || this.grappleTimer > 0;
@@ -94,13 +96,17 @@ export class Player {
     }
     if (this.state === 'DASH') { this.dashTimer -= dt; this.trail.push({ x: this.x, y: this.y, life: 0.3 }); if (this.dashTimer <= 0) this.state = 'FALL'; }
 
-    if (input.justPressed('parry') && this.parryCd <= 0 && !locked) {
+    if (input.justPressed('parry')) this.parryBuf = PARRY_BUF;
+    if (this.parryBuf > 0 && this.parryCd <= 0 && !locked) {
+      this.parryBuf = 0;
       this.state = 'PARRY'; this.parryTimer = PARRY_TOTAL; this.parryCd = PARRY_TOTAL + PARRY_CD; this.vx = 0;
     }
     if (this.state === 'PARRY' && (this.parryTimer -= dt) <= 0) this.state = 'IDLE';
 
     const canAttack = ['IDLE', 'RUN', 'JUMP', 'FALL'].includes(this.state) || (this.state === 'ATTACK' && this.attackTimer < ATTACK_DUR * 0.5);
-    if (input.justPressed('attack') && canAttack) {
+    if (input.justPressed('attack')) this.attackBuf = ATTACK_BUF;
+    if (this.attackBuf > 0 && canAttack) {
+      this.attackBuf = 0;
       this.comboStep = this.comboTimer > 0 ? Math.min(3, this.comboStep + 1) : 1;
       this.state = 'ATTACK'; this.attackTimer = ATTACK_DUR; this.comboTimer = COMBO_WINDOW;
       this.attackHit = true; this.hitSet.clear();

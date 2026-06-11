@@ -35,9 +35,19 @@ function glow(ctx, x, y, r, color, a = 1) { // origin (keyed by radius+colour) a
   ctx.restore();
 }
 
-export function drawShadow(ctx, e) {
-  ctx.save(); ctx.globalAlpha = 0.32; ctx.fillStyle = '#000';
-  ctx.beginPath(); ctx.ellipse(e.x + e.w / 2, e.y + e.h - 2, e.w * 0.55, 7, 0, 0, Math.PI * 2); ctx.fill();
+// Contact shadow: projected onto the nearest standable surface below the entity and
+// shrunk/faded with the drop, so it stays on the ground during jumps instead of
+// riding along glued to the feet.
+export function drawShadow(ctx, e, solids) {
+  const cx = e.x + e.w / 2, feet = e.y + e.h;
+  let gy = Infinity;
+  for (const s of solids || []) {
+    if (cx >= s.x && cx <= s.x + s.w && s.y >= feet - 4 && s.y < gy) gy = s.y;
+  }
+  if (gy === Infinity) gy = feet; // over a pit edge: fall back to the old behavior
+  const k = Math.max(0.25, 1 - Math.max(0, gy - feet) / 320);
+  ctx.save(); ctx.globalAlpha = 0.32 * k; ctx.fillStyle = '#000';
+  ctx.beginPath(); ctx.ellipse(cx, gy - 2, e.w * 0.55 * k, 7 * k, 0, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
 

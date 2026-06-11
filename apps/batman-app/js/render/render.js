@@ -12,9 +12,9 @@ export function renderWorld(ctx, game, dt) {
   parallax.draw(ctx, camera);
 
   camera.begin(ctx);
-  for (const e of enemies) if (!e.dead) S.drawShadow(ctx, e);
-  if (boss && !boss.dead) S.drawShadow(ctx, boss);
-  S.drawShadow(ctx, player);
+  for (const e of enemies) if (!e.dead) S.drawShadow(ctx, e, room.solids);
+  if (boss && !boss.dead) S.drawShadow(ctx, boss, room.solids);
+  S.drawShadow(ctx, player, room.solids);
 
   S.drawPlatforms(ctx, room);
   S.drawHazards(ctx, room, time);

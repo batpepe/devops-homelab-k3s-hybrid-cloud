@@ -207,13 +207,19 @@ function frame(now) {
   if (mode === 'GAMEOVER' && (input.justPressed('jump') || input.justPressed('attack'))) start(runMode);
 
   while (acc >= DT) {
-    if (mode === 'PLAYING' && !paused) { if (game.hitstop > 0) game.hitstop -= DT; else update(DT); }
+    if (mode === 'PLAYING' && !paused) {
+      // Clear one-shot input only when a sim step actually consumed it; clearing during
+      // hitstop used to eat attack/parry presses mid-combat (dead J/K feel).
+      if (game.hitstop > 0) game.hitstop -= DT;
+      else { update(DT); input.lateUpdate(); }
+    } else {
+      input.lateUpdate();
+    }
     acc -= DT;
   }
 
   renderWorld(ctx, game, DT);
   hud.update(game.player, { bossHpFrac: game.boss && !game.boss.dead ? game.boss.hpFrac : null, objective: game.objective, score: mode === 'PLAYING' ? game.score : null });
-  input.lateUpdate();
   requestAnimationFrame(frame);
 }
 

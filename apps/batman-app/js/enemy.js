@@ -63,6 +63,9 @@ export class Enemy {
     }
 
     const px = player.x + player.w / 2, cx = this.x + this.w / 2, dist = Math.abs(px - cx);
+    // Vertical band: melee cannot reach a player perched on a platform, so do not chase
+    // one - that is what made enemies grind into platform sides and swing at air.
+    const dy = Math.abs((player.y + player.h / 2) - (this.y + this.h / 2));
 
     if (this.state === 'STUNNED') {
       this.vx = 0; this.stunTimer -= dt; if (this.stunTimer <= 0) this.state = 'PATROL';
@@ -81,7 +84,7 @@ export class Enemy {
     } else if (this.state === 'ATTACK') {
       this.timer -= dt;
       if (this.timer <= 0) { this.state = 'CHASE'; this.attackActive = false; this.cdTimer = this.cfg.cd; }
-    } else if (dist < this.cfg.aggro && !player.dead) {
+    } else if (dist < this.cfg.aggro && dy < 80 && !player.dead) {
       this.state = 'CHASE';
       this.facing = px < cx ? -1 : 1;
       if (this.cfg.ranged) {
@@ -93,6 +96,8 @@ export class Enemy {
         if (dist <= this.cfg.reach && this.cdTimer <= 0 && this.attackAllowed) { this.state = 'WINDUP'; this.timer = this.cfg.windup; this.vx = 0; }
         else if (dist <= this.cfg.reach + 40 && !this.attackAllowed) this.vx = -this.facing * this.cfg.speed * 0.4; // keep spacing without a token
         else this.vx = this.facing * this.cfg.speed;
+        // Walking into a wall toward an unreachable player just grinds the sprite; stand instead.
+        if ((this.facing < 0 && this.onWallLeft) || (this.facing > 0 && this.onWallRight)) this.vx = 0;
       }
     } else {
       this.state = 'PATROL';
