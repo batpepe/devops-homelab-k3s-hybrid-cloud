@@ -35,7 +35,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [ ] Add **Tempo + OpenTelemetry collector**; instrument `nodejs-app` and `flask-app` - `L, resume`
 - [ ] Define 2 SLOs (nodejs API availability, end-to-end CV page latency) with burn-rate alerts - `M, resume`
 - [ ] Commit Grafana dashboards as code (`grafana-operator` or ConfigMap dashboards) - `M, resume`
-- [ ] Add Blackbox Exporter for synthetic checks on `cv.batpepe.online` and `game.batpepe.online` - `S, resume`
+- [x] Add Blackbox Exporter for synthetic checks on `cv.batpepe.online` and `game.batpepe.online` (manifests existed in argocd-apps/blackbox.yaml but were never bootstrapped; applied 2026-06-11, both apps Healthy) - `S, resume`
 
 ## Policy and compliance
 - [ ] Install **Kyverno**; ship policies: no `:latest`, require resources, require probes, disallow privileged - `M, resume`
