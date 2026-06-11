@@ -1,0 +1,193 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: homepage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: homepage
+  namespace: homepage
+---
+# Read-only cluster access: ingress auto-discovery + the cluster widget.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: homepage
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "pods", "nodes"]
+  verbs: ["get", "list"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["nodes", "pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: homepage
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: homepage
+subjects:
+- kind: ServiceAccount
+  name: homepage
+  namespace: homepage
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config
+  namespace: homepage
+data:
+  settings.yaml: |
+    title: Homelab
+    headerStyle: clean
+  kubernetes.yaml: |
+    mode: cluster
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: k3s
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - search:
+        provider: duckduckgo
+        target: _blank
+  services.yaml: |
+    # Ingresses annotated with gethomepage.dev/enabled are discovered
+    # automatically; static entries below cover services managed elsewhere.
+    - Platform:
+        - ArgoCD:
+            href: http://argocd.local
+            icon: argo-cd.png
+            description: GitOps
+        - Grafana:
+            href: http://grafana.local
+            icon: grafana.png
+            description: Dashboards
+  bookmarks.yaml: |
+    - Dev:
+        - Repo:
+            - abbr: GH
+              href: https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+    spec:
+      serviceAccountName: homepage
+      containers:
+      - name: homepage
+        image: ghcr.io/gethomepage/homepage:v1.13.2
+        env:
+        # v1+ rejects requests whose Host header is not listed here.
+        - name: HOMEPAGE_ALLOWED_HOSTS
+          value: "homepage.local"
+        ports:
+        - containerPort: 3000
+          name: web
+        volumeMounts:
+        - name: config
+          mountPath: /app/config/settings.yaml
+          subPath: settings.yaml
+        - name: config
+          mountPath: /app/config/kubernetes.yaml
+          subPath: kubernetes.yaml
+        - name: config
+          mountPath: /app/config/widgets.yaml
+          subPath: widgets.yaml
+        - name: config
+          mountPath: /app/config/services.yaml
+          subPath: services.yaml
+        - name: config
+          mountPath: /app/config/bookmarks.yaml
+          subPath: bookmarks.yaml
+        - name: logs
+          mountPath: /app/config/logs
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+            httpHeaders:
+            - name: Host
+              value: homepage.local
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+            httpHeaders:
+            - name: Host
+              value: homepage.local
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: homepage-config
+      - name: logs
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  selector:
+    app: homepage
+  ports:
+  - port: 80
+    targetPort: 3000
+    name: web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepage-ingress
+  namespace: homepage
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: homepage.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homepage
+            port:
+              number: 80
