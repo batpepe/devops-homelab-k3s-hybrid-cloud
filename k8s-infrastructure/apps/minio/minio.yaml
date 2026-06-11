@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-data
+  namespace: minio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+# minio-secret is NOT managed by ArgoCD. Create it manually before applying:
+# kubectl create secret generic minio-secret -n minio \
+#   --from-literal=MINIO_ROOT_USER=<user> \
+#   --from-literal=MINIO_ROOT_PASSWORD=<password> \
+#   --dry-run=client -o yaml | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  replicas: 1
+  # Recreate: single writer on the RWO volume.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        # Docker Hub minio/minio is stale; quay.io is the maintained registry.
+        image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+        args:
+        - server
+        - /data
+        - --console-address
+        - ":9001"
+        envFrom:
+        - secretRef:
+            name: minio-secret
+        ports:
+        - containerPort: 9000
+          name: s3-api
+        - containerPort: 9001
+          name: console
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: minio-data
+---
+# S3 endpoint for in-cluster consumers (Velero, Loki): http://minio.minio.svc:9000
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  selector:
+    app: minio
+  ports:
+  - port: 9000
+    targetPort: 9000
+    name: s3-api
+  - port: 9001
+    targetPort: 9001
+    name: console
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-ingress
+  namespace: minio
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: MinIO
+    gethomepage.dev/group: Platform
+    gethomepage.dev/icon: minio.png
+spec:
+  rules:
+  - host: minio.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: minio
+            port:
+              number: 9001
