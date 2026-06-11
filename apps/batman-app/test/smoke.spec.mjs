@@ -74,6 +74,15 @@ test('exit transition swaps rooms and persists state', async ({ page }) => {
     g.player.x = g.room.width - 50;
     g.player.y = g.room.groundY - 70;
   });
+  // Doorway commit: arming a transition must grant i-frames so a chaser cannot kill
+  // the player mid-fade (that death used to freeze the fade into a fake hang).
+  await page.waitForFunction(() => window.__bat.game.transition || window.__bat.game.room.id === 'skybridge');
+  const committed = await page.evaluate(() => {
+    const g = window.__bat.game;
+    return g.room.id === 'skybridge' || g.player.invulnTimer > 0;
+  });
+  expect(committed).toBe(true);
+
   await page.waitForFunction(() => window.__bat.game.room.id === 'skybridge');
 
   const after = await page.evaluate(() => {

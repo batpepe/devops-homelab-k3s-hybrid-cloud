@@ -137,7 +137,13 @@ function loadRoom(g, id, entryId) {
 function checkExits(g) {
   if (runMode !== 'campaign' || g.transition) return;
   for (const ex of g.room.exits) {
-    if (aabb(g.player, ex)) { g.transition = { t: 0, dur: 0.55, to: ex.to, entry: ex.entry, swapped: false }; return; }
+    if (aabb(g.player, ex)) {
+      g.transition = { t: 0, dur: 0.55, to: ex.to, entry: ex.entry, swapped: false };
+      // Touching a door commits the exit: i-frames through the fade so a chaser cannot
+      // kill the player in the doorway (death there froze the fade into a fake hang).
+      g.player.invulnTimer = Math.max(g.player.invulnTimer, g.transition.dur + 0.1);
+      return;
+    }
   }
 }
 
@@ -159,6 +165,7 @@ function start(kind) { runMode = kind || 'campaign'; paused = false; audio.ensur
 function gameOver(won) {
   mode = 'GAMEOVER';
   const g = game;
+  g.transition = null; // never leave a frozen mid-fade black screen under the menu
   const text = won ? 'GOTHAM SECURED' : 'YOU FELL';
   const endless = runMode === 'endless';
   const key = endless ? 'batman.best.endless' : 'batman.best.campaign';
