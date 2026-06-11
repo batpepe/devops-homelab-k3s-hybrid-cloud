@@ -3,6 +3,20 @@ kind: Namespace
 metadata:
   name: pihole
 ---
+# Without this PVC every pod restart wiped gravity.db, adlists and local DNS
+# records back to image defaults.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole-data
+  namespace: pihole
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 # pihole-secret is NOT managed by ArgoCD. Create it manually before applying:
 # kubectl create secret generic pihole-secret -n pihole \
 #   --from-literal=WEBPASSWORD=<your-password> \
@@ -14,6 +28,10 @@ metadata:
   namespace: pihole
 spec:
   replicas: 1
+  # Recreate, not RollingUpdate: single writer on the RWO volume. Costs a short
+  # DNS blip during deploys.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: pihole
@@ -42,6 +60,36 @@ spec:
         - containerPort: 53
           name: dns-udp
           protocol: UDP
+        volumeMounts:
+        - name: data
+          mountPath: /etc/pihole
+          subPath: pihole
+        - name: data
+          mountPath: /etc/dnsmasq.d
+          subPath: dnsmasq.d
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          tcpSocket:
+            port: 53
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /admin
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pihole-data
 ---
 apiVersion: v1
 kind: Service
@@ -82,6 +130,11 @@ metadata:
   namespace: pihole
   annotations:
     kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Pi-hole
+    gethomepage.dev/group: Network
+    gethomepage.dev/icon: pi-hole.png
+    gethomepage.dev/href: http://pihole.local/admin
 spec:
   rules:
   - host: pihole.local
