@@ -28,7 +28,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [ ] Add `securityContext` to every workload: `runAsNonRoot`, `readOnlyRootFilesystem`, drop ALL caps - `M, hardening`
 - [ ] Add `PodDisruptionBudget` + `HorizontalPodAutoscaler` to nginx, nodejs, flask - `S, resume`
 - [ ] Add `ResourceQuota` and `LimitRange` per namespace - `S, hardening`
-- [ ] Deploy **Velero** with S3 backend; nightly cluster + PVC snapshots - `L, resume`
+- [ ] Deploy **Velero** with S3 backend; nightly cluster + PVC snapshots (in-cluster MinIO at minio.minio.svc:9000 is ready as the backend) - `L, resume`
 
 ## Observability completeness
 - [ ] Add **Loki + Promtail** for log aggregation, wired into Grafana - `M, resume`

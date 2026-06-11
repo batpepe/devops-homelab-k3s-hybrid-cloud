@@ -62,6 +62,8 @@ You will be credited in the commit / release notes unless you ask to remain anon
 | `cloudflare-token` | `apps` | `cloudflared` tunnel |
 | `grafana-admin-secret` | `monitoring` | Grafana admin login |
 | `tg-secret` | `monitoring` | Grafana → Telegram alerting |
+| `pihole-secret` | `pihole` | Pi-hole admin password |
+| `minio-secret` | `minio` | MinIO root credentials (S3) |
 
 Additionally:
 - `terraform.tfvars` and all `*.tfstate*` files are gitignored.

@@ -111,3 +111,79 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/minio
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: minio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vaultwarden
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/vaultwarden
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: vaultwarden
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: uptime-kuma
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/uptime-kuma
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: uptime-kuma
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homepage
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/homepage
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: homepage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

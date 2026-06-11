@@ -13,7 +13,7 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 ## Key paths
 - terraform/main.tf                                      single EC2 + SG
 - ansible/setup-server.yml                               Docker + nginx on EC2
-- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 6 apps
+- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 10 apps
 - k8s-infrastructure/argocd-apps/monitoring-stack.yaml   prometheus-stack Helm app
 - k8s-infrastructure/apps/<svc>/*.yaml                   per-workload manifests
 - .github/workflows/ci-*.yml                             per-app build, scan, manifest bump
@@ -30,8 +30,8 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 - argocd app sync <name> && argocd app diff <name>
 
 ## Secrets, never in Git
-postgres-secret (apps), cloudflare-token (apps),
-grafana-admin-secret (monitoring), tg-secret (monitoring).
+postgres-secret (apps), cloudflare-token (apps), pihole-secret (pihole),
+grafana-admin-secret (monitoring), tg-secret (monitoring), minio-secret (minio).
 Provision with `kubectl create secret generic`. Never commit values or realistic-looking examples.
 
 ## Constraints

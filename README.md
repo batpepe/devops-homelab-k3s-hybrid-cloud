@@ -98,8 +98,8 @@ flowchart LR
 | CI | GitHub Actions, Trivy, GHCR |
 | Networking | Traefik (K3s default), Cloudflare Tunnel |
 | Observability | Prometheus, Alertmanager, Grafana, Telegram |
-| Data | PostgreSQL 15 (PVC-backed) |
-| Apps | Nginx, Node.js, Flask, static HTML, Pi-hole, whoami |
+| Data | PostgreSQL 15 (PVC-backed), MinIO S3 (PVC-backed) |
+| Apps | Nginx, Node.js, Flask, static HTML, Pi-hole, Vaultwarden, Homepage, Uptime Kuma |
 
 ## 📁 Repository Layout
 ```
