@@ -6,7 +6,7 @@
 
 import { Input } from './input.js';
 import { Camera } from './camera.js';
-import { makeArena, makeEndlessWave } from './world.js';
+import { makeEndlessWave, ROOMS, CAMPAIGN_START, validateRoomGraph } from './world.js';
 import { Player } from './player.js';
 import { Enemy } from './enemy.js';
 import { Boss } from './boss.js';
@@ -35,30 +35,121 @@ const BOSS_EVERY = 5;
 
 function newGame(kind) {
   const endless = kind === 'endless';
-  const room = makeArena();
-  if (endless) room.gate.open = true;
-  // Both collision sets are built once; update() just picks one (no per-frame concat).
-  room.solidsOpen = room.platforms;
-  room.solidsClosed = room.platforms.concat(room.gate);
-  room.solids = room.gate.open ? room.solidsOpen : room.solidsClosed;
   const g = {
-    room,
-    player: new Player(room.playerStart),
+    room: null, player: null,
     enemies: [],
     gadgets: new Gadgets(),
     fx: new Effects(),
     camera: new Camera(canvas.width, canvas.height),
-    parallax: new Parallax(canvas.width, canvas.height, room.width),
+    parallax: null,
     input, audio, time: 0,
     boss: null, enemyProjectiles: [], pickups: [], shockwaves: [],
     hitstop: 0, waveIndex: 0, score: 0, bossScored: false,
     phase: endless ? 'ENDLESS' : 'WAVES',
     endlessWave: 0,
+    rooms: {}, roomStates: {}, transition: null,
     objective: endless ? 'Wave 1 - survive' : 'Clear the courtyard',
   };
-  if (endless) spawnEndless(g);
-  else spawnWave(g, 0);
+  if (endless) {
+    // Survival contract: the untouched arena with the gate open, no exits in play.
+    const room = getRoom(g, 'arena');
+    room.gate.open = true;
+    room.solids = room.solidsOpen;
+    g.room = room;
+    g.player = new Player(room.playerStart);
+    g.parallax = new Parallax(canvas.width, canvas.height, room.width);
+    spawnEndless(g);
+  } else {
+    g.player = new Player(ROOMS[CAMPAIGN_START]().entries.start);
+    loadRoom(g, CAMPAIGN_START, 'start');
+    spawnWave(g, 0);
+  }
   return g;
+}
+
+// Both collision sets are built once per room; update() just picks one (no per-frame concat).
+function buildRoom(id) {
+  const room = ROOMS[id]();
+  room.solidsOpen = room.platforms;
+  room.solidsClosed = room.gate ? room.platforms.concat(room.gate) : room.platforms;
+  room.solids = (!room.gate || room.gate.open) ? room.solidsOpen : room.solidsClosed;
+  return room;
+}
+function getRoom(g, id) { return g.rooms[id] || (g.rooms[id] = buildRoom(id)); }
+
+const ROOM_OBJECTIVES = {
+  courtyard: 'Head east to the skybridge',
+  skybridge: 'Cross the skybridge - ride the beacons',
+  undercroft: 'Fight through the undercroft',
+  enforcerHall: 'Face the Enforcer',
+};
+function roomObjective(g, id) {
+  if (id === 'courtyard' && g.phase === 'WAVES') return 'Clear the courtyard';
+  return ROOM_OBJECTIVES[id] || g.objective;
+}
+
+function saveRoomState(g) {
+  g.roomStates[g.room.id] = {
+    visited: true,
+    // Foot-anchored y: the Enemy constructor subtracts the type height again on respawn.
+    aliveSpawns: g.enemies.filter((e) => !e.dead).map((e) => ({ x: e.x, y: e.y + e.h, type: e.type })),
+    lootLeft: g.pickups.filter((p) => p.loot).map((p) => ({ x: p.x, y: p.y })),
+  };
+}
+
+// Single funnel for entering a room, used by newGame and transitions. Clears every
+// world-space transient (fx, projectiles, batarangs) so nothing renders at coordinates
+// from the previous room, and rebuilds Parallax because its layers are baked to a fixed
+// room width at construction.
+function loadRoom(g, id, entryId) {
+  const room = getRoom(g, id);
+  g.room = room;
+  room.solids = (!room.gate || room.gate.open) ? room.solidsOpen : room.solidsClosed;
+
+  g.enemies = [];
+  g.enemyProjectiles.length = 0;
+  g.shockwaves.length = 0;
+  g.pickups = [];
+  g.gadgets.batarangs.length = 0;
+  g.boss = null;
+  g.fx = new Effects();
+
+  const p = g.player, en = room.entries[entryId];
+  p.x = en.x; p.y = en.y; p.facing = en.facing || 1;
+  p.vx = 0; p.vy = 0;
+  p.grappleTimer = 0; p.grappleTarget = null;
+  p.trail.length = 0; p.hitSet.clear();
+  p.state = 'IDLE';
+  // Health, cooldowns, combo and invulnerability carry across rooms on purpose.
+
+  const st = g.roomStates[id];
+  for (const s of (st ? st.aliveSpawns : room.spawns || [])) g.enemies.push(new Enemy(s));
+  for (const l of (st ? st.lootLeft : room.pickupSpawns || [])) {
+    g.pickups.push({ x: l.x, y: l.y, w: 18, h: 18, vy: 0, life: Infinity, loot: true, static: true });
+  }
+
+  g.camera.snap(p, room);
+  g.parallax = new Parallax(canvas.width, canvas.height, room.width);
+  g.objective = roomObjective(g, id);
+  if (room.name) hud.announceRoom(room.name);
+}
+
+function checkExits(g) {
+  if (runMode !== 'campaign' || g.transition) return;
+  for (const ex of g.room.exits) {
+    if (aabb(g.player, ex)) { g.transition = { t: 0, dur: 0.55, to: ex.to, entry: ex.entry, swapped: false }; return; }
+  }
+}
+
+function stepTransition(g, dt) {
+  const tr = g.transition;
+  tr.t += dt;
+  if (!tr.swapped && tr.t >= tr.dur / 2) {
+    saveRoomState(g);
+    loadRoom(g, tr.to, tr.entry);
+    tr.swapped = true;
+  }
+  if (tr.t >= tr.dur) g.transition = null;
 }
 
 function spawnWave(g, i) { for (const s of g.room.waves[i]) g.enemies.push(new Enemy(s)); }
@@ -96,6 +187,8 @@ const pauseBtn = document.getElementById('btn-pause');
 pauseBtn.addEventListener('click', () => { pauseBtn.blur(); togglePause(); }); // blur: a focused button would re-fire on Enter mid-game
 hud.showStart();
 hud.setMuteLabel(audio.muted);
+window.__bat = { get game() { return game; } }; // test seam (Playwright drives state through it)
+for (const err of validateRoomGraph()) console.error('room graph: ' + err);
 window.addEventListener('keydown', (e) => {
   if (e.code === 'KeyM') { audio.ensure(); hud.setMuteLabel(audio.toggleMute()); }
   if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
@@ -126,12 +219,14 @@ function frame(now) {
 
 function update(dt) {
   const g = game; g.time += dt;
+  if (g.transition) { stepTransition(g, dt); return; } // world freezes during the fade
   if (g.parallax.update(dt)) g.audio.thunder();
-  g.room.solids = g.room.gate.open ? g.room.solidsOpen : g.room.solidsClosed;
+  g.room.solids = (!g.room.gate || g.room.gate.open) ? g.room.solidsOpen : g.room.solidsClosed;
 
   manageTokens(g);
   g.player.update(dt, input, g.room, g.enemies, g.gadgets, g.fx, g.camera, g.time, g.audio);
   if (g.player.justThrewBatarang) g.camera.addShake(2);
+  checkExits(g);
 
   const sink = { enemyProjectiles: g.enemyProjectiles, audio: g.audio, fx: g.fx, camera: g.camera, shockwaves: g.shockwaves, addEnemy: (e) => g.enemies.push(e) };
   for (const e of g.enemies) e.update(dt, g.player, g.room.solids, sink);
@@ -196,10 +291,16 @@ function updatePickups(g, dt) {
   const p = g.player;
   for (let i = g.pickups.length - 1; i >= 0; i--) {
     const pk = g.pickups[i];
-    pk.vy += 1200 * dt; pk.y += pk.vy * dt;
-    if (pk.y + pk.h >= g.room.groundY) { pk.y = g.room.groundY - pk.h; pk.vy = 0; }
-    pk.life -= dt;
-    if (aabb(p, pk)) { if (p.health < p.maxHealth) p.health++; g.audio.pickup(); g.fx.burst(pk.x + pk.w / 2, pk.y, '#3fb7ff', 10); g.pickups.splice(i, 1); continue; }
+    if (!pk.static) { // static loot sits on platforms; gravity would drop it to the ground
+      pk.vy += 1200 * dt; pk.y += pk.vy * dt;
+      if (pk.y + pk.h >= g.room.groundY) { pk.y = g.room.groundY - pk.h; pk.vy = 0; }
+      pk.life -= dt;
+    }
+    if (aabb(p, pk)) {
+      if (pk.loot) { g.score += 150; g.fx.score(pk.x + pk.w / 2, pk.y - 8, 150); }
+      else if (p.health < p.maxHealth) p.health++;
+      g.audio.pickup(); g.fx.burst(pk.x + pk.w / 2, pk.y, '#3fb7ff', 10); g.pickups.splice(i, 1); continue;
+    }
     if (pk.life <= 0) g.pickups.splice(i, 1);
   }
 }
@@ -283,13 +384,16 @@ function progress(g) {
       g.pickups.push({ x: g.player.x + g.player.w / 2 - 9, y: g.player.y - 40, w: 18, h: 18, vy: -150, life: 12 });
       g.waveIndex++;
       if (g.waveIndex < g.room.waves.length) { spawnWave(g, g.waveIndex); g.objective = 'Clear the courtyard'; }
-      else { g.room.gate.open = true; g.audio.gate(); g.phase = 'TOBOSS'; g.objective = 'Breach the gate, hunt the Enforcer'; }
+      else { g.room.gate.open = true; g.audio.gate(); g.phase = 'EXPLORE'; g.objective = 'The gate is open - head east'; }
     }
-  } else if (g.phase === 'TOBOSS') {
-    if (g.player.x > g.room.bossTrigger) {
+  } else if (g.phase === 'EXPLORE') {
+    // Spans every room between the courtyard and the boss; the only event is the hall trigger.
+    if (g.room.id === 'enforcerHall' && !g.boss && g.player.x > g.room.bossTrigger) {
       g.boss = new Boss(g.room.bossSpawn.x, g.room.groundY);
+      g.room.gate.open = false; // lock the hall behind the player
+      g.room.solids = g.room.solidsClosed;
       g.phase = 'BOSS'; g.objective = 'Defeat the Enforcer';
-      g.audio.bossRoar(); g.camera.addShake(8);
+      g.audio.gate(); g.audio.bossRoar(); g.camera.addShake(8);
     }
   } else if (g.phase === 'BOSS') {
     if (g.boss && g.boss.dead) { if (!g.bossScored) { g.score += 500; g.bossScored = true; g.fx.score(g.boss.x + g.boss.w / 2, g.boss.y - 10, 500); } g.phase = 'WON'; gameOver(true); }

@@ -47,6 +47,63 @@ test('survival starts via its own button: endless objective and score readout', 
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('room graph is consistent', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'load' });
+  const errors = await page.evaluate(() => import('/js/world.js').then((m) => m.validateRoomGraph()));
+  expect(errors).toEqual([]);
+});
+
+test('exit transition swaps rooms and persists state', async ({ page }) => {
+  const errors = trackErrors(page);
+
+  await page.goto('/', { waitUntil: 'load' });
+  await page.locator('#btn-start').click();
+
+  // Clear both courtyard waves through the test seam until the gate opens.
+  await page.waitForFunction(() => {
+    const g = window.__bat.game;
+    for (const e of g.enemies) { e.hp = 0; e.dead = true; }
+    return g.phase === 'EXPLORE';
+  });
+
+  // Mark state, then step into the east exit.
+  await page.evaluate(() => {
+    const g = window.__bat.game;
+    g.player.health = 3;
+    window.__scoreBefore = g.score;
+    g.player.x = g.room.width - 50;
+    g.player.y = g.room.groundY - 70;
+  });
+  await page.waitForFunction(() => window.__bat.game.room.id === 'skybridge');
+
+  const after = await page.evaluate(() => {
+    const g = window.__bat.game;
+    return {
+      health: g.player.health,
+      scoreDelta: g.score - window.__scoreBefore,
+      parallaxMatchesRoom: g.parallax.roomW === g.room.width,
+      courtyardVisited: !!(g.roomStates.courtyard && g.roomStates.courtyard.visited),
+      banner: document.getElementById('room-banner').textContent,
+    };
+  });
+  expect(after.health).toBe(3);                 // health persists across rooms
+  expect(after.scoreDelta).toBe(0);             // score persists across rooms
+  expect(after.parallaxMatchesRoom).toBe(true); // parallax rebuilt for the new width
+  expect(after.courtyardVisited).toBe(true);
+  expect(after.banner).toMatch(/skybridge/i);
+
+  // Walk back west: cleared courtyard enemies must stay dead.
+  await page.evaluate(() => {
+    const g = window.__bat.game;
+    g.player.x = 4; g.player.y = g.room.groundY - 70;
+  });
+  await page.waitForFunction(() => window.__bat.game.room.id === 'courtyard' && !window.__bat.game.transition);
+  const back = await page.evaluate(() => window.__bat.game.enemies.length);
+  expect(back).toBe(0);
+
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
 test('pause opens, resumes, and exits to the main menu', async ({ page }) => {
   const errors = trackErrors(page);
 

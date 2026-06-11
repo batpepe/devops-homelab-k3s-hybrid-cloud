@@ -19,6 +19,7 @@ export function renderWorld(ctx, game, dt) {
   S.drawPlatforms(ctx, room);
   S.drawHazards(ctx, room, time);
   S.drawGate(ctx, room);
+  S.drawExits(ctx, room, time);
   S.drawAnchors(ctx, room, time);
   for (const pk of pickups) S.drawPickup(ctx, pk, time);
   S.drawShockwaves(ctx, shockwaves);
@@ -35,6 +36,16 @@ export function renderWorld(ctx, game, dt) {
   parallax.drawForeground(ctx, camera);
   parallax.drawRain(ctx, dt);
   fx.drawOverlay(ctx, ctx.canvas.width, ctx.canvas.height, player);
+
+  // Room-transition fade: black ramps in to the swap at the midpoint, then back out.
+  if (game.transition) {
+    const tr = game.transition, half = tr.dur / 2;
+    const a = tr.t < half ? tr.t / half : Math.max(0, 1 - (tr.t - half) / half);
+    ctx.globalAlpha = Math.min(1, a);
+    ctx.fillStyle = '#05060d';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.globalAlpha = 1;
+  }
 
   if (input.usingTouch) drawTouchControls(ctx, input);
 }

@@ -35,6 +35,14 @@ export class Camera {
     }
   }
 
+  // Hard placement for room transitions: no lerp from the previous room, no leftover shake.
+  snap(target, room) {
+    const look = (target.facing || 1) * 90;
+    this.x = clamp(target.x + target.w / 2 - this.w / 2 + look, 0, Math.max(0, room.width - this.w));
+    this.y = clamp(target.y + target.h / 2 - this.h / 2 - 30, 0, Math.max(0, room.height - this.h));
+    this.shakeMag = this.shakeX = this.shakeY = 0;
+  }
+
   begin(ctx) {
     ctx.save();
     ctx.translate(Math.round(-this.x + this.shakeX), Math.round(-this.y + this.shakeY));

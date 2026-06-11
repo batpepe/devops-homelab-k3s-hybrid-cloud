@@ -20,6 +20,7 @@ export class Hud {
     this.bossUi = document.getElementById('boss-ui');
     this.bossFill = document.getElementById('boss-fill');
     this.objective = document.getElementById('objective');
+    this.roomBanner = document.getElementById('room-banner');
     this.muteBtn = document.getElementById('btn-mute');
     this._segs = -1; this._lastCombo = 0; this._objText = '';
   }
@@ -56,6 +57,12 @@ export class Hud {
   }
   hideMenus() { this.menuStart.classList.add('hidden'); this.menuOver.classList.add('hidden'); this.showPause(false); }
   setMuteLabel(muted) { if (this.muteBtn) this.muteBtn.textContent = muted ? 'SOUND: OFF' : 'SOUND: ON'; }
+
+  announceRoom(name) {
+    if (!this.roomBanner || !name) return;
+    this.roomBanner.textContent = name;
+    this.roomBanner.classList.remove('flash'); void this.roomBanner.offsetWidth; this.roomBanner.classList.add('flash');
+  }
 
   setObjective(text) {
     if (text === this._objText) return;

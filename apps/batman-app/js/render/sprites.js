@@ -84,6 +84,19 @@ export function drawAnchors(ctx, room, time) {
   }
 }
 
+export function drawExits(ctx, room, time) {
+  for (const ex of room.exits || []) {
+    const pulse = 0.4 + 0.25 * Math.sin(time * 3 + ex.x);
+    const g = ctx.createLinearGradient(0, ex.y, 0, ex.y + ex.h);
+    g.addColorStop(0, 'rgba(63,183,255,0)');
+    g.addColorStop(1, 'rgba(63,183,255,0.30)');
+    ctx.save(); ctx.globalAlpha = pulse;
+    ctx.fillStyle = g; ctx.fillRect(ex.x, ex.y, ex.w, ex.h);
+    ctx.restore();
+    glow(ctx, ex.x + ex.w / 2, ex.y + ex.h - 8, 30, 'rgba(63,183,255,0.35)', pulse);
+  }
+}
+
 export function drawPickup(ctx, pk, time) {
   const yy = pk.y + Math.sin(time * 4) * 3;
   glow(ctx, pk.x + pk.w / 2, yy + pk.h / 2, 22, 'rgba(63,183,255,0.4)', 0.9);

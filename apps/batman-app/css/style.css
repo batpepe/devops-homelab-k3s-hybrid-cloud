@@ -92,6 +92,16 @@ body { position: fixed; inset: 0; }
 #objective.flash { animation: objflash 0.5s ease-out; }
 @keyframes objflash { 0% { background: rgba(63, 183, 255, 0.5); } 100% { background: rgba(8, 12, 24, 0.6); } }
 
+/* Room banner: invisible at rest, flashes on room entry */
+#room-banner {
+  position: absolute; top: 36%; left: 50%; transform: translateX(-50%);
+  color: var(--gold); font-size: 34px; font-weight: bold; letter-spacing: 8px;
+  text-shadow: 0 0 18px rgba(229, 169, 16, 0.5);
+  opacity: 0; white-space: nowrap;
+}
+#room-banner.flash { animation: roomflash 1.8s ease-out; }
+@keyframes roomflash { 0% { opacity: 0; } 15% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
+
 /* Corner buttons (mute, pause) */
 #btn-mute, #btn-pause {
   position: absolute; bottom: 14px; left: 14px;

@@ -8,10 +8,13 @@
 import { moveAndCollide } from './physics.js';
 import { Enemy } from './enemy.js';
 
+const ENGAGE_DIST = 540; // attack-pick range (design value, not the viewport)
+
 export class Boss {
   constructor(x, groundY) {
     this.w = 92; this.h = 120;
     this.x = x; this.y = groundY - this.h;
+    this.groundY = groundY;
     this.vx = 0; this.vy = 0;
     this.maxHp = 30; this.hp = this.maxHp;
     this.facing = -1;
@@ -50,13 +53,13 @@ export class Boss {
       case 'INTRO': this.vx = 0; this.timer -= dt; if (this.timer <= 0) this.state = 'CHASE'; break;
       case 'ROAR': this.vx = 0; this.timer -= dt; if (this.timer <= 0) this.state = 'SUMMON'; break;
       case 'SUMMON':
-        sink.addEnemy(new Enemy({ x: this.x - 120, y: solids[0].y, type: 'thrower' }));
-        sink.addEnemy(new Enemy({ x: this.x + this.w + 120, y: solids[0].y, type: 'blade' }));
+        sink.addEnemy(new Enemy({ x: this.x - 120, y: this.groundY, type: 'thrower' }));
+        sink.addEnemy(new Enemy({ x: this.x + this.w + 120, y: this.groundY, type: 'blade' }));
         this.state = 'CHASE'; this.cd = 1.0; break;
       case 'STUNNED': this.vx = 0; this.stunTimer -= dt; if (this.stunTimer <= 0) this.state = 'CHASE'; break;
       case 'CHASE': {
         this.facing = px < cx ? -1 : 1;
-        if (this.cd <= 0 && dist < 540) {
+        if (this.cd <= 0 && dist < ENGAGE_DIST) {
           const r = Math.random();
           if (dist > 250 && r < 0.55) { this.state = 'CHARGE_TELE'; this.timer = 0.6; }
           else if (r < 0.4) { this.state = 'POUND_TELE'; this.timer = 0.7; }
@@ -87,7 +90,7 @@ export class Boss {
         if (this.timer <= 0 || this.vy > 0) { this.state = 'POUND_DOWN'; this.vy = 1500; } break;
       case 'POUND_DOWN': this.vx = 0;
         if (this.onGround) {
-          sink.shockwaves.push({ x: cx, y: solids[0].y, r: 20, maxR: 380, life: 0.5, max: 0.5, hit: false });
+          sink.shockwaves.push({ x: cx, y: this.groundY, r: 20, maxR: 380, life: 0.5, max: 0.5, hit: false });
           sink.audio.boom(); sink.camera.addShake(14);
           this.state = 'CHASE'; this.cd = 1.2;
         } break;
