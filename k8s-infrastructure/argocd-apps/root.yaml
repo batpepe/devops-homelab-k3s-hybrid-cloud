@@ -1,0 +1,22 @@
+# App-of-Apps root: watches this directory, so any Application file added here
+# deploys automatically. Bootstrap once with:
+#   kubectl apply -f k8s-infrastructure/argocd-apps/root.yaml
+# After that, no manual kubectl apply is ever needed for new apps.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/argocd-apps
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

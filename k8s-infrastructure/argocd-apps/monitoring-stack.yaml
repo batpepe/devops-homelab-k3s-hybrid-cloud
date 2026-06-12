@@ -13,13 +13,14 @@ spec:
       releaseName: monitoring
       values: |
         grafana:
-          # Create the secret manually:
+          # Create the secret manually, with BOTH keys:
           # kubectl create secret generic grafana-admin-secret -n monitoring \
+          #   --from-literal=admin-user=admin \
           #   --from-literal=admin-password=<your-password>
-          adminPasswordFrom:
-            secretKeyRef:
-              name: grafana-admin-secret
-              key: admin-password
+          admin:
+            existingSecret: grafana-admin-secret
+            userKey: admin-user
+            passwordKey: admin-password
           
           additionalDataSources:
             - name: Prometheus

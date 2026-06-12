@@ -16,10 +16,14 @@ spec:
     spec:
       containers:
       - name: cloudflared
-        image: cloudflare/cloudflared:2024.8.3
+        image: cloudflare/cloudflared:2026.6.0
         args:
         - tunnel
         - --no-autoupdate
+        # 2026.4.0 changed the default edge IP version to auto; pin to IPv4 so
+        # flaky home IPv6 cannot break connector registration.
+        - --edge-ip-version
+        - "4"
         - run
         resources:
           requests:

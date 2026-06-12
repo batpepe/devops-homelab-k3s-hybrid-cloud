@@ -187,3 +187,24 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+# Name matches the Application that was hand-applied to the cluster, so the
+# root app adopts it instead of creating a duplicate.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: whoami-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/whoami
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
