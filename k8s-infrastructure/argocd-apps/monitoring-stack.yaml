@@ -64,6 +64,10 @@ spec:
               url: http://loki.monitoring.svc:3100
               access: proxy
 
+          # Grafana substitutes ${TG_*} into provisioning files BEFORE parsing
+          # them as YAML, and the telegram integration requires chatid to be a
+          # string. The chatid value inside tg-secret must therefore include
+          # its own surrounding double quotes: --from-literal=chatid='"-100..."'
           envValueFrom:
             TG_BOT_TOKEN:
               secretKeyRef:
