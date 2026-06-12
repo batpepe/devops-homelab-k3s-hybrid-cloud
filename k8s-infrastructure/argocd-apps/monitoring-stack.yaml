@@ -54,7 +54,7 @@ spec:
                       settings:
                         bottoken: "${TG_BOT_TOKEN}"
                         chatid: "${TG_CHAT_ID}"
-                        message: '{{ template "custom_tg_alert" . }}'
+                        message: '{{ `{{ template "custom_tg_alert" . }}` }}'
                         parseMode: "HTML"
             policies.yaml:
               apiVersion: 1
@@ -70,7 +70,11 @@ spec:
               templates:
                 - orgId: 1
                   name: custom_tg_alert
+                  # The body is Grafana templating, not Helm. The chart runs
+                  # helm tpl over alerting values, so the braces must be kept
+                  # inside a raw-string literal or rendering fails.
                   template: |
+                    {{ `
                     {{ define "custom_tg_alert" }}
                     {{ range .Alerts }}
                     {{ if eq .Status "firing" }}🚨 <b>ALERT: FIRING!</b> 🚨{{ else }}✅ <b>ALERT: RESOLVED!</b> ✅{{ end }}
@@ -79,6 +83,7 @@ spec:
                     <b>Namespace:</b> {{ .Labels.namespace }}
                     {{ end }}
                     {{ end }}
+                    ` }}
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
