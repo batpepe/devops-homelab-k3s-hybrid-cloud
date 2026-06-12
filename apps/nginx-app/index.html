@@ -31,8 +31,9 @@
     <div class="footer">Version: 1.2.0 | CI/CD powered by GitHub Actions</div>
 
 <script>
-  // Fetch stats from the live backend API
-  fetch('https://api.batpepe.online/api/visit')
+  // Same-origin: /api is routed to the nodejs backend by the Ingress,
+  // so the API needs no public hostname of its own.
+  fetch('/api/visit')
     .then(response => response.json())
     .then(data => {
       if (data.status === 'Healthy') {

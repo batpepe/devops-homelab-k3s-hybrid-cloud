@@ -72,3 +72,22 @@ spec:
             name: nginx-svc
             port:
               number: 80
+  - host: cv.batpepe.online
+    http:
+      paths:
+      # Longest prefix wins: /api goes to the visit-counter backend, the
+      # rest to the static site. Keeps the API same-origin with the CV.
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: nodejs-svc
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-svc
+            port:
+              number: 80

@@ -40,10 +40,16 @@ spec:
         - name: TZ
           value: "Europe/Kyiv"
         - name: DOMAIN
-          value: "http://vaultwarden.local"
-        # Flip to "false" via a Git commit once your account exists.
+          value: "https://vaultwarden.batpepe.online"
+        # Signups stay closed; create accounts via /admin invites instead,
+        # so the public host never has an open-registration window.
         - name: SIGNUPS_ALLOWED
-          value: "true"
+          value: "false"
+        - name: ADMIN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: vaultwarden-secret
+              key: ADMIN_TOKEN
         ports:
         - containerPort: 80
           name: web
@@ -87,9 +93,9 @@ spec:
     targetPort: 80
     name: web
 ---
-# The web vault needs a secure context (HTTPS) for WebCrypto; over plain HTTP
-# use the Bitwarden desktop/mobile clients. TLS on traefik is the follow-up
-# that unlocks the web UI.
+# The web vault needs a secure context (HTTPS) for WebCrypto. The public
+# hostname gets TLS at the Cloudflare edge; vaultwarden.local stays plain
+# HTTP, good for probes but not for the web UI.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -104,6 +110,16 @@ metadata:
 spec:
   rules:
   - host: vaultwarden.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: vaultwarden
+            port:
+              number: 80
+  - host: vaultwarden.batpepe.online
     http:
       paths:
       - path: /

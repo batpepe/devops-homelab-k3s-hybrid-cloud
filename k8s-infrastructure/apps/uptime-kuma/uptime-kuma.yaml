@@ -107,3 +107,13 @@ spec:
             name: uptime-kuma
             port:
               number: 80
+  - host: uptime.batpepe.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: uptime-kuma
+            port:
+              number: 80

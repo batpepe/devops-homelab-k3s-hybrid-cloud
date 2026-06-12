@@ -147,3 +147,13 @@ spec:
             name: pihole-web
             port:
               number: 80
+  - host: pihole.batpepe.online
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pihole-web
+            port:
+              number: 80
