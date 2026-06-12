@@ -39,6 +39,8 @@ spec:
             datasources:
               defaultDatasourceEnabled: false
 
+          # Single source of truth for grafana datasources; the kps default
+          # block and the loki-stack datasource ConfigMap are both disabled.
           additionalDataSources:
             - name: Prometheus
               type: prometheus
@@ -48,6 +50,19 @@ spec:
               isDefault: true
               jsonData:
                 httpMethod: POST
+            - name: Alertmanager
+              type: alertmanager
+              uid: alertmanager
+              url: http://monitoring-kube-prometheus-alertmanager.monitoring.svc:9093
+              access: proxy
+              jsonData:
+                handleGrafanaManagedAlerts: false
+                implementation: prometheus
+            - name: Loki
+              type: loki
+              uid: loki
+              url: http://loki.monitoring.svc:3100
+              access: proxy
 
           envValueFrom:
             TG_BOT_TOKEN:
