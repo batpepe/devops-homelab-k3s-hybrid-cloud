@@ -21,7 +21,24 @@ spec:
             existingSecret: grafana-admin-secret
             userKey: admin-user
             passwordKey: admin-password
+
+          # Chart-managed ingress; replaces the ingress that was once
+          # hand-applied outside Git.
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hosts:
+              - grafana.local
+              - grafana.batpepe.online
           
+          # The chart's sidecar provisions its own default Prometheus
+          # datasource; two defaults make Grafana refuse to start, so it is
+          # disabled in favor of the explicit one below (dashboards pin its
+          # uid "prometheus").
+          sidecar:
+            datasources:
+              defaultDatasourceEnabled: false
+
           additionalDataSources:
             - name: Prometheus
               type: prometheus
