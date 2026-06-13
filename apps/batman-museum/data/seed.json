@@ -1,0 +1,992 @@
+{
+  "eras": [
+    {
+      "slug": "golden-age",
+      "name": "The Golden Age",
+      "yearStart": 1939,
+      "yearEnd": 1956,
+      "blurb": "Batman is born: a pulp vigilante of the night who gains a sidekick, a butler, a code against killing, and a rogues gallery that will define comics for a century.",
+      "accent": "#d4a017",
+      "sort": 0
+    },
+    {
+      "slug": "silver-age",
+      "name": "The Silver Age",
+      "yearStart": 1956,
+      "yearEnd": 1970,
+      "blurb": "Science fiction, camp and the Comics Code soften the Dark Knight. Batman joins the Justice League, meets Batwoman and Batgirl, and conquers television.",
+      "accent": "#9fb4c7",
+      "sort": 1
+    },
+    {
+      "slug": "bronze-age",
+      "name": "The Bronze Age",
+      "yearStart": 1970,
+      "yearEnd": 1986,
+      "blurb": "O'Neil and Adams drag Batman back into the shadows: a lean gothic detective, a lethal Joker again, and the debut of Ra's al Ghul.",
+      "accent": "#b87333",
+      "sort": 2
+    },
+    {
+      "slug": "modern-age",
+      "name": "The Modern Age",
+      "yearStart": 1986,
+      "yearEnd": null,
+      "blurb": "The Dark Knight Returns detonates the genre: grim, psychological, literary. Batman becomes the defining myth of mature superhero comics.",
+      "accent": "#c0392b",
+      "sort": 3
+    },
+    {
+      "slug": "animated",
+      "name": "The Animated Universe",
+      "yearStart": 1992,
+      "yearEnd": 2006,
+      "blurb": "Timm and Dini's deco-noir Gotham gives Batman his definitive voice, invents Harley Quinn, and builds an entire animated DC universe.",
+      "accent": "#e74c3c",
+      "sort": 4
+    },
+    {
+      "slug": "cinematic",
+      "name": "The Cinematic Eras",
+      "yearStart": 1943,
+      "yearEnd": null,
+      "blurb": "From a 1943 wartime serial to Burton's gothic blockbuster, Schumacher's neon excess, Nolan's crime epic, and Reeves' rain-soaked noir.",
+      "accent": "#4aa3ff",
+      "sort": 5
+    },
+    {
+      "slug": "games",
+      "name": "Video Games",
+      "yearStart": 1986,
+      "yearEnd": null,
+      "blurb": "From 8-bit beginnings on home computers to the Arkham trilogy that proved licensed games could be masterpieces.",
+      "accent": "#39d353",
+      "sort": 6
+    }
+  ],
+  "items": [
+    {
+      "slug": "detective-comics-27",
+      "eraSlug": "golden-age",
+      "title": "Detective Comics #27",
+      "mediaType": "comics",
+      "releaseDate": "1939-03-30",
+      "yearDisplay": "1939",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/b/bc/Detective_Comics_27_%28May_1939%29.png",
+      "impact": "Six pages by Bob Kane and Bill Finger introduce 'The Bat-Man': a grim vigilante for a darker kind of hero. This is the big bang of the entire mythos.",
+      "story": "Detective Comics #27 is an American comic book of the Detective Comics anthology series known for debuting the superhero Batman in a featured story called \"The Case of the Chemical Syndicate\" during the Golden Age of Comic Books. It is considered one of the most important and valuable first appearance debuts from DC Comics alongside Action Comics #1, released the previous year. In addition to the debut of Batman, Detective Comics #27 included several other stories featuring established and original characters. These features represented the range of genres covered by the anthology series at the time, including crime, espionage, western, and mystery fiction.",
+      "funFacts": [
+        "The cover date says May 1939, but the issue hit newsstands on March 30, 1939.",
+        "Batman's debut story, 'The Case of the Chemical Syndicate', is just six pages long.",
+        "Bill Finger's co-creator credit was only officially recognized by DC in 2015."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Detective_Comics_27",
+      "sort": 0
+    },
+    {
+      "slug": "batman-1-1940",
+      "eraSlug": "golden-age",
+      "title": "Batman #1",
+      "mediaType": "comics",
+      "releaseDate": "1940-04-25",
+      "yearDisplay": "1940",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/7/7b/Comic_Book_-_The_Joker_%281940%29.jpg",
+      "impact": "The first solo Batman title introduces both the Joker and Catwoman in a single issue - arguably the greatest one-issue villain debut in comics history.",
+      "story": "The Joker is a supervillain appearing in American comic books published by DC Comics. Created by Bill Finger, Bob Kane, and Jerry Robinson, the character first appeared in the debut issue of the comic book Batman on April 25, 1940. Credit for the Joker's creation is disputed; Kane and Robinson claimed responsibility for his design while acknowledging Finger's writing contribution. Although the Joker was planned to be killed off during his initial appearance, he was spared by editorial intervention, allowing the character to endure as the archenemy of the superhero Batman.",
+      "funFacts": [
+        "The Joker was slated to die in his second story; an editorial change kept him alive.",
+        "Catwoman debuts as 'the Cat', a jewel thief Batman deliberately lets slip away."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Joker_(character)",
+      "sort": 1
+    },
+    {
+      "slug": "robin-debut",
+      "eraSlug": "golden-age",
+      "title": "Robin Debuts (Detective Comics #38)",
+      "mediaType": "comics",
+      "releaseDate": "1940-04-01",
+      "yearDisplay": "1940",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/4/43/Dick_Grayson_-_Nicola_Scott_Cover.webp",
+      "impact": "Robin brightens Batman's world and reportedly nearly doubles Detective Comics' sales, inventing the kid-sidekick template every publisher would copy.",
+      "story": "Richard John \"Dick\" Grayson is a superhero appearing in American comic books published by DC Comics, commonly in association with Batman, the Teen Titans, and the Justice League. Created by writer Bill Finger and artist Bob Kane, he first appeared in Detective Comics #38 in April 1940. Dick is the original and most popular incarnation of Robin, the crime-fighting partner of Batman, with whom he forms the Dynamic Duo. The son of master acrobats dubbed the Flying Graysons, he is later adopted by Batman's alter ego Bruce Wayne.",
+      "funFacts": [
+        "Robin's look was inspired by N.C. Wyeth's illustrations of Robin Hood.",
+        "Dick Grayson later outgrows the role and becomes Nightwing in 1984."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Dick_Grayson",
+      "sort": 2
+    },
+    {
+      "slug": "alfred-debut",
+      "eraSlug": "golden-age",
+      "title": "Alfred Arrives (Batman #16)",
+      "mediaType": "comics",
+      "releaseDate": "1943-06-15",
+      "yearDisplay": "1943",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/5/5c/Alfred_Pennyworth_%28Alex_Ross%29.jpg",
+      "impact": "Wayne Manor gains its soul: the butler who keeps Bruce Wayne human and the Batcave tidy.",
+      "story": "Alfred Thaddeus Crane Pennyworth, originally Alfred Beagle, is a fictional character appearing in American comic books published by DC Comics, most commonly in association with the superhero Batman.",
+      "funFacts": [
+        "The original Alfred was portly and clean-shaven; the slim, mustached look from the 1943 movie serial was adopted by the comics."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Alfred_Pennyworth",
+      "sort": 3
+    },
+    {
+      "slug": "batman-serial-1943",
+      "eraSlug": "golden-age",
+      "title": "Batman (1943 Serial)",
+      "mediaType": "movies",
+      "releaseDate": "1943-07-16",
+      "yearDisplay": "1943",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/f4/Batman1943SerialPoster.jpg",
+      "impact": "Batman's first screen appearance: a 15-chapter wartime Columbia serial that invented 'The Bat's Cave' and its grandfather-clock entrance, both adopted by the comics.",
+      "story": "Batman is a 1943 American 15-chapter theatrical serial from Columbia Pictures, produced by Rudolph C. Flothow, directed by Lambert Hillyer, that stars Lewis Wilson as Batman and Douglas Croft as his sidekick Robin. The serial is based on the DC Comics character Batman, who first appeared in Detective Comics #27 in May 1939. The villain is an original character named Dr. Daka, a secret agent of the Japanese Imperial government, played by J. Carrol Naish. Rounding out the cast are Shirley Patterson as Linda Page, Bruce Wayne's love interest, and William Austin as Alfred, the Wayne Manor butler.",
+      "funFacts": [
+        "Made on a wartime budget: the Batmobile was a plain black Cadillac.",
+        "William Austin's on-screen Alfred changed how Alfred was drawn in the comics."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(serial)",
+      "sort": 4
+    },
+    {
+      "slug": "bob-kane",
+      "eraSlug": "golden-age",
+      "title": "Bob Kane",
+      "mediaType": "comics",
+      "releaseDate": "1939-06-15",
+      "yearDisplay": "1915-1998",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Bob_Kane_1966_photo.jpg",
+      "impact": "Credited creator of Batman, whose 1939 deal with DC kept his name alone on every Batman story for over half a century.",
+      "story": "Robert Kane was an American comic book writer, animator, and artist who co-created Batman and many other early related characters for DC Comics. He was inducted into the comic book industry's Jack Kirby Hall of Fame in 1993 and into the Will Eisner Comic Book Hall of Fame in 1996.",
+      "funFacts": [
+        "Kane's first concept had red tights and rigid bat wings; Bill Finger suggested the cowl, the cape and the gray suit."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Bob_Kane",
+      "sort": 5
+    },
+    {
+      "slug": "bill-finger",
+      "eraSlug": "golden-age",
+      "title": "Bill Finger",
+      "mediaType": "comics",
+      "releaseDate": "1939-06-15",
+      "yearDisplay": "1914-1974",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Bill_Finger_yearbook_photo_1933.png",
+      "impact": "The uncredited architect of the mythos: the cowl, the name Bruce Wayne, Gotham City, the Joker's look, the origin story.",
+      "story": "Milton \"Bill\" Finger was an American comic book writer who is credited with co-creating the DC Comics character Batman with Bob Kane. Despite making major contributions as an innovative writer, visionary mythos/world builder and illustration architect, Finger was often given \"ghostwriter\" status on comics he created or co-created, including those featuring Batman and the original Green Lantern. In recent years, Finger's lost legacy has been restored.",
+      "funFacts": [
+        "DC officially added Finger's co-creator credit in 2015, four decades after his death.",
+        "Comics' award for unsung writers, the Bill Finger Award, is named in his honor."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Bill_Finger",
+      "sort": 6
+    },
+    {
+      "slug": "batwoman-debut",
+      "eraSlug": "silver-age",
+      "title": "Batwoman Debuts (Detective Comics #233)",
+      "mediaType": "comics",
+      "releaseDate": "1956-07-01",
+      "yearDisplay": "1956",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/8/87/Detective233.JPG",
+      "impact": "Kathy Kane arrives: the first of the Bat-Family's women, introduced partly as an answer to 1950s criticism of Batman and Robin's home life.",
+      "story": "Katherine \"Kathy\" Kane is a character appearing in American comic books published by DC Comics. She is the first DC character to appear as the superheroine Batwoman. She was created by writer Edmond Hamilton and artist Sheldon Moldoff under the direction of editor Jack Schiff, as part of an ongoing effort to expand Batman's cast of supporting characters. Batwoman began appearing in DC Comics stories beginning with Detective Comics #233 (1956), in which she was introduced as a love interest for Batman in order to combat the allegations of Batman's homosexuality arising from the controversial book Seduction of the Innocent (1954). When Julius Schwartz became editor of the Batman-related comic in 1964, he removed characters deemed non-essential, including Batwoman, Bat-Girl, Bat-Mite, and Ace the Bat-Hound. Later, the 1985 limited series Crisis on Infinite Earths retroactively established that Kathy Kane never becomes Batwoman in DC's main continuity. The character has since made appearances in the main continuity without the Batwoman persona.",
+      "funFacts": [
+        "Her introduction followed the moral panic stirred by Fredric Wertham's 'Seduction of the Innocent'.",
+        "Her utility purse hid crime-fighting gear disguised as lipstick and compacts."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kathy_Kane",
+      "sort": 7
+    },
+    {
+      "slug": "jla-debut",
+      "eraSlug": "silver-age",
+      "title": "Justice League Founded (The Brave and the Bold #28)",
+      "mediaType": "comics",
+      "releaseDate": "1960-03-01",
+      "yearDisplay": "1960",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/f2/JLA-AlexRoss.jpg",
+      "impact": "Batman becomes a charter member of the Justice League of America, anchoring DC's shared universe from then on.",
+      "story": "The Justice League, or Justice League of America (JLA), are a group of superheroes appearing in American comic books published by DC Comics. The team first appeared in The Brave and the Bold #28. Writer Gardner Fox conceived the team as a revival of the Justice Society of America, a similar team from DC Comics from the 1940s which had been pulled out of print due to a decline in sales. The Justice League is an all-star ensemble cast of established superhero characters from DC Comics' portfolio. Diegetically, these superheroes usually operate independently but occasionally assemble as a team to tackle especially formidable villains. This is in contrast to certain other superhero teams such as the Doom Patrol or Marvel’s X-Men whose characters were created specifically to be part of the team, with the team being central to their identity. The cast of the Justice League usually features a few highly popular characters who have their own solo books, such as Superman, Batman, and Wonder Woman, alongside several lesser-known characters who benefit from exposure.",
+      "funFacts": [
+        "The League debuted in The Brave and the Bold #28 before earning its own title later in 1960.",
+        "The JLA's sales success reportedly prompted Marvel to commission the Fantastic Four."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Justice_League",
+      "sort": 8
+    },
+    {
+      "slug": "new-look-batman",
+      "eraSlug": "silver-age",
+      "title": "The New Look (Detective Comics #327)",
+      "mediaType": "comics",
+      "releaseDate": "1964-05-01",
+      "yearDisplay": "1964",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/4/4d/BatmanComicIssue1%2C1940.png",
+      "impact": "Editor Julius Schwartz and artist Carmine Infantino strip away the sci-fi silliness, add the yellow chest oval, and rescue Batman from looming cancellation.",
+      "story": "Batman is an ongoing superhero comic book series published by DC Comics, featuring the character of the same name as its protagonist. The character, created by Bill Finger and Bob Kane, first appeared in Detective Comics #27. Batman proved to be so popular that a self-titled ongoing comic book series began publication with a cover date of spring 1940. It was first advertised in early April 1940, one month after the first appearance of his new sidekick, Robin the Boy Wonder.",
+      "funFacts": [
+        "The yellow oval insignia debuted with the 1964 'New Look' redesign.",
+        "Batman's sales had fallen so far that DC reportedly considered cancelling the books."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(comic_book)",
+      "sort": 9
+    },
+    {
+      "slug": "batman-66-tv",
+      "eraSlug": "silver-age",
+      "title": "Batman (ABC TV Series)",
+      "mediaType": "tv",
+      "releaseDate": "1966-01-12",
+      "yearDisplay": "1966",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Batman_%281966_TV_series_logo%29.svg/500px-Batman_%281966_TV_series_logo%29.svg.png",
+      "impact": "Same Bat-time, same Bat-channel: the Adam West series makes Batman a global pop phenomenon and welds 'camp' to the character for a generation.",
+      "story": "Batman is an American superhero comedy television series based on the DC Comics character of the same name. It stars Adam West as Bruce Wayne/Batman and Burt Ward as Dick Grayson/Robin—two crime-fighting heroes who defend Gotham City from a variety of archvillains. It is known for its camp style and upbeat theme music, as well as its intentionally humorous, simplistic morality aimed at its preteen audience. The 120 episodes aired on the ABC network for three seasons from January 12, 1966, to March 14, 1968, twice weekly during the first two seasons, and weekly for the third. A companion feature film was released in 1966 between the first and second seasons of the TV show.",
+      "funFacts": [
+        "ABC aired it twice a week, and both broadcasts reached the ratings top ten in season one.",
+        "Cesar Romero refused to shave his mustache, so the Joker's makeup was painted over it."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(TV_series)",
+      "sort": 10
+    },
+    {
+      "slug": "batgirl-debut",
+      "eraSlug": "silver-age",
+      "title": "Batgirl Debuts (Detective Comics #359)",
+      "mediaType": "comics",
+      "releaseDate": "1967-01-01",
+      "yearDisplay": "1967",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/6/6c/Barbara_Gordon.jpg",
+      "impact": "Barbara Gordon is created partly at the TV producers' request for a new heroine - and outlives the show to become a pillar of the comics.",
+      "story": "Barbara Joan Gordon is a superheroine appearing in American comic books published by DC Comics, commonly in association with the superhero Batman. The character was created by television producer William Dozier, editor Julius Schwartz, writer Gardner Fox, and artist Carmine Infantino. Dozier, the producer of the 1960s Batman television series, requested Schwartz to call for a new female counterpart to the superhero Batman that could be introduced into publication and the third season of the show simultaneously. The character subsequently made her first comic-book appearance as Batgirl in Detective Comics #359, titled \"The Million Dollar Debut of Batgirl!\" in January 1967, by Fox and Infantino, allowing her to be introduced into the television series, portrayed by actress Yvonne Craig, in the season 3 premiere \"Enter Batgirl, Exit Penguin\", in September that same year.",
+      "funFacts": [
+        "Her debut was timed to help pitch a heroine for the TV show's third season, where Yvonne Craig played her.",
+        "She later becomes Oracle, DC's master hacker, after The Killing Joke."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Barbara_Gordon",
+      "sort": 11
+    },
+    {
+      "slug": "adam-west",
+      "eraSlug": "silver-age",
+      "title": "Adam West",
+      "mediaType": "tv",
+      "releaseDate": "1966-06-15",
+      "yearDisplay": "1928-2017",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Adam_West_1961.JPG",
+      "impact": "The Bright Knight: West's deadpan sincerity is what made the 1966 series work, and he embraced the role for the rest of his life.",
+      "story": "William West Anderson, known professionally as Adam West, was an American actor. He portrayed Batman in the 1960s ABC series of the same name and its 1966 theatrical feature film, reprising the role in various media until 2017. Having made his film debut in the 1950s, West starred opposite Chuck Connors in Geronimo (1962) and The Three Stooges in The Outlaws Is Coming (1965). He also appeared in the science fiction film Robinson Crusoe on Mars (1964).",
+      "funFacts": [
+        "He voiced his own self-parody as Mayor Adam West on Family Guy.",
+        "He returned to voice Batman in animated films in the 2010s."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Adam_West",
+      "sort": 12
+    },
+    {
+      "slug": "ras-al-ghul-debut",
+      "eraSlug": "bronze-age",
+      "title": "Ra's al Ghul Debuts (Batman #232)",
+      "mediaType": "comics",
+      "releaseDate": "1971-06-01",
+      "yearDisplay": "1971",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/f7/Ra%27s_al_Ghul.png",
+      "impact": "O'Neil and Adams introduce the Demon's Head: an immortal eco-extremist who knows Batman's identity and treats him as an equal - a new scale of villain.",
+      "story": "Ra's al Ghul is a supervillain appearing in American comic books published by DC Comics, commonly as an adversary of the superhero Batman. Created by editor Julius Schwartz, writer Dennis O'Neil, and artist Neal Adams, the character first appeared in Batman #232's \"Daughter of the Demon\".",
+      "funFacts": [
+        "Ra's al Ghul translates roughly as 'the Demon's Head'.",
+        "Unlike most villains, he deduced Batman's secret identity on his own."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Ra's_al_Ghul",
+      "sort": 13
+    },
+    {
+      "slug": "joker-five-way",
+      "eraSlug": "bronze-age",
+      "title": "The Joker's Five-Way Revenge (Batman #251)",
+      "mediaType": "comics",
+      "releaseDate": "1973-09-01",
+      "yearDisplay": "1973",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/6/69/Comic_Book_-_Batman_251_Cover_%281973%29.jpg",
+      "impact": "After years of camp, O'Neil and Adams return the Joker to homicidal madness - the story that re-armed comics' greatest villain.",
+      "story": "After two decades as a giggling prankster, the Joker returned in Batman #251 (September 1973) as a murderer settling scores: one by one, he hunts the five former henchmen he suspects of betraying him. Dennis O'Neil's script and Neal Adams' art restored the character's lethal menace and set the template for every serious Joker story since.",
+      "funFacts": [
+        "Neal Adams' cover for Batman #251 is one of the most homaged Batman images ever drawn."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Joker_(character)",
+      "sort": 14
+    },
+    {
+      "slug": "strange-apparitions",
+      "eraSlug": "bronze-age",
+      "title": "Strange Apparitions (Detective Comics #469-479)",
+      "mediaType": "comics",
+      "releaseDate": "1977-08-01",
+      "yearDisplay": "1977-78",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/2/28/Detective_Comics_475.jpg",
+      "impact": "Englehart and Rogers deliver what many call the definitive Batman run: noir Gotham, Silver St. Cloud, and the Joker's Laughing Fish.",
+      "story": "Across Detective Comics #469-479 (1977-78), writer Steve Englehart and artist Marshall Rogers staged a moody, romantic, noir Gotham: Hugo Strange steals Batman's identity, Silver St. Cloud discovers it, and the Joker poisons the city's fish to copyright his grin. Collected as Batman: Strange Apparitions, the run is regularly cited among the greatest Batman comics ever made.",
+      "funFacts": [
+        "'The Laughing Fish' chapter was adapted nearly beat-for-beat in Batman: The Animated Series.",
+        "The run introduced Silver St. Cloud, who deduced Batman's identity on her own."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Marshall_Rogers",
+      "sort": 15
+    },
+    {
+      "slug": "neal-adams",
+      "eraSlug": "bronze-age",
+      "title": "Neal Adams",
+      "mediaType": "comics",
+      "releaseDate": "1970-06-15",
+      "yearDisplay": "1941-2022",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/94/Neal_Adams_by_Gage_Skidmore.jpg",
+      "impact": "The artist who gave Batman his modern body: long ears, flowing cape, real anatomy, real shadows.",
+      "story": "Neal Adams was an American comic book artist. He was the co-founder of the graphic design studio Continuity Associates, and was a creators-rights advocate who helped secure a pension and recognition for Superman creators Jerry Siegel and Joe Shuster. During his career, Adams co-created the characters John Stewart, Man-Bat, and Ra's al Ghul for DC Comics.",
+      "funFacts": [
+        "Adams also campaigned successfully for creator rights, including recognition and pensions for Superman's creators Siegel and Shuster."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Neal_Adams",
+      "sort": 16
+    },
+    {
+      "slug": "dennis-oneil",
+      "eraSlug": "bronze-age",
+      "title": "Dennis O'Neil",
+      "mediaType": "comics",
+      "releaseDate": "1970-06-15",
+      "yearDisplay": "1939-2020",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/92/Dennis_O%27Neil_%287885471094%29.jpg",
+      "impact": "Writer and later group editor who steered Batman for three decades, from the gothic 1970s revival through Knightfall and No Man's Land.",
+      "story": "Dennis Joseph O'Neil was an American comic book writer and editor, principally for Marvel Comics and DC Comics from the 1960s through the 1990s, and Group Editor for the Batman family of titles until his retirement.",
+      "funFacts": [
+        "He co-created Ra's al Ghul and Talia and wrote the definitive 1970s Batman with Neal Adams."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Dennis_O'Neil",
+      "sort": 17
+    },
+    {
+      "slug": "dark-knight-returns",
+      "eraSlug": "modern-age",
+      "title": "The Dark Knight Returns",
+      "mediaType": "comics",
+      "releaseDate": "1986-02-01",
+      "yearDisplay": "1986",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/b/b2/Batman_The_Dark_Knight_Returns_1_%28February_1986%29.jpg",
+      "impact": "Frank Miller's aged Batman comes out of retirement in a dystopian Gotham. Alongside Watchmen, it redefined what mainstream comics could be - every dark Batman since stands in its shadow.",
+      "story": "The Dark Knight Returns is a 1986 four-issue comic book miniseries starring Batman, written by Frank Miller, illustrated by Miller and Klaus Janson, with color by Lynn Varley, and published by DC Comics. It tells an alternative story of Bruce Wayne who, at 55 years old, returns from a decade of retirement to fight crime while facing opposition from the Gotham City police force and the United States government. The story also features the return of classic foes Two-Face and the Joker, and culminates in a confrontation with Superman, who is now an instrument of the government.",
+      "funFacts": [
+        "Published in 1986 as a four-issue prestige-format miniseries.",
+        "Its armored Batman-versus-Superman duel inspired the climax of the 2016 film."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Dark_Knight_Returns",
+      "sort": 18
+    },
+    {
+      "slug": "year-one",
+      "eraSlug": "modern-age",
+      "title": "Batman: Year One",
+      "mediaType": "comics",
+      "releaseDate": "1987-06-15",
+      "yearDisplay": "1987",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/b/b1/Batman_vol._1-404_%28January_1987%29.jpg",
+      "impact": "Miller and Mazzucchelli retell Batman's first year as a grounded crime novel - the canonical origin ever since.",
+      "story": "Batman: Year One is an American comic book story arc written by Frank Miller and illustrated by David Mazzucchelli. Year One was originally published by DC Comics in Batman #404-407 monthly issues format in 1987. The story recounts Batman's first year as a crime-fighter as well as exploring the life of recently transferred Gotham police detective Jim Gordon, building towards their first encounter and their eventual alliance against Gotham's criminal underworld.",
+      "funFacts": [
+        "It ran in Batman #404-407 in 1987.",
+        "A core influence on both Batman Begins and The Batman."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Year_One",
+      "sort": 19
+    },
+    {
+      "slug": "killing-joke",
+      "eraSlug": "modern-age",
+      "title": "Batman: The Killing Joke",
+      "mediaType": "comics",
+      "releaseDate": "1988-03-29",
+      "yearDisplay": "1988",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/3/32/Killingjoke.JPG",
+      "impact": "Moore and Bolland's 'one bad day': the defining Joker origin story, and a lasting controversy for what it does to Barbara Gordon.",
+      "story": "Batman: The Killing Joke is a 1988 DC Comics one-shot graphic novel featuring the characters Batman and the Joker written by Alan Moore, illustrated by Brian Bolland, and originally colored by John Higgins. The Killing Joke provides another origin story for the supervillain the Joker, loosely adapted from the 1951 story \"The Man Behind the Red Hood!\", which was written by Batman co-creator Bill Finger. The Joker's supposed origin is presented via flashback, while simultaneously depicting his attempt to drive Jim Gordon insane and Batman's desperate attempt to stop him.",
+      "funFacts": [
+        "The 2008 deluxe edition was recolored to match Brian Bolland's original intent.",
+        "Its events led Barbara Gordon to be reinvented as Oracle."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_The_Killing_Joke",
+      "sort": 20
+    },
+    {
+      "slug": "death-in-the-family",
+      "eraSlug": "modern-age",
+      "title": "A Death in the Family",
+      "mediaType": "comics",
+      "releaseDate": "1988-12-01",
+      "yearDisplay": "1988-89",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/f9/Batman_428.jpg",
+      "impact": "Readers voted by phone on whether Robin lives or dies. By 5,343 votes to 5,271, Jason Todd dies - and comics' relationship with its audience changes forever.",
+      "story": "\"A Death in the Family\" is a 1988 storyline in the American comic book Batman, published by DC Comics. It was written by Jim Starlin and penciled by Jim Aparo, with cover art by Mike Mignola. Serialized in Batman #426–429 from August to November 1988, \"A Death in the Family\" is considered one of the most important Batman stories for featuring the death of his sidekick Robin at the hands of his archenemy, the Joker.",
+      "funFacts": [
+        "The 900-number poll margin was just 72 votes.",
+        "Jason Todd eventually returned as the Red Hood."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/A_Death_in_the_Family_(comics)",
+      "sort": 21
+    },
+    {
+      "slug": "knightfall",
+      "eraSlug": "modern-age",
+      "title": "Knightfall",
+      "mediaType": "comics",
+      "releaseDate": "1993-06-15",
+      "yearDisplay": "1993-94",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/c/c1/Batman497.png",
+      "impact": "Bane breaks the Bat. The 90s' biggest Batman event puts Bruce Wayne in a wheelchair and a darker substitute in the cowl.",
+      "story": "\"Knightfall\" is a 1993–1994 Batman story arc published by DC Comics. It consists of a trilogy of storylines that ran from 1993 to 1994, consisting of \"Knightfall\", \"Knightquest\", and \"KnightsEnd\".",
+      "funFacts": [
+        "Jean-Paul Valley, Azrael, wore an armored Bat-suit while Bruce recovered.",
+        "Bane breaking Batman's back was adapted into The Dark Knight Rises."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Knightfall",
+      "sort": 22
+    },
+    {
+      "slug": "long-halloween",
+      "eraSlug": "modern-age",
+      "title": "The Long Halloween",
+      "mediaType": "comics",
+      "releaseDate": "1996-06-15",
+      "yearDisplay": "1996-97",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/5/52/Batman_thelonghalloween.jpg",
+      "impact": "Loeb and Sale's year-long murder mystery: Two-Face's definitive origin and a favorite source text for the films.",
+      "story": "Batman: The Long Halloween is a 13-issue American comic book limited series written by Jeph Loeb with art by Tim Sale. It was originally published by DC Comics in 1996 and 1997. It was the follow-up to three Batman: Legends of the Dark Knight Halloween Specials which were reprinted in Batman: Haunted Knight by the same creative team. The series' success led to Loeb and Sale to reteam for two sequels, Batman: Dark Victory and Catwoman: When in Rome, which are set concurrently. A third sequel, a 10-issue limited series entitled The Last Halloween, began publication on September 25, 2024.",
+      "funFacts": [
+        "Thirteen issues, one for each holiday of the year.",
+        "Matt Reeves cited it as a key influence on The Batman."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_The_Long_Halloween",
+      "sort": 23
+    },
+    {
+      "slug": "hush",
+      "eraSlug": "modern-age",
+      "title": "Batman: Hush",
+      "mediaType": "comics",
+      "releaseDate": "2002-06-15",
+      "yearDisplay": "2002-03",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/b/bb/Batman_608_%282002%29.jpg",
+      "impact": "Jim Lee's blockbuster artwork turns a villain mystery into the best-selling Batman run of its decade.",
+      "story": "\"Batman: Hush\" is an American comic book story arc published by the comic book publishing company DC Comics featuring the superhero Batman. It was published in monthly installments within the comic book series Batman, running from issue #608–619 in October 2002 until September 2003. The story arc was written by Jeph Loeb, penciled by Jim Lee, inked by Scott Williams, and colored by Alex Sinclair, under the editorship of Bob Schreck.",
+      "funFacts": [
+        "It ran in Batman #608-619.",
+        "Introduced the bandaged villain Hush, created by Jeph Loeb and Jim Lee."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Hush",
+      "sort": 24
+    },
+    {
+      "slug": "court-of-owls",
+      "eraSlug": "modern-age",
+      "title": "The Court of Owls",
+      "mediaType": "comics",
+      "releaseDate": "2011-06-15",
+      "yearDisplay": "2011",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/1/1b/The_Court_of_Owls.jpg",
+      "impact": "The New 52 relaunch opens with Snyder and Capullo unearthing a secret society that has owned Gotham all along - the defining Batman epic of the 2010s.",
+      "story": "The Court of Owls is a criminal organization and secret society appearing in American comic books published by DC Comics. They appear as adversaries of the superhero Batman. Created by writer Scott Snyder and artist Greg Capullo, the Court is described as an organization of the wealthiest and most influential citizens of the city of Gotham, having existed since the city's founding and completely unknown among its general population outside of an urban legend centered around their reputation for grisly assassinations carried out by indoctrinated agents known as Talons. The 2015–2016 \"Robin War\" story line details their international expansion, with the group renaming itself as the Parliament of Owls.",
+      "funFacts": [
+        "Launched with DC's 2011 New 52 line-wide reboot.",
+        "The Court is built on an old Gotham nursery rhyme invented for the story."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Court_of_Owls",
+      "sort": 25
+    },
+    {
+      "slug": "btas",
+      "eraSlug": "animated",
+      "title": "Batman: The Animated Series",
+      "mediaType": "tv",
+      "releaseDate": "1992-09-05",
+      "yearDisplay": "1992",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Batman-_The_Animated_Series_logo.svg/1280px-Batman-_The_Animated_Series_logo.svg.png",
+      "impact": "Dark deco painted on black paper: the series that gave Batman his definitive modern voice and won superhero animation real respect.",
+      "story": "Batman: The Animated Series is an American animated superhero television series based on the DC Comics superhero Batman. Developed by Bruce Timm and Eric Radomski, and produced by Warner Bros. Animation, it originally aired on Fox Kids from September 5, 1992, to September 15, 1995, with a total of 85 episodes. Mid-way through the series' run, it was re-titled The Adventures of Batman & Robin.",
+      "funFacts": [
+        "Background art was painted on black paper - the crew called the style 'Dark Deco'.",
+        "Kevin Conroy's Batman and Mark Hamill's Joker both debuted here."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_The_Animated_Series",
+      "sort": 26
+    },
+    {
+      "slug": "harley-quinn-debut",
+      "eraSlug": "animated",
+      "title": "Harley Quinn Debuts ('Joker's Favor')",
+      "mediaType": "tv",
+      "releaseDate": "1992-09-11",
+      "yearDisplay": "1992",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/c/c9/HarleyQuinn_Various_incarnations.jpg",
+      "impact": "Written as a one-episode henchwoman for the Joker, Harley becomes the biggest new DC character in half a century.",
+      "story": "Harley Quinn is a fictional character appearing in American comic books published by DC Comics. She was created by Paul Dini and Bruce Timm for Batman: The Animated Series as a henchwoman for the Joker, and debuted in the series' 22nd episode, \"Joker's Favor\", on September 11, 1992. Although originally intended to appear in only one episode, Quinn became a recurring character within the DC Animated Universe (DCAU) as the Joker's sidekick and love interest, and was adapted into DC Comics' canon seven years later, beginning with the one-shot Batman: Harley Quinn #1. Quinn's origin story portrays her as a former psychiatrist at Arkham Asylum in Gotham City manipulated by the Joker, her patient, eventually becoming his accomplice and lover. The character's alias is a play on the stock character Harlequin from the 16th-century Italian theatre commedia dell'arte.",
+      "funFacts": [
+        "Voiced by Arleen Sorkin, whose harlequin costume in a soap-opera dream sequence inspired the character.",
+        "She crossed from the cartoon into DC comics canon in the 1990s."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Harley_Quinn",
+      "sort": 27
+    },
+    {
+      "slug": "mask-of-the-phantasm",
+      "eraSlug": "animated",
+      "title": "Batman: Mask of the Phantasm",
+      "mediaType": "movies",
+      "releaseDate": "1993-12-25",
+      "yearDisplay": "1993",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/e/ea/Batman_mask_of_the_phantasm_poster.jpg",
+      "impact": "The animated crew's theatrical noir: a Christmas-Day box-office flop that grew into many fans' pick for the best Batman film, period.",
+      "story": "Batman: Mask of the Phantasm is a 1993 American animated superhero film featuring the DC Comics character Batman. It was directed by Eric Radomski and Bruce Timm, and written by Alan Burnett, Paul Dini, Martin Pasko, and Michael Reaves. The film is based on Batman: The Animated Series (1992–1995), and is the first film of the DC Animated Universe and the only one to receive a theatrical release. Kevin Conroy, Mark Hamill, Efrem Zimbalist Jr., Bob Hastings and Robert Costanzo reprise their voice roles from Batman: The Animated Series, joined by Dana Delany, Hart Bochner, Stacy Keach, Abe Vigoda, Dick Miller and John P. Ryan.",
+      "funFacts": [
+        "It was upgraded from direct-to-video to a theatrical release mid-production.",
+        "Mark Hamill's Joker gets his darkest turn of the DCAU era."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Mask_of_the_Phantasm",
+      "sort": 28
+    },
+    {
+      "slug": "new-batman-adventures",
+      "eraSlug": "animated",
+      "title": "The New Batman Adventures",
+      "mediaType": "tv",
+      "releaseDate": "1997-06-15",
+      "yearDisplay": "1997",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/The_New_Batman_Adventures_%28logo%29.svg/1280px-The_New_Batman_Adventures_%28logo%29.svg.png",
+      "impact": "The sleeker Kids' WB continuation: simplified designs, a bigger Bat-Family, and a bridge to the wider DC animated universe.",
+      "story": "The New Batman Adventures is an American animated superhero television series based on the DC Comics superhero Batman, which aired on Kids' WB from September 13, 1997 to January 16, 1999. Produced by Warner Bros. Television Animation, it is a continuation of Batman: The Animated Series (1992–1995), serving as the series' third and final season and the third series in the DC Animated Universe. It was followed by Batman Beyond (1999–2001). The series was revamped from BTAS, replacing its art style with streamlined designs to allow for more consistent animation and maintain similarity with the simultaneously running Superman: The Animated Series (1996–2000), with episodes airing on Kids' WB under the title The New Batman/Superman Adventures.",
+      "funFacts": [
+        "Character designs were streamlined to match Superman: The Animated Series."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_New_Batman_Adventures",
+      "sort": 29
+    },
+    {
+      "slug": "batman-beyond",
+      "eraSlug": "animated",
+      "title": "Batman Beyond",
+      "mediaType": "tv",
+      "releaseDate": "1999-01-10",
+      "yearDisplay": "1999",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Batman_Beyond_%28logo%29.svg/1280px-Batman_Beyond_%28logo%29.svg.png",
+      "impact": "Neo-Gotham, decades from now: teenager Terry McGinnis inherits the cowl from an aged Bruce Wayne - a future Batman fans embraced as canon.",
+      "story": "Batman Beyond is an American animated cyberpunk superhero television series based on the DC Comics superhero Batman, and serving as the sequel to both Batman: The Animated Series and The New Batman Adventures. Created and developed by Paul Dini, Bruce Timm, and Alan Burnett and produced by Warner Bros. Television Animation, the series began airing on January 10, 1999 on The WB's Sunday Night lineup as a two-part pilot.",
+      "funFacts": [
+        "The network wanted a teen Batman; the writers answered with a cyberpunk elegy.",
+        "Kevin Conroy stayed on as the elderly Bruce Wayne."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_Beyond",
+      "sort": 30
+    },
+    {
+      "slug": "kevin-conroy",
+      "eraSlug": "animated",
+      "title": "Kevin Conroy",
+      "mediaType": "tv",
+      "releaseDate": "1992-06-15",
+      "yearDisplay": "1955-2022",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Kevin_Conroy_Photo_Op_GalaxyCon_Raleigh_2021.jpg",
+      "impact": "For three decades, across hundreds of episodes, films and games, Conroy's voice WAS Batman for an entire generation.",
+      "story": "Kevin Conroy was an American actor. He appeared in a variety of stage performances, television series, and television films. Conroy earned fame for voicing Batman in various animated media, beginning with Batman: The Animated Series in 1992. Conroy went on to voice the character for dozens of animated television series, feature films, and video games over the next three decades.",
+      "funFacts": [
+        "He used two distinct voices to split Bruce Wayne from Batman.",
+        "He reprised the role in the Batman: Arkham game trilogy."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Kevin_Conroy",
+      "sort": 31
+    },
+    {
+      "slug": "justice-league-tv",
+      "eraSlug": "animated",
+      "title": "Justice League / JL Unlimited",
+      "mediaType": "tv",
+      "releaseDate": "2001-06-15",
+      "yearDisplay": "2001-06",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/1/1e/Justice_League_Unlimited_logo.png",
+      "impact": "The DCAU graduates to the full League, with Conroy's Batman as its spine, closing the universe Timm and Dini began in 1992.",
+      "story": "Justice League Unlimited (JLU) is an American animated superhero television series produced by Warner Bros. Animation with DC Comics and airing on Cartoon Network. Featuring a wide array of superheroes from the DC Universe, and specifically based on the Justice League superhero team, it is a direct sequel to the previous Justice League animated series and picks up around two years after it. JLU debuted on July 31, 2004, on Toonami and ended on May 13, 2006.",
+      "funFacts": [
+        "Continued as Justice League Unlimited through 2006, the DCAU's finale."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Justice_League_Unlimited",
+      "sort": 32
+    },
+    {
+      "slug": "batman-1966-film",
+      "eraSlug": "cinematic",
+      "title": "Batman: The Movie (1966)",
+      "mediaType": "movies",
+      "releaseDate": "1966-07-30",
+      "yearDisplay": "1966",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/6/69/Batman1966Poster.jpg",
+      "impact": "The TV series goes widescreen with the Batboat, the Batcopter, and the immortal shark-repellent Bat-Spray.",
+      "story": "Batman is a 1966 American superhero film directed by Leslie H. Martinson. Based on the television series, and the first full-length theatrical adaptation of the DC Comics character of the same name, the film stars Adam West as Batman and Burt Ward as Robin. The film hit theaters two months after the last episode of the first season of the television series. The film includes most members of the original TV cast, with the exception of Julie Newmar as Catwoman; in the film, Newmar was replaced by Lee Meriwether.",
+      "funFacts": [
+        "Shot quickly between the TV show's first and second seasons.",
+        "Home of the line: 'Some days you just can't get rid of a bomb.'"
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(1966_film)",
+      "sort": 33
+    },
+    {
+      "slug": "batman-1989",
+      "eraSlug": "cinematic",
+      "title": "Batman (1989)",
+      "mediaType": "movies",
+      "releaseDate": "1989-06-23",
+      "yearDisplay": "1989",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/5/5a/Batman_%281989%29_theatrical_poster.jpg",
+      "impact": "Burton's gothic blockbuster proves dark superhero cinema sells: a merchandising earthquake, an Oscar for its Gotham, and the template for the modern comic-book movie.",
+      "story": "Batman is a 1989 superhero film directed by Tim Burton and written by Sam Hamm and Warren Skaaren. Based on the DC Comics character, it is the first installment of Warner Bros.' initial Batman film series. The film stars Jack Nicholson, Michael Keaton, Kim Basinger, Robert Wuhl, Pat Hingle, Billy Dee Williams, Michael Gough, and Jack Palance. The film's score was composed by Danny Elfman, and songs were written by Prince. The film takes place early in the war on crime of the title character (Keaton) and depicts his conflict with his archenemy the Joker (Nicholson).",
+      "funFacts": [
+        "Won the Academy Award for Best Art Direction for Anton Furst's Gotham City.",
+        "Michael Keaton's casting drew tens of thousands of protest letters - before the film silenced them."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(1989_film)",
+      "sort": 34
+    },
+    {
+      "slug": "batman-returns",
+      "eraSlug": "cinematic",
+      "title": "Batman Returns",
+      "mediaType": "movies",
+      "releaseDate": "1992-06-19",
+      "yearDisplay": "1992",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/8/83/Batman_returns_poster2.jpg",
+      "impact": "Burton unleashed: stranger and kinkier, with Pfeiffer's Catwoman and DeVito's Penguin - too dark for the toy aisle, exactly right for everyone else.",
+      "story": "Batman Returns is a 1992 American superhero film directed by Tim Burton and written by Daniel Waters. Based on the DC Comics character Batman, it is the sequel to Batman (1989), also directed by Burton, and the second installment in the Batman film series (1989–1997). The cast includes Michael Keaton, Danny DeVito, Michelle Pfeiffer, Christopher Walken, Michael Gough, Pat Hingle, and Michael Murphy. Set during Christmas in Gotham City, the film follows Batman (Keaton) as he confronts corrupt businessman Max Shreck (Walken) and deformed crime boss Oswald Cobblepot / the Penguin (DeVito), whose bid for power threatens the city. Their schemes are further complicated by Shreck's former secretary Selina Kyle (Pfeiffer), who seeks revenge against him as Catwoman.",
+      "funFacts": [
+        "Parental backlash over its darkness pushed the studio toward a family-friendlier sequel.",
+        "Michelle Pfeiffer performed much of her own whip work."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_Returns",
+      "sort": 35
+    },
+    {
+      "slug": "batman-forever",
+      "eraSlug": "cinematic",
+      "title": "Batman Forever",
+      "mediaType": "movies",
+      "releaseDate": "1995-06-16",
+      "yearDisplay": "1995",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/9/9d/Batman_Forever_poster.png",
+      "impact": "Schumacher's neon-circus course correction: a massive box-office hit that began the franchise's slide into camp.",
+      "story": "Batman Forever is a 1995 American superhero film based on the DC Comics character Batman. It is the third installment of the Batman film series, acting as a standalone sequel to Batman Returns. Directed by Joel Schumacher and produced by Tim Burton and Peter MacGregor-Scott, it stars Val Kilmer as Bruce Wayne / Batman, replacing Michael Keaton, alongside Jim Carrey, Tommy Lee Jones, Nicole Kidman, and Chris O'Donnell. The film follows Batman as he attempts to prevent the Riddler (Carrey) and Two-Face (Jones) from uncovering his secret identity and extracting information from the minds of Gotham City's residents, while at the same time navigating his feelings for psychologist Dr. Chase Meridian (Kidman) and adopting orphaned acrobat Dick Grayson (O'Donnell)—who becomes his partner and best friend, Robin.",
+      "funFacts": [
+        "Val Kilmer replaced Michael Keaton in the cowl.",
+        "Robin finally reaches the big screen, played by Chris O'Donnell."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_Forever",
+      "sort": 36
+    },
+    {
+      "slug": "batman-and-robin",
+      "eraSlug": "cinematic",
+      "title": "Batman & Robin",
+      "mediaType": "movies",
+      "releaseDate": "1997-06-20",
+      "yearDisplay": "1997",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/3/37/Batman_%26_Robin_poster.jpg",
+      "impact": "Bat-nipples, ice puns, and a franchise frozen solid for eight years - the cautionary tale that made Batman Begins possible.",
+      "story": "Batman & Robin is a 1997 American superhero film based on the DC Comics characters Batman and Robin. It is the fourth and final installment of Warner Bros.' initial Batman film series (1989–1997) and a sequel to Batman Forever (1995). Directed by Joel Schumacher and written by Akiva Goldsman, it stars George Clooney as Bruce Wayne / Batman and Chris O'Donnell as Dick Grayson / Robin, alongside Arnold Schwarzenegger, Uma Thurman, and Alicia Silverstone. The film follows the titular characters as they oppose Mr. Freeze and Poison Ivy, while struggling to keep their partnership together.",
+      "funFacts": [
+        "George Clooney has repeatedly and publicly apologized for it.",
+        "Its failure cancelled the planned sequel, Batman Unchained."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_%26_Robin_(film)",
+      "sort": 37
+    },
+    {
+      "slug": "batman-begins",
+      "eraSlug": "cinematic",
+      "title": "Batman Begins",
+      "mediaType": "movies",
+      "releaseDate": "2005-06-15",
+      "yearDisplay": "2005",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/a/af/Batman_Begins_Poster.jpg",
+      "impact": "Nolan rebuilds Batman from first principles - fear, training, a plausible Gotham - and invents the 'gritty reboot' as Hollywood grammar.",
+      "story": "Batman Begins is a 2005 superhero film based on the DC Comics character Batman. Directed by Christopher Nolan, who co-wrote the screenplay with David S. Goyer, the film stars Christian Bale as Bruce Wayne / Batman, with Michael Caine, Liam Neeson, Katie Holmes, Gary Oldman, Cillian Murphy, Tom Wilkinson, Rutger Hauer, Ken Watanabe, and Morgan Freeman in supporting roles. The film reboots the Batman film series, telling the origin story of Bruce Wayne (Bale) from the death of his parents to his journey to become Batman and his fight to stop Ra's al Ghul (Neeson) and the Scarecrow (Murphy) from plunging Gotham City into chaos.",
+      "funFacts": [
+        "The Tumbler was a practical vehicle, not CGI, capable of real stunt driving.",
+        "Draws heavily on Year One and the short story 'The Man Who Falls'."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_Begins",
+      "sort": 38
+    },
+    {
+      "slug": "the-dark-knight",
+      "eraSlug": "cinematic",
+      "title": "The Dark Knight",
+      "mediaType": "movies",
+      "releaseDate": "2008-07-18",
+      "yearDisplay": "2008",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
+      "impact": "The first superhero film to pass one billion dollars. Ledger's Joker wins a posthumous Oscar, and comic-book cinema is suddenly taken seriously.",
+      "story": "The Dark Knight is a 2008 superhero film directed by Christopher Nolan, from a screenplay co-written with his brother Jonathan. Based on the DC Comics superhero Batman, it is the sequel to Batman Begins (2005), and the second installment in The Dark Knight trilogy. The plot follows the vigilante Batman, police lieutenant James Gordon, and district attorney Harvey Dent, who form an alliance to dismantle organized crime in Gotham City. Their efforts are derailed by the Joker, an anarchistic mastermind who seeks to test how far Batman will go to save the city from chaos. The ensemble cast includes Christian Bale, Michael Caine, Heath Ledger, Gary Oldman, Aaron Eckhart, Maggie Gyllenhaal, and Morgan Freeman.",
+      "funFacts": [
+        "Heath Ledger won a posthumous Academy Award for Best Supporting Actor.",
+        "Its Best Picture snub is widely credited with pushing the Oscars to expand the category."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Dark_Knight",
+      "sort": 39
+    },
+    {
+      "slug": "dark-knight-rises",
+      "eraSlug": "cinematic",
+      "title": "The Dark Knight Rises",
+      "mediaType": "movies",
+      "releaseDate": "2012-07-20",
+      "yearDisplay": "2012",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/8/83/Dark_knight_rises_poster.jpg",
+      "impact": "Nolan closes cinema's first complete Batman saga on his own terms: Bane, a broken Bat, and an actual ending.",
+      "story": "The Dark Knight Rises is a 2012 superhero film based on the DC Comics character Batman. Directed by Christopher Nolan, who co-wrote the screenplay with his brother Jonathan Nolan, and the story with David S. Goyer, it is the final installment in Nolan's The Dark Knight trilogy, and the sequel to The Dark Knight (2008). The film stars Christian Bale as Bruce Wayne / Batman, alongside Anne Hathaway, Gary Oldman, Tom Hardy, Morgan Freeman, Marion Cotillard, Joseph Gordon-Levitt, and Michael Caine. Set eight years after the events of The Dark Knight, it follows a retired Wayne being forced to resume his role as Batman to save Gotham City from nuclear destruction at the hands of the terrorist Bane (Hardy).",
+      "funFacts": [
+        "Large portions were shot with IMAX cameras.",
+        "Bane breaking Batman's back adapts the Knightfall storyline."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Dark_Knight_Rises",
+      "sort": 40
+    },
+    {
+      "slug": "the-batman-2022",
+      "eraSlug": "cinematic",
+      "title": "The Batman",
+      "mediaType": "movies",
+      "releaseDate": "2022-03-04",
+      "yearDisplay": "2022",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/ff/The_Batman_%28film%29_poster.jpg",
+      "impact": "Reeves' rain-soaked noir: a year-two Batman finally played as the World's Greatest Detective, hunting a Riddler built for the true-crime age.",
+      "story": "The Batman is a 2022 American superhero film based on the DC Comics character Batman. Directed by Matt Reeves from a screenplay he wrote with Peter Craig, it is a reboot of the Batman film franchise. Robert Pattinson stars as Bruce Wayne / Batman alongside Zoë Kravitz, Paul Dano, Jeffrey Wright, John Turturro, Peter Sarsgaard, Andy Serkis, and Colin Farrell. The film sees Batman, in his second year fighting crime in Gotham City, uncover corruption with ties to his own family while pursuing the Riddler (Dano), a mysterious serial killer targeting the city's elite. Reeves and Dylan Clark produced the film for DC Films and Warner Bros. Pictures.",
+      "funFacts": [
+        "Robert Pattinson's Bruce Wayne barely appears in public - by design.",
+        "Nirvana's 'Something in the Way' anchors the film's sound."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Batman_(film)",
+      "sort": 41
+    },
+    {
+      "slug": "batman-1986-game",
+      "eraSlug": "games",
+      "title": "Batman (1986)",
+      "mediaType": "games",
+      "releaseDate": "1986-06-15",
+      "yearDisplay": "1986",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/6/68/Batman_%28Amstrad_CPC_game%29.jpg",
+      "impact": "Batman's video game debut: an isometric action-adventure on 8-bit home computers, the start of four decades on screens you control.",
+      "story": "Batman is a 1986 isometric action-adventure game by Ocean Software for the Amstrad PCW, Amstrad CPC, ZX Spectrum, and MSX, and the first Batman game developed. The game received favourable reviews. An unrelated Batman game was released two years later, titled Batman: The Caped Crusader.",
+      "funFacts": [
+        "Developed by Ocean Software for the ZX Spectrum and other 8-bit machines.",
+        "The mission: rescue Robin, one gadget at a time."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman_(1986_video_game)",
+      "sort": 42
+    },
+    {
+      "slug": "batman-nes",
+      "eraSlug": "games",
+      "title": "Batman: The Video Game (NES)",
+      "mediaType": "games",
+      "releaseDate": "1990-06-15",
+      "yearDisplay": "1989-90",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/f/fa/Batman_The_Video_Game_NES_NA_Cover.jpg",
+      "impact": "Sunsoft's brutal, beloved NES tie-in: famous for its wall-jump, its difficulty, and one of the great 8-bit soundtracks.",
+      "story": "Batman: The Video Game is a platformer developed by Sunsoft for the Nintendo Entertainment System featuring the DC Comics character Batman, tying into the 1989 film of the same name.",
+      "funFacts": [
+        "Loosely based on the 1989 Tim Burton film.",
+        "Its wall-jump mechanic became a cult favorite among NES players."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_The_Video_Game",
+      "sort": 43
+    },
+    {
+      "slug": "arkham-asylum",
+      "eraSlug": "games",
+      "title": "Batman: Arkham Asylum",
+      "mediaType": "games",
+      "releaseDate": "2009-08-25",
+      "yearDisplay": "2009",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/4/42/Batman_Arkham_Asylum_Videogame_Cover.jpg",
+      "impact": "Rocksteady proves a licensed superhero game can be a masterpiece: freeflow combat, predator stealth, and the BTAS voices reunited.",
+      "story": "Batman: Arkham Asylum is a 2009 action-adventure game developed by Rocksteady Studios and published by Eidos Interactive in conjunction with Warner Bros. Interactive Entertainment. Based on the DC Comics superhero Batman and written by veteran Batman writer Paul Dini, Arkham Asylum was inspired by the long-running comic book mythos. In the game's main storyline, Batman battles his archenemy, the Joker, who instigates an elaborate plot to seize control of Arkham Asylum, trap Batman inside with many of his incarcerated foes, and threaten Gotham City with hidden bombs.",
+      "funFacts": [
+        "Written by Paul Dini of Batman: The Animated Series.",
+        "Kevin Conroy and Mark Hamill reprised Batman and the Joker."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Arkham_Asylum",
+      "sort": 44
+    },
+    {
+      "slug": "arkham-city",
+      "eraSlug": "games",
+      "title": "Batman: Arkham City",
+      "mediaType": "games",
+      "releaseDate": "2011-10-18",
+      "yearDisplay": "2011",
+      "isMilestone": true,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/0/00/Batman_Arkham_City_Game_Cover.jpg",
+      "impact": "The open-air prison sequel that perfected the formula - and gave Hamill's Joker an unforgettable curtain call.",
+      "story": "Batman: Arkham City is a 2011 action-adventure game developed by Rocksteady Studios and published by Warner Bros. Interactive Entertainment. Based on the DC Comics superhero Batman, it is the sequel to the 2009 video game Batman: Arkham Asylum and the second installment in the Batman: Arkham series. Written by veteran Batman writer Paul Dini with Paul Crocker and Sefton Hill, Arkham City was inspired by the long-running comic book mythos. In the game's main storyline, Bruce Wayne is incarcerated in Arkham City, a super-prison enclosing the decaying urban slums of Gotham City. He dons his alter ego, Batman, and goes on a mission to uncover the secret behind a sinister scheme orchestrated by the facility's warden, Hugo Strange.",
+      "funFacts": [
+        "Mark Hamill announced it as his final Joker performance - he later returned anyway.",
+        "Swept many 2011 Game of the Year awards."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Arkham_City",
+      "sort": 45
+    },
+    {
+      "slug": "arkham-knight",
+      "eraSlug": "games",
+      "title": "Batman: Arkham Knight",
+      "mediaType": "games",
+      "releaseDate": "2015-06-23",
+      "yearDisplay": "2015",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/6/6c/Batman_Arkham_Knight_Cover_Art.jpg",
+      "impact": "Rocksteady's finale adds a drivable Batmobile and closes the trilogy at blockbuster scale.",
+      "story": "Batman: Arkham Knight is a 2015 action-adventure game developed by Rocksteady Studios and published by Warner Bros. Interactive Entertainment. Based on the DC Comics superhero Batman, it is the successor to the 2013 video game Batman: Arkham Origins, a direct sequel to Batman: Arkham City (2011) and the fourth main installment in the Batman: Arkham series. Written by Sefton Hill, Ian Ball, and Martin Lancaster, Arkham Knight is inspired by the long-running comic book mythos. Set nine months after the events of Arkham City, the game's main storyline follows Batman as he confronts Scarecrow, who has launched an attack on Gotham City and caused a citywide evacuation. Scarecrow, with the help of the mysterious Arkham Knight, plots to unite all of Gotham's criminals in an attempt to finally destroy Batman.",
+      "funFacts": [
+        "The PC port launched so broken it was withdrawn from sale for months.",
+        "First game in the series rated M by the ESRB."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_Arkham_Knight",
+      "sort": 46
+    },
+    {
+      "slug": "telltale-batman",
+      "eraSlug": "games",
+      "title": "Batman: The Telltale Series",
+      "mediaType": "games",
+      "releaseDate": "2016-08-02",
+      "yearDisplay": "2016",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/2/24/Batman_%28Telltale_Games%29_logo.png",
+      "impact": "A choice-driven Batman where being Bruce Wayne is the hard part - Telltale put the mask second and the man first.",
+      "story": "Batman: The Telltale Series is a 2016 episodic point-and-click graphic adventure video game developed and published by Telltale Games and distributed by Warner Bros. Interactive Entertainment under its DC Entertainment label. The game is based on the DC Comics character Batman, created by Bob Kane and Bill Finger, though not tied to any previous adaptation of the work in film or other media. Upon release, it received a mixed reception, with praise given for its atmosphere, action sequences, and faithfulness to the Batman mythos, but was criticized for its technical issues and plot. A second season, titled Batman: The Enemy Within, was released in 2017, and was viewed as an improvement over the original.",
+      "funFacts": [
+        "Player choices reshape Bruce's relationships with allies and villains alike."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Batman%3A_The_Telltale_Series",
+      "sort": 47
+    },
+    {
+      "slug": "lego-batman-game",
+      "eraSlug": "games",
+      "title": "LEGO Batman: The Videogame",
+      "mediaType": "games",
+      "releaseDate": "2008-06-15",
+      "yearDisplay": "2008",
+      "isMilestone": false,
+      "isExhibit": true,
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/e/e3/Lego_batman_cover.jpg",
+      "impact": "The family-friendly counterweight: Gotham City as a toybox, and a gateway Batman for a whole age bracket.",
+      "story": "Lego Batman: The Videogame is a 2008 action-adventure video game developed by Traveller's Tales and published by Warner Bros. Interactive Entertainment, released for the Xbox 360, PlayStation 3, PlayStation 2, PlayStation Portable, Wii, Nintendo DS, Microsoft Windows, and Mac OS X. The game is based on the DC Comics character Batman, as well as the eponymous Lego Batman toyline.",
+      "funFacts": [
+        "The first LEGO game built on an original story rather than adapting a film."
+      ],
+      "sourceUrl": "https://en.wikipedia.org/wiki/Lego_Batman%3A_The_Videogame",
+      "sort": 48
+    }
+  ]
+}

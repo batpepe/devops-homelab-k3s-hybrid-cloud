@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #04060c;
+  --panel: #0a1018;
+  --panel-2: #0d1521;
+  --line: #1c2a3a;
+  --amber: #f5b81c;
+  --cyan: #58d5f0;
+  --text: #d7e2ec;
+  --dim: #7d8fa3;
+  --danger: #e4572e;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.font-display {
+  font-family: var(--font-rajdhani), var(--font-inter), sans-serif;
+  letter-spacing: 0.08em;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(245, 184, 28, 0.35);
+}
+
+/* ---------- backdrop ---------- */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+.twinkle {
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0% {
+    transform: rotate(-13deg);
+  }
+  50% {
+    transform: rotate(11deg);
+  }
+  100% {
+    transform: rotate(-13deg);
+  }
+}
+.signal-sweep {
+  transform-box: view-box;
+  animation: sweep 16s ease-in-out infinite;
+}
+
+/* ---------- constellation stars ---------- */
+.star-pos {
+  transform: translate(-50%, -50%);
+}
+.star {
+  position: relative;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  cursor: pointer;
+}
+.star-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--accent, #fff);
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--accent) 75%, transparent);
+  transition: transform 0.25s ease;
+}
+.star-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 45%, transparent) 0%,
+    transparent 70%
+  );
+  animation: starpulse 3.6s ease-in-out infinite;
+}
+@keyframes starpulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.25);
+  }
+}
+.star:hover .star-core {
+  transform: scale(1.9);
+}
+.star-label {
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  display: flex;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.zoomed-in .star-label {
+  opacity: 1;
+}
+.star:hover .star-label {
+  opacity: 1;
+}
+
+/* ---------- era cluster labels ---------- */
+.era-cluster-label {
+  transition: opacity 0.45s ease, transform 0.3s ease;
+}
+.era-cluster-label:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+.zoomed-in .era-cluster-label {
+  opacity: 0;
+  pointer-events: none;
+}
+.era-halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 760px;
+  height: 760px;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 20%, transparent) 0%,
+    transparent 62%
+  );
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+/* ---------- HUD / Batcomputer card ---------- */
+.hud-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--accent, var(--cyan));
+  pointer-events: none;
+}
+@keyframes scan {
+  from {
+    background-position-y: 0;
+  }
+  to {
+    background-position-y: 6px;
+  }
+}
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(88, 213, 240, 0.06) 0px,
+    rgba(88, 213, 240, 0.06) 1px,
+    transparent 2px,
+    transparent 5px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  animation: scan 1.1s linear infinite;
+}
+
+/* ---------- filter chips ---------- */
+.chip-ping {
+  will-change: transform, opacity;
+}

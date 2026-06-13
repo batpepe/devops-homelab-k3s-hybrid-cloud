@@ -1,0 +1,851 @@
+{
+  "eras": [
+    {
+      "slug": "golden-age",
+      "name": "The Golden Age",
+      "wiki": "Golden Age of Comic Books",
+      "yearStart": 1939,
+      "yearEnd": 1956,
+      "accent": "#d4a017",
+      "blurb": "Batman is born: a pulp vigilante of the night who gains a sidekick, a butler, a code against killing, and a rogues gallery that will define comics for a century."
+    },
+    {
+      "slug": "silver-age",
+      "name": "The Silver Age",
+      "wiki": "Silver Age of Comic Books",
+      "yearStart": 1956,
+      "yearEnd": 1970,
+      "accent": "#9fb4c7",
+      "blurb": "Science fiction, camp and the Comics Code soften the Dark Knight. Batman joins the Justice League, meets Batwoman and Batgirl, and conquers television."
+    },
+    {
+      "slug": "bronze-age",
+      "name": "The Bronze Age",
+      "wiki": "Bronze Age of Comic Books",
+      "yearStart": 1970,
+      "yearEnd": 1986,
+      "accent": "#b87333",
+      "blurb": "O'Neil and Adams drag Batman back into the shadows: a lean gothic detective, a lethal Joker again, and the debut of Ra's al Ghul."
+    },
+    {
+      "slug": "modern-age",
+      "name": "The Modern Age",
+      "wiki": "Modern Age of Comic Books",
+      "yearStart": 1986,
+      "yearEnd": null,
+      "accent": "#c0392b",
+      "blurb": "The Dark Knight Returns detonates the genre: grim, psychological, literary. Batman becomes the defining myth of mature superhero comics."
+    },
+    {
+      "slug": "animated",
+      "name": "The Animated Universe",
+      "wiki": "DC Animated Universe",
+      "yearStart": 1992,
+      "yearEnd": 2006,
+      "accent": "#e74c3c",
+      "blurb": "Timm and Dini's deco-noir Gotham gives Batman his definitive voice, invents Harley Quinn, and builds an entire animated DC universe."
+    },
+    {
+      "slug": "cinematic",
+      "name": "The Cinematic Eras",
+      "wiki": "Batman in film",
+      "yearStart": 1943,
+      "yearEnd": null,
+      "accent": "#4aa3ff",
+      "blurb": "From a 1943 wartime serial to Burton's gothic blockbuster, Schumacher's neon excess, Nolan's crime epic, and Reeves' rain-soaked noir."
+    },
+    {
+      "slug": "games",
+      "name": "Video Games",
+      "wiki": "List of Batman video games",
+      "yearStart": 1986,
+      "yearEnd": null,
+      "accent": "#39d353",
+      "blurb": "From 8-bit beginnings on home computers to the Arkham trilogy that proved licensed games could be masterpieces."
+    }
+  ],
+  "items": [
+    {
+      "slug": "detective-comics-27",
+      "wiki": "Detective Comics 27",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1939-03-30",
+      "yearDisplay": "1939",
+      "title": "Detective Comics #27",
+      "impact": "Six pages by Bob Kane and Bill Finger introduce 'The Bat-Man': a grim vigilante for a darker kind of hero. This is the big bang of the entire mythos.",
+      "facts": [
+        "The cover date says May 1939, but the issue hit newsstands on March 30, 1939.",
+        "Batman's debut story, 'The Case of the Chemical Syndicate', is just six pages long.",
+        "Bill Finger's co-creator credit was only officially recognized by DC in 2015."
+      ]
+    },
+    {
+      "slug": "batman-1-1940",
+      "wiki": "Joker (character)",
+      "imageOverride": "https://upload.wikimedia.org/wikipedia/en/7/7b/Comic_Book_-_The_Joker_%281940%29.jpg",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1940-04-25",
+      "yearDisplay": "1940",
+      "title": "Batman #1",
+      "impact": "The first solo Batman title introduces both the Joker and Catwoman in a single issue - arguably the greatest one-issue villain debut in comics history.",
+      "facts": [
+        "The Joker was slated to die in his second story; an editorial change kept him alive.",
+        "Catwoman debuts as 'the Cat', a jewel thief Batman deliberately lets slip away."
+      ]
+    },
+    {
+      "slug": "robin-debut",
+      "wiki": "Dick Grayson",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1940-04-01",
+      "yearDisplay": "1940",
+      "title": "Robin Debuts (Detective Comics #38)",
+      "impact": "Robin brightens Batman's world and reportedly nearly doubles Detective Comics' sales, inventing the kid-sidekick template every publisher would copy.",
+      "facts": [
+        "Robin's look was inspired by N.C. Wyeth's illustrations of Robin Hood.",
+        "Dick Grayson later outgrows the role and becomes Nightwing in 1984."
+      ]
+    },
+    {
+      "slug": "alfred-debut",
+      "wiki": "Alfred Pennyworth",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1943",
+      "yearDisplay": "1943",
+      "title": "Alfred Arrives (Batman #16)",
+      "impact": "Wayne Manor gains its soul: the butler who keeps Bruce Wayne human and the Batcave tidy.",
+      "facts": [
+        "The original Alfred was portly and clean-shaven; the slim, mustached look from the 1943 movie serial was adopted by the comics."
+      ]
+    },
+    {
+      "slug": "batman-serial-1943",
+      "wiki": "Batman (serial)",
+      "era": "golden-age",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1943-07-16",
+      "yearDisplay": "1943",
+      "title": "Batman (1943 Serial)",
+      "impact": "Batman's first screen appearance: a 15-chapter wartime Columbia serial that invented 'The Bat's Cave' and its grandfather-clock entrance, both adopted by the comics.",
+      "facts": [
+        "Made on a wartime budget: the Batmobile was a plain black Cadillac.",
+        "William Austin's on-screen Alfred changed how Alfred was drawn in the comics."
+      ]
+    },
+    {
+      "slug": "bob-kane",
+      "wiki": "Bob Kane",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1939",
+      "yearDisplay": "1915-1998",
+      "title": "Bob Kane",
+      "impact": "Credited creator of Batman, whose 1939 deal with DC kept his name alone on every Batman story for over half a century.",
+      "facts": [
+        "Kane's first concept had red tights and rigid bat wings; Bill Finger suggested the cowl, the cape and the gray suit."
+      ]
+    },
+    {
+      "slug": "bill-finger",
+      "wiki": "Bill Finger",
+      "era": "golden-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1939",
+      "yearDisplay": "1914-1974",
+      "title": "Bill Finger",
+      "impact": "The uncredited architect of the mythos: the cowl, the name Bruce Wayne, Gotham City, the Joker's look, the origin story.",
+      "facts": [
+        "DC officially added Finger's co-creator credit in 2015, four decades after his death.",
+        "Comics' award for unsung writers, the Bill Finger Award, is named in his honor."
+      ]
+    },
+    {
+      "slug": "batwoman-debut",
+      "wiki": "Kathy Kane",
+      "imageOverride": "https://upload.wikimedia.org/wikipedia/en/8/87/Detective233.JPG",
+      "era": "silver-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1956-07-01",
+      "yearDisplay": "1956",
+      "title": "Batwoman Debuts (Detective Comics #233)",
+      "impact": "Kathy Kane arrives: the first of the Bat-Family's women, introduced partly as an answer to 1950s criticism of Batman and Robin's home life.",
+      "facts": [
+        "Her introduction followed the moral panic stirred by Fredric Wertham's 'Seduction of the Innocent'.",
+        "Her utility purse hid crime-fighting gear disguised as lipstick and compacts."
+      ]
+    },
+    {
+      "slug": "jla-debut",
+      "wiki": "Justice League",
+      "era": "silver-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1960-03-01",
+      "yearDisplay": "1960",
+      "title": "Justice League Founded (The Brave and the Bold #28)",
+      "impact": "Batman becomes a charter member of the Justice League of America, anchoring DC's shared universe from then on.",
+      "facts": [
+        "The League debuted in The Brave and the Bold #28 before earning its own title later in 1960.",
+        "The JLA's sales success reportedly prompted Marvel to commission the Fantastic Four."
+      ]
+    },
+    {
+      "slug": "new-look-batman",
+      "wiki": "Batman (comic book)",
+      "era": "silver-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1964-05-01",
+      "yearDisplay": "1964",
+      "title": "The New Look (Detective Comics #327)",
+      "impact": "Editor Julius Schwartz and artist Carmine Infantino strip away the sci-fi silliness, add the yellow chest oval, and rescue Batman from looming cancellation.",
+      "facts": [
+        "The yellow oval insignia debuted with the 1964 'New Look' redesign.",
+        "Batman's sales had fallen so far that DC reportedly considered cancelling the books."
+      ]
+    },
+    {
+      "slug": "batman-66-tv",
+      "wiki": "Batman (TV series)",
+      "era": "silver-age",
+      "media": "tv",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1966-01-12",
+      "yearDisplay": "1966",
+      "title": "Batman (ABC TV Series)",
+      "impact": "Same Bat-time, same Bat-channel: the Adam West series makes Batman a global pop phenomenon and welds 'camp' to the character for a generation.",
+      "facts": [
+        "ABC aired it twice a week, and both broadcasts reached the ratings top ten in season one.",
+        "Cesar Romero refused to shave his mustache, so the Joker's makeup was painted over it."
+      ]
+    },
+    {
+      "slug": "batgirl-debut",
+      "wiki": "Barbara Gordon",
+      "era": "silver-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1967-01-01",
+      "yearDisplay": "1967",
+      "title": "Batgirl Debuts (Detective Comics #359)",
+      "impact": "Barbara Gordon is created partly at the TV producers' request for a new heroine - and outlives the show to become a pillar of the comics.",
+      "facts": [
+        "Her debut was timed to help pitch a heroine for the TV show's third season, where Yvonne Craig played her.",
+        "She later becomes Oracle, DC's master hacker, after The Killing Joke."
+      ]
+    },
+    {
+      "slug": "adam-west",
+      "wiki": "Adam West",
+      "era": "silver-age",
+      "media": "tv",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1966",
+      "yearDisplay": "1928-2017",
+      "title": "Adam West",
+      "impact": "The Bright Knight: West's deadpan sincerity is what made the 1966 series work, and he embraced the role for the rest of his life.",
+      "facts": [
+        "He voiced his own self-parody as Mayor Adam West on Family Guy.",
+        "He returned to voice Batman in animated films in the 2010s."
+      ]
+    },
+    {
+      "slug": "ras-al-ghul-debut",
+      "wiki": "Ra's al Ghul",
+      "era": "bronze-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1971-06-01",
+      "yearDisplay": "1971",
+      "title": "Ra's al Ghul Debuts (Batman #232)",
+      "impact": "O'Neil and Adams introduce the Demon's Head: an immortal eco-extremist who knows Batman's identity and treats him as an equal - a new scale of villain.",
+      "facts": [
+        "Ra's al Ghul translates roughly as 'the Demon's Head'.",
+        "Unlike most villains, he deduced Batman's secret identity on his own."
+      ]
+    },
+    {
+      "slug": "joker-five-way",
+      "wiki": "Joker (character)",
+      "imageOverride": "https://upload.wikimedia.org/wikipedia/en/6/69/Comic_Book_-_Batman_251_Cover_%281973%29.jpg",
+      "era": "bronze-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1973-09-01",
+      "yearDisplay": "1973",
+      "title": "The Joker's Five-Way Revenge (Batman #251)",
+      "impact": "After years of camp, O'Neil and Adams return the Joker to homicidal madness - the story that re-armed comics' greatest villain.",
+      "story": "After two decades as a giggling prankster, the Joker returned in Batman #251 (September 1973) as a murderer settling scores: one by one, he hunts the five former henchmen he suspects of betraying him. Dennis O'Neil's script and Neal Adams' art restored the character's lethal menace and set the template for every serious Joker story since.",
+      "facts": [
+        "Neal Adams' cover for Batman #251 is one of the most homaged Batman images ever drawn."
+      ]
+    },
+    {
+      "slug": "strange-apparitions",
+      "wiki": "Marshall Rogers",
+      "imageOverride": "https://upload.wikimedia.org/wikipedia/en/2/28/Detective_Comics_475.jpg",
+      "era": "bronze-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1977-08-01",
+      "yearDisplay": "1977-78",
+      "title": "Strange Apparitions (Detective Comics #469-479)",
+      "impact": "Englehart and Rogers deliver what many call the definitive Batman run: noir Gotham, Silver St. Cloud, and the Joker's Laughing Fish.",
+      "story": "Across Detective Comics #469-479 (1977-78), writer Steve Englehart and artist Marshall Rogers staged a moody, romantic, noir Gotham: Hugo Strange steals Batman's identity, Silver St. Cloud discovers it, and the Joker poisons the city's fish to copyright his grin. Collected as Batman: Strange Apparitions, the run is regularly cited among the greatest Batman comics ever made.",
+      "facts": [
+        "'The Laughing Fish' chapter was adapted nearly beat-for-beat in Batman: The Animated Series.",
+        "The run introduced Silver St. Cloud, who deduced Batman's identity on her own."
+      ]
+    },
+    {
+      "slug": "neal-adams",
+      "wiki": "Neal Adams",
+      "era": "bronze-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1970",
+      "yearDisplay": "1941-2022",
+      "title": "Neal Adams",
+      "impact": "The artist who gave Batman his modern body: long ears, flowing cape, real anatomy, real shadows.",
+      "facts": [
+        "Adams also campaigned successfully for creator rights, including recognition and pensions for Superman's creators Siegel and Shuster."
+      ]
+    },
+    {
+      "slug": "dennis-oneil",
+      "wiki": "Dennis O'Neil",
+      "era": "bronze-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1970",
+      "yearDisplay": "1939-2020",
+      "title": "Dennis O'Neil",
+      "impact": "Writer and later group editor who steered Batman for three decades, from the gothic 1970s revival through Knightfall and No Man's Land.",
+      "facts": [
+        "He co-created Ra's al Ghul and Talia and wrote the definitive 1970s Batman with Neal Adams."
+      ]
+    },
+    {
+      "slug": "dark-knight-returns",
+      "wiki": "The Dark Knight Returns",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1986-02-01",
+      "yearDisplay": "1986",
+      "title": "The Dark Knight Returns",
+      "impact": "Frank Miller's aged Batman comes out of retirement in a dystopian Gotham. Alongside Watchmen, it redefined what mainstream comics could be - every dark Batman since stands in its shadow.",
+      "facts": [
+        "Published in 1986 as a four-issue prestige-format miniseries.",
+        "Its armored Batman-versus-Superman duel inspired the climax of the 2016 film."
+      ]
+    },
+    {
+      "slug": "year-one",
+      "wiki": "Batman: Year One",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1987",
+      "yearDisplay": "1987",
+      "title": "Batman: Year One",
+      "impact": "Miller and Mazzucchelli retell Batman's first year as a grounded crime novel - the canonical origin ever since.",
+      "facts": [
+        "It ran in Batman #404-407 in 1987.",
+        "A core influence on both Batman Begins and The Batman."
+      ]
+    },
+    {
+      "slug": "killing-joke",
+      "wiki": "Batman: The Killing Joke",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1988-03-29",
+      "yearDisplay": "1988",
+      "title": "Batman: The Killing Joke",
+      "impact": "Moore and Bolland's 'one bad day': the defining Joker origin story, and a lasting controversy for what it does to Barbara Gordon.",
+      "facts": [
+        "The 2008 deluxe edition was recolored to match Brian Bolland's original intent.",
+        "Its events led Barbara Gordon to be reinvented as Oracle."
+      ]
+    },
+    {
+      "slug": "death-in-the-family",
+      "wiki": "Batman: A Death in the Family",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1988-12-01",
+      "yearDisplay": "1988-89",
+      "title": "A Death in the Family",
+      "impact": "Readers voted by phone on whether Robin lives or dies. By 5,343 votes to 5,271, Jason Todd dies - and comics' relationship with its audience changes forever.",
+      "facts": [
+        "The 900-number poll margin was just 72 votes.",
+        "Jason Todd eventually returned as the Red Hood."
+      ]
+    },
+    {
+      "slug": "knightfall",
+      "wiki": "Batman: Knightfall",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1993",
+      "yearDisplay": "1993-94",
+      "title": "Knightfall",
+      "impact": "Bane breaks the Bat. The 90s' biggest Batman event puts Bruce Wayne in a wheelchair and a darker substitute in the cowl.",
+      "facts": [
+        "Jean-Paul Valley, Azrael, wore an armored Bat-suit while Bruce recovered.",
+        "Bane breaking Batman's back was adapted into The Dark Knight Rises."
+      ]
+    },
+    {
+      "slug": "long-halloween",
+      "wiki": "Batman: The Long Halloween",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1996",
+      "yearDisplay": "1996-97",
+      "title": "The Long Halloween",
+      "impact": "Loeb and Sale's year-long murder mystery: Two-Face's definitive origin and a favorite source text for the films.",
+      "facts": [
+        "Thirteen issues, one for each holiday of the year.",
+        "Matt Reeves cited it as a key influence on The Batman."
+      ]
+    },
+    {
+      "slug": "hush",
+      "wiki": "Batman: Hush",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2002",
+      "yearDisplay": "2002-03",
+      "title": "Batman: Hush",
+      "impact": "Jim Lee's blockbuster artwork turns a villain mystery into the best-selling Batman run of its decade.",
+      "facts": [
+        "It ran in Batman #608-619.",
+        "Introduced the bandaged villain Hush, created by Jeph Loeb and Jim Lee."
+      ]
+    },
+    {
+      "slug": "court-of-owls",
+      "wiki": "Batman: The Court of Owls",
+      "era": "modern-age",
+      "media": "comics",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2011",
+      "yearDisplay": "2011",
+      "title": "The Court of Owls",
+      "impact": "The New 52 relaunch opens with Snyder and Capullo unearthing a secret society that has owned Gotham all along - the defining Batman epic of the 2010s.",
+      "facts": [
+        "Launched with DC's 2011 New 52 line-wide reboot.",
+        "The Court is built on an old Gotham nursery rhyme invented for the story."
+      ]
+    },
+    {
+      "slug": "btas",
+      "wiki": "Batman: The Animated Series",
+      "era": "animated",
+      "media": "tv",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1992-09-05",
+      "yearDisplay": "1992",
+      "title": "Batman: The Animated Series",
+      "impact": "Dark deco painted on black paper: the series that gave Batman his definitive modern voice and won superhero animation real respect.",
+      "facts": [
+        "Background art was painted on black paper - the crew called the style 'Dark Deco'.",
+        "Kevin Conroy's Batman and Mark Hamill's Joker both debuted here."
+      ]
+    },
+    {
+      "slug": "harley-quinn-debut",
+      "wiki": "Harley Quinn",
+      "era": "animated",
+      "media": "tv",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1992-09-11",
+      "yearDisplay": "1992",
+      "title": "Harley Quinn Debuts ('Joker's Favor')",
+      "impact": "Written as a one-episode henchwoman for the Joker, Harley becomes the biggest new DC character in half a century.",
+      "facts": [
+        "Voiced by Arleen Sorkin, whose harlequin costume in a soap-opera dream sequence inspired the character.",
+        "She crossed from the cartoon into DC comics canon in the 1990s."
+      ]
+    },
+    {
+      "slug": "mask-of-the-phantasm",
+      "wiki": "Batman: Mask of the Phantasm",
+      "era": "animated",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1993-12-25",
+      "yearDisplay": "1993",
+      "title": "Batman: Mask of the Phantasm",
+      "impact": "The animated crew's theatrical noir: a Christmas-Day box-office flop that grew into many fans' pick for the best Batman film, period.",
+      "facts": [
+        "It was upgraded from direct-to-video to a theatrical release mid-production.",
+        "Mark Hamill's Joker gets his darkest turn of the DCAU era."
+      ]
+    },
+    {
+      "slug": "new-batman-adventures",
+      "wiki": "The New Batman Adventures",
+      "era": "animated",
+      "media": "tv",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1997",
+      "yearDisplay": "1997",
+      "title": "The New Batman Adventures",
+      "impact": "The sleeker Kids' WB continuation: simplified designs, a bigger Bat-Family, and a bridge to the wider DC animated universe.",
+      "facts": [
+        "Character designs were streamlined to match Superman: The Animated Series."
+      ]
+    },
+    {
+      "slug": "batman-beyond",
+      "wiki": "Batman Beyond",
+      "era": "animated",
+      "media": "tv",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1999-01-10",
+      "yearDisplay": "1999",
+      "title": "Batman Beyond",
+      "impact": "Neo-Gotham, decades from now: teenager Terry McGinnis inherits the cowl from an aged Bruce Wayne - a future Batman fans embraced as canon.",
+      "facts": [
+        "The network wanted a teen Batman; the writers answered with a cyberpunk elegy.",
+        "Kevin Conroy stayed on as the elderly Bruce Wayne."
+      ]
+    },
+    {
+      "slug": "kevin-conroy",
+      "wiki": "Kevin Conroy",
+      "era": "animated",
+      "media": "tv",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1992",
+      "yearDisplay": "1955-2022",
+      "title": "Kevin Conroy",
+      "impact": "For three decades, across hundreds of episodes, films and games, Conroy's voice WAS Batman for an entire generation.",
+      "facts": [
+        "He used two distinct voices to split Bruce Wayne from Batman.",
+        "He reprised the role in the Batman: Arkham game trilogy."
+      ]
+    },
+    {
+      "slug": "justice-league-tv",
+      "wiki": "Justice League Unlimited",
+      "era": "animated",
+      "media": "tv",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2001",
+      "yearDisplay": "2001-06",
+      "title": "Justice League / JL Unlimited",
+      "impact": "The DCAU graduates to the full League, with Conroy's Batman as its spine, closing the universe Timm and Dini began in 1992.",
+      "facts": [
+        "Continued as Justice League Unlimited through 2006, the DCAU's finale."
+      ]
+    },
+    {
+      "slug": "batman-1966-film",
+      "wiki": "Batman (1966 film)",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1966-07-30",
+      "yearDisplay": "1966",
+      "title": "Batman: The Movie (1966)",
+      "impact": "The TV series goes widescreen with the Batboat, the Batcopter, and the immortal shark-repellent Bat-Spray.",
+      "facts": [
+        "Shot quickly between the TV show's first and second seasons.",
+        "Home of the line: 'Some days you just can't get rid of a bomb.'"
+      ]
+    },
+    {
+      "slug": "batman-1989",
+      "wiki": "Batman (1989 film)",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1989-06-23",
+      "yearDisplay": "1989",
+      "title": "Batman (1989)",
+      "impact": "Burton's gothic blockbuster proves dark superhero cinema sells: a merchandising earthquake, an Oscar for its Gotham, and the template for the modern comic-book movie.",
+      "facts": [
+        "Won the Academy Award for Best Art Direction for Anton Furst's Gotham City.",
+        "Michael Keaton's casting drew tens of thousands of protest letters - before the film silenced them."
+      ]
+    },
+    {
+      "slug": "batman-returns",
+      "wiki": "Batman Returns",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1992-06-19",
+      "yearDisplay": "1992",
+      "title": "Batman Returns",
+      "impact": "Burton unleashed: stranger and kinkier, with Pfeiffer's Catwoman and DeVito's Penguin - too dark for the toy aisle, exactly right for everyone else.",
+      "facts": [
+        "Parental backlash over its darkness pushed the studio toward a family-friendlier sequel.",
+        "Michelle Pfeiffer performed much of her own whip work."
+      ]
+    },
+    {
+      "slug": "batman-forever",
+      "wiki": "Batman Forever",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1995-06-16",
+      "yearDisplay": "1995",
+      "title": "Batman Forever",
+      "impact": "Schumacher's neon-circus course correction: a massive box-office hit that began the franchise's slide into camp.",
+      "facts": [
+        "Val Kilmer replaced Michael Keaton in the cowl.",
+        "Robin finally reaches the big screen, played by Chris O'Donnell."
+      ]
+    },
+    {
+      "slug": "batman-and-robin",
+      "wiki": "Batman & Robin (film)",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1997-06-20",
+      "yearDisplay": "1997",
+      "title": "Batman & Robin",
+      "impact": "Bat-nipples, ice puns, and a franchise frozen solid for eight years - the cautionary tale that made Batman Begins possible.",
+      "facts": [
+        "George Clooney has repeatedly and publicly apologized for it.",
+        "Its failure cancelled the planned sequel, Batman Unchained."
+      ]
+    },
+    {
+      "slug": "batman-begins",
+      "wiki": "Batman Begins",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2005-06-15",
+      "yearDisplay": "2005",
+      "title": "Batman Begins",
+      "impact": "Nolan rebuilds Batman from first principles - fear, training, a plausible Gotham - and invents the 'gritty reboot' as Hollywood grammar.",
+      "facts": [
+        "The Tumbler was a practical vehicle, not CGI, capable of real stunt driving.",
+        "Draws heavily on Year One and the short story 'The Man Who Falls'."
+      ]
+    },
+    {
+      "slug": "the-dark-knight",
+      "wiki": "The Dark Knight",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2008-07-18",
+      "yearDisplay": "2008",
+      "title": "The Dark Knight",
+      "impact": "The first superhero film to pass one billion dollars. Ledger's Joker wins a posthumous Oscar, and comic-book cinema is suddenly taken seriously.",
+      "facts": [
+        "Heath Ledger won a posthumous Academy Award for Best Supporting Actor.",
+        "Its Best Picture snub is widely credited with pushing the Oscars to expand the category."
+      ]
+    },
+    {
+      "slug": "dark-knight-rises",
+      "wiki": "The Dark Knight Rises",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2012-07-20",
+      "yearDisplay": "2012",
+      "title": "The Dark Knight Rises",
+      "impact": "Nolan closes cinema's first complete Batman saga on his own terms: Bane, a broken Bat, and an actual ending.",
+      "facts": [
+        "Large portions were shot with IMAX cameras.",
+        "Bane breaking Batman's back adapts the Knightfall storyline."
+      ]
+    },
+    {
+      "slug": "the-batman-2022",
+      "wiki": "The Batman (film)",
+      "era": "cinematic",
+      "media": "movies",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2022-03-04",
+      "yearDisplay": "2022",
+      "title": "The Batman",
+      "impact": "Reeves' rain-soaked noir: a year-two Batman finally played as the World's Greatest Detective, hunting a Riddler built for the true-crime age.",
+      "facts": [
+        "Robert Pattinson's Bruce Wayne barely appears in public - by design.",
+        "Nirvana's 'Something in the Way' anchors the film's sound."
+      ]
+    },
+    {
+      "slug": "batman-1986-game",
+      "wiki": "Batman (1986 video game)",
+      "era": "games",
+      "media": "games",
+      "milestone": true,
+      "exhibit": true,
+      "date": "1986",
+      "yearDisplay": "1986",
+      "title": "Batman (1986)",
+      "impact": "Batman's video game debut: an isometric action-adventure on 8-bit home computers, the start of four decades on screens you control.",
+      "facts": [
+        "Developed by Ocean Software for the ZX Spectrum and other 8-bit machines.",
+        "The mission: rescue Robin, one gadget at a time."
+      ]
+    },
+    {
+      "slug": "batman-nes",
+      "wiki": "Batman: The Video Game",
+      "era": "games",
+      "media": "games",
+      "milestone": false,
+      "exhibit": true,
+      "date": "1990",
+      "yearDisplay": "1989-90",
+      "title": "Batman: The Video Game (NES)",
+      "impact": "Sunsoft's brutal, beloved NES tie-in: famous for its wall-jump, its difficulty, and one of the great 8-bit soundtracks.",
+      "facts": [
+        "Loosely based on the 1989 Tim Burton film.",
+        "Its wall-jump mechanic became a cult favorite among NES players."
+      ]
+    },
+    {
+      "slug": "arkham-asylum",
+      "wiki": "Batman: Arkham Asylum",
+      "era": "games",
+      "media": "games",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2009-08-25",
+      "yearDisplay": "2009",
+      "title": "Batman: Arkham Asylum",
+      "impact": "Rocksteady proves a licensed superhero game can be a masterpiece: freeflow combat, predator stealth, and the BTAS voices reunited.",
+      "facts": [
+        "Written by Paul Dini of Batman: The Animated Series.",
+        "Kevin Conroy and Mark Hamill reprised Batman and the Joker."
+      ]
+    },
+    {
+      "slug": "arkham-city",
+      "wiki": "Batman: Arkham City",
+      "era": "games",
+      "media": "games",
+      "milestone": true,
+      "exhibit": true,
+      "date": "2011-10-18",
+      "yearDisplay": "2011",
+      "title": "Batman: Arkham City",
+      "impact": "The open-air prison sequel that perfected the formula - and gave Hamill's Joker an unforgettable curtain call.",
+      "facts": [
+        "Mark Hamill announced it as his final Joker performance - he later returned anyway.",
+        "Swept many 2011 Game of the Year awards."
+      ]
+    },
+    {
+      "slug": "arkham-knight",
+      "wiki": "Batman: Arkham Knight",
+      "era": "games",
+      "media": "games",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2015-06-23",
+      "yearDisplay": "2015",
+      "title": "Batman: Arkham Knight",
+      "impact": "Rocksteady's finale adds a drivable Batmobile and closes the trilogy at blockbuster scale.",
+      "facts": [
+        "The PC port launched so broken it was withdrawn from sale for months.",
+        "First game in the series rated M by the ESRB."
+      ]
+    },
+    {
+      "slug": "telltale-batman",
+      "wiki": "Batman: The Telltale Series",
+      "era": "games",
+      "media": "games",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2016-08-02",
+      "yearDisplay": "2016",
+      "title": "Batman: The Telltale Series",
+      "impact": "A choice-driven Batman where being Bruce Wayne is the hard part - Telltale put the mask second and the man first.",
+      "facts": [
+        "Player choices reshape Bruce's relationships with allies and villains alike."
+      ]
+    },
+    {
+      "slug": "lego-batman-game",
+      "wiki": "Lego Batman: The Videogame",
+      "era": "games",
+      "media": "games",
+      "milestone": false,
+      "exhibit": true,
+      "date": "2008",
+      "yearDisplay": "2008",
+      "title": "LEGO Batman: The Videogame",
+      "impact": "The family-friendly counterweight: Gotham City as a toybox, and a gateway Batman for a whole age bracket.",
+      "facts": [
+        "The first LEGO game built on an original story rather than adapting a film."
+      ]
+    }
+  ]
+}

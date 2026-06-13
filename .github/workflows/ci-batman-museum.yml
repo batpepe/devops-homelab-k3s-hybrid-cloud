@@ -1,0 +1,80 @@
+name: Build Batman Museum
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'apps/batman-museum/**'
+      - '.github/workflows/ci-batman-museum.yml'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: batpepe/batman-museum
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
+        with:
+          context: ./apps/batman-museum
+          push: true
+          # Uncached on purpose: a cached "apk upgrade" layer freezes packages at
+          # cache-write time, so new CVE fixes never enter the image and the Trivy
+          # gate fails on a stale layer. The rebuild costs little.
+          pull: true
+          no-cache: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Smoke test the image
+        run: |
+          docker run -d --rm --name museum-smoke -p 8080:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          for i in $(seq 1 15); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/health || true)
+            if [ "$code" = "200" ]; then echo "health ok"; docker stop museum-smoke; exit 0; fi
+            sleep 2
+          done
+          echo "health check failed"; docker logs museum-smoke; docker stop museum-smoke; exit 1
+
+      - name: Update K8s manifest
+        run: |
+          sed -i -E "s|image: ghcr.io/batpepe/batman-museum:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" k8s-infrastructure/apps/batman-museum/batman-museum.yaml
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add k8s-infrastructure/apps/batman-museum/batman-museum.yaml
+          git commit -m "gitops: update batman-museum image to ${{ github.sha }}" || echo "No changes"
+          for i in $(seq 1 5); do
+            git pull --rebase origin main && git push && exit 0
+            echo "manifest push attempt $i failed; retrying" >&2
+            sleep $((RANDOM % 5 + 1))
+          done
+          echo "manifest push failed after 5 attempts" >&2
+          exit 1

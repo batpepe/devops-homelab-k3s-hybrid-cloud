@@ -208,3 +208,22 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: batman-museum
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/batman-museum
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

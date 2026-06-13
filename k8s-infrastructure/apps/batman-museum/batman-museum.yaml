@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batman-museum
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batman-museum
+  template:
+    metadata:
+      labels:
+        app: batman-museum
+    spec:
+      containers:
+        - name: batman-museum
+          # Bumped to an immutable commit SHA by ci-batman-museum.yml on each build.
+          image: ghcr.io/batpepe/batman-museum:da9df0f4c63f8a5b8ccc0d8f615e5c664ab4b29f
+          ports:
+            - containerPort: 3000
+          env:
+            # Discrete PG* vars: pg reads them natively (no DATABASE_URL needed).
+            - name: PGHOST
+              value: postgres-service
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: batman_museum
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: 100m
+              memory: 192Mi
+            limits:
+              cpu: 500m
+              memory: 384Mi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: batman-museum-svc
+  namespace: apps
+spec:
+  selector:
+    app: batman-museum
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+# Public host routed by the Cloudflare Tunnel wildcard through Traefik.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: batman-museum-ingress
+  namespace: apps
+spec:
+  rules:
+    - host: museum.batpepe.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: batman-museum-svc
+                port:
+                  number: 80
