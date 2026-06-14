@@ -25,6 +25,11 @@ const POSTFX = true;
 const DEBUG_CAM = false;
 
 type Slot = { x: number; z: number; side: 1 | -1 };
+type TouchState = {
+  look: { dx: number; dy: number };
+  move: { x: number; y: number };
+  tap: { x: number; y: number } | null;
+};
 
 function buildSlots(n: number): { slots: Slot[]; zFar: number } {
   const slots: Slot[] = [];
@@ -137,11 +142,13 @@ function ExhibitFrame({
 function Room({
   zFar,
   accent,
-  noise
+  noise,
+  lowPerf
 }: {
   zFar: number;
   accent: string;
   noise: THREE.Texture;
+  lowPerf: boolean;
 }) {
   const zNear = 3;
   const centerZ = (zNear + zFar) / 2;
@@ -155,10 +162,10 @@ function Room({
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, centerZ]} receiveShadow>
         <planeGeometry args={[HALL_W, lengthZ]} />
         <MeshReflectorMaterial
-          resolution={1024}
+          resolution={lowPerf ? 256 : 1024}
           mixBlur={1.2}
           mixStrength={4}
-          blur={[300, 90]}
+          blur={lowPerf ? [150, 45] : [300, 90]}
           roughness={0.82}
           depthScale={1.1}
           minDepthThreshold={0.4}
@@ -256,30 +263,41 @@ function Player({
   bounds,
   meshes,
   onSelect,
-  zFar
+  zFar,
+  isTouch,
+  touch
 }: {
   bounds: { minX: number; maxX: number; minZ: number; maxZ: number };
   meshes: React.RefObject<{ mesh: THREE.Object3D; item: Item }[]>;
   onSelect: (i: Item) => void;
   zFar: number;
+  isTouch: boolean;
+  touch: React.RefObject<TouchState>;
 }) {
   const { camera, gl } = useThree();
-
-  // Spawn near the entrance, off-centre and angled down the hall so the first
-  // frame already reveals a row of lit exhibits and the cyan strips.
-  useEffect(() => {
-    camera.position.set(-3.1, EYE, 2.2);
-    camera.lookAt(2.6, 1.5, zFar * 0.4);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const keys = useRef<Record<string, boolean>>({});
   const lockRef = useRef<{ isLocked: boolean } | null>(null);
   const ray = useMemo(() => new THREE.Raycaster(), []);
   const front = useMemo(() => new THREE.Vector3(), []);
   const side = useMemo(() => new THREE.Vector3(), []);
   const move = useMemo(() => new THREE.Vector3(), []);
+  const yaw = useRef(0);
+  const pitch = useRef(0);
 
+  // Spawn near the entrance, off-centre and angled down the hall so the first
+  // frame already reveals a row of lit exhibits and the cyan strips.
   useEffect(() => {
+    camera.position.set(-3.1, EYE, 2.2);
+    camera.lookAt(2.6, 1.5, zFar * 0.4);
+    camera.rotation.order = "YXZ";
+    yaw.current = camera.rotation.y;
+    pitch.current = camera.rotation.x;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keyboard (desktop only).
+  useEffect(() => {
+    if (isTouch) return;
     const d = (e: KeyboardEvent) => (keys.current[e.code] = true);
     const u = (e: KeyboardEvent) => (keys.current[e.code] = false);
     window.addEventListener("keydown", d);
@@ -288,27 +306,49 @@ function Player({
       window.removeEventListener("keydown", d);
       window.removeEventListener("keyup", u);
     };
-  }, []);
+  }, [isTouch]);
 
-  // Click while pointer-locked: raycast from screen center onto exhibits.
+  const inspectAt = (nx: number, ny: number) => {
+    ray.setFromCamera(new THREE.Vector2(nx, ny), camera);
+    const list = meshes.current ?? [];
+    const hit = ray.intersectObjects(list.map((m) => m.mesh), false)[0];
+    if (hit) {
+      const found = list.find((m) => m.mesh === hit.object);
+      if (found) onSelect(found.item);
+    }
+  };
+
+  // Click while pointer-locked: raycast from screen center onto exhibits (desktop).
   useEffect(() => {
+    if (isTouch) return;
     const onClick = () => {
       if (!lockRef.current?.isLocked) return;
-      ray.setFromCamera(new THREE.Vector2(0, 0), camera);
-      const list = meshes.current ?? [];
-      const hit = ray.intersectObjects(list.map((m) => m.mesh), false)[0];
-      if (hit) {
-        const found = list.find((m) => m.mesh === hit.object);
-        if (found) onSelect(found.item);
-      }
+      inspectAt(0, 0);
     };
     const el = gl.domElement;
     el.addEventListener("click", onClick);
     return () => el.removeEventListener("click", onClick);
-  }, [camera, gl, meshes, onSelect, ray]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camera, gl, meshes, onSelect, ray, isTouch]);
 
   useFrame((_, dt) => {
     const speed = 3.4 * Math.min(dt, 0.05);
+
+    if (isTouch) {
+      const t = touch.current;
+      const s = 0.004;
+      yaw.current -= t.look.dx * s;
+      pitch.current = Math.max(-1.2, Math.min(1.2, pitch.current - t.look.dy * s));
+      t.look.dx = 0;
+      t.look.dy = 0;
+      camera.rotation.set(pitch.current, yaw.current, 0);
+      if (t.tap) {
+        const tap = t.tap;
+        t.tap = null;
+        inspectAt(tap.x, tap.y);
+      }
+    }
+
     camera.getWorldDirection(front);
     front.y = 0;
     front.normalize();
@@ -319,6 +359,11 @@ function Player({
     if (k["KeyS"] || k["ArrowDown"]) move.sub(front);
     if (k["KeyD"] || k["ArrowRight"]) move.add(side);
     if (k["KeyA"] || k["ArrowLeft"]) move.sub(side);
+    if (isTouch) {
+      const m = touch.current.move;
+      if (m.y) move.addScaledVector(front, -m.y);
+      if (m.x) move.addScaledVector(side, m.x);
+    }
     if (move.lengthSq() > 0) {
       move.normalize().multiplyScalar(speed);
       camera.position.add(move);
@@ -328,7 +373,7 @@ function Player({
     camera.position.z = THREE.MathUtils.clamp(camera.position.z, bounds.minZ, bounds.maxZ);
   });
 
-  return <PointerLockControls ref={lockRef as never} />;
+  return isTouch ? null : <PointerLockControls ref={lockRef as never} />;
 }
 
 function CameraRig({ zFar }: { zFar: number }) {
@@ -343,11 +388,17 @@ function CameraRig({ zFar }: { zFar: number }) {
 function Scene({
   era,
   exhibits,
-  onSelect
+  onSelect,
+  lowPerf,
+  isTouch,
+  touch
 }: {
   era: Era;
   exhibits: Item[];
   onSelect: (i: Item) => void;
+  lowPerf: boolean;
+  isTouch: boolean;
+  touch: React.RefObject<TouchState>;
 }) {
   const { slots, zFar } = useMemo(() => buildSlots(exhibits.length), [exhibits.length]);
   const noise = useMemo(() => makeNoiseNormal(), []);
@@ -385,7 +436,7 @@ function Scene({
       <pointLight position={[0, 2.6, zFar + 1.8]} intensity={36} distance={13} color="#58d5f0" />
       <pointLight position={[0, 1.5, zFar + 1.0]} intensity={12} distance={8} color={era.accent} />
 
-      <Room zFar={zFar} accent={era.accent} noise={noise} />
+      <Room zFar={zFar} accent={era.accent} noise={noise} lowPerf={lowPerf} />
 
       <Suspense fallback={null}>
         {exhibits.map((item, i) => (
@@ -399,16 +450,16 @@ function Scene({
         ))}
       </Suspense>
 
-      <Sparkles count={70} scale={[HALL_W, HALL_H, Math.abs(zFar) + 4]} position={[0, HALL_H / 2, zFar / 2]} size={1.4} speed={0.2} opacity={0.35} color="#cfe0f5" />
+      <Sparkles count={lowPerf ? 28 : 70} scale={[HALL_W, HALL_H, Math.abs(zFar) + 4]} position={[0, HALL_H / 2, zFar / 2]} size={1.4} speed={0.2} opacity={0.35} color="#cfe0f5" />
 
       {DEBUG_CAM ? (
         <CameraRig zFar={zFar} />
       ) : (
-        <Player bounds={bounds} meshes={meshes} onSelect={onSelect} zFar={zFar} />
+        <Player bounds={bounds} meshes={meshes} onSelect={onSelect} zFar={zFar} isTouch={isTouch} touch={touch} />
       )}
 
       {POSTFX && (
-        <EffectComposer multisampling={4}>
+        <EffectComposer multisampling={lowPerf ? 0 : 4}>
           <Bloom mipmapBlur intensity={0.85} luminanceThreshold={0.55} luminanceSmoothing={0.35} />
           <Vignette eskil={false} offset={0.22} darkness={0.82} />
         </EffectComposer>
@@ -420,6 +471,19 @@ function Scene({
 export default function Gallery3D({ era, exhibits }: { era: Era; exhibits: Item[] }) {
   const [selected, setSelected] = useState<Item | null>(null);
   const [entered, setEntered] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
+  const touch = useRef<TouchState>({ look: { dx: 0, dy: 0 }, move: { x: 0, y: 0 }, tap: null });
+  const lowPerf = isTouch;
+
+  useEffect(() => {
+    // ?touch=1 forces the touch UI (handy for QA or touch-screen laptops).
+    const force = new URLSearchParams(window.location.search).get("touch") === "1";
+    setIsTouch(
+      force ||
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window
+    );
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSelected(null);
@@ -433,34 +497,44 @@ export default function Gallery3D({ era, exhibits }: { era: Era; exhibits: Item[
   }, [selected]);
 
   return (
-    <div className="relative h-screen w-screen bg-[var(--bg)]">
+    <div className="relative h-dvh w-screen overflow-hidden bg-[var(--bg)]">
       <Canvas
-        shadows
-        dpr={[1, 1.8]}
+        shadows={!lowPerf}
+        dpr={lowPerf ? [1, 1.5] : [1, 1.8]}
         camera={{ position: [0, EYE, 2], fov: 72, near: 0.1, far: 60 }}
-        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}
+        gl={{ antialias: !lowPerf, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }}
+        style={{ touchAction: "none" }}
       >
-        <Scene era={era} exhibits={exhibits} onSelect={setSelected} />
+        <Scene
+          era={era}
+          exhibits={exhibits}
+          onSelect={setSelected}
+          lowPerf={lowPerf}
+          isTouch={isTouch}
+          touch={touch}
+        />
       </Canvas>
 
-      {/* crosshair */}
-      <div className="pointer-events-none fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-        <div className="h-1.5 w-1.5 rounded-full border border-[var(--cyan)]/70" />
-      </div>
+      {/* crosshair (desktop aim only) */}
+      {!isTouch && (
+        <div className="pointer-events-none fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+          <div className="h-1.5 w-1.5 rounded-full border border-[var(--cyan)]/70" />
+        </div>
+      )}
 
       {/* header / back */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 flex items-start justify-between bg-gradient-to-b from-[rgba(2,4,9,0.85)] to-transparent p-5">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 flex items-start justify-between gap-3 bg-gradient-to-b from-[rgba(2,4,9,0.85)] to-transparent p-4 sm:p-5">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--dim)]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--dim)] sm:text-[11px]">
             Gallery wing
           </p>
-          <h1 className="font-display text-2xl font-bold tracking-[0.18em]" style={{ color: era.accent }}>
+          <h1 className="font-display text-xl font-bold tracking-[0.18em] sm:text-2xl" style={{ color: era.accent }}>
             {era.name}
           </h1>
         </div>
         <Link
           href="/"
-          className="pointer-events-auto font-display border border-[var(--line)] bg-[rgba(10,16,24,0.7)] px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-[var(--dim)] backdrop-blur-sm transition-colors hover:border-[var(--cyan)] hover:text-[var(--cyan)]"
+          className="pointer-events-auto shrink-0 font-display border border-[var(--line)] bg-[rgba(10,16,24,0.7)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-[var(--dim)] backdrop-blur-sm transition-colors hover:border-[var(--cyan)] hover:text-[var(--cyan)] sm:px-4 sm:py-2 sm:text-[11px]"
         >
           &lt;&lt; star map
         </Link>
@@ -470,18 +544,22 @@ export default function Gallery3D({ era, exhibits }: { era: Era; exhibits: Item[
       {!entered && (
         <button
           onClick={() => setEntered(true)}
-          className="fixed inset-0 z-30 grid place-items-center bg-[rgba(2,4,9,0.6)] backdrop-blur-sm"
+          className="fixed inset-0 z-30 grid place-items-center bg-[rgba(2,4,9,0.6)] px-6 backdrop-blur-sm"
         >
           <div className="text-center">
-            <p className="font-display text-lg uppercase tracking-[0.3em] text-[var(--text)]">
+            <p className="font-display text-base uppercase tracking-[0.3em] text-[var(--text)] sm:text-lg">
               Enter {era.name}
             </p>
-            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--dim)]">
-              click to look // WASD to walk // click art to inspect // esc to release
+            <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--dim)] sm:text-[11px] sm:tracking-[0.25em]">
+              {isTouch
+                ? "drag to look // joystick to move // tap art to inspect"
+                : "click to look // WASD to walk // click art to inspect // esc to release"}
             </p>
           </div>
         </button>
       )}
+
+      {isTouch && entered && <TouchControls touch={touch} />}
 
       {selected && (
         <InspectView item={selected} accent={era.accent} onClose={() => setSelected(null)} />
@@ -552,6 +630,121 @@ function InspectView({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Touch input: a full-screen look surface (drag to look, tap to inspect) plus a
+// thumb joystick for movement. Writes into the shared `touch` ref consumed by
+// Player's useFrame, so no React re-renders fire per touch move.
+function TouchControls({ touch }: { touch: React.RefObject<TouchState> }) {
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const lookId = useRef<number | null>(null);
+  const last = useRef({ x: 0, y: 0 });
+  const moved = useRef(false);
+
+  const onStart = (e: React.TouchEvent) => {
+    if (lookId.current !== null) return;
+    const t = e.changedTouches[0];
+    lookId.current = t.identifier;
+    last.current = { x: t.clientX, y: t.clientY };
+    moved.current = false;
+  };
+  const onMove = (e: React.TouchEvent) => {
+    if (lookId.current === null) return;
+    const t = Array.from(e.touches).find((x) => x.identifier === lookId.current);
+    if (!t) return;
+    const dx = t.clientX - last.current.x;
+    const dy = t.clientY - last.current.y;
+    last.current = { x: t.clientX, y: t.clientY };
+    if (Math.abs(dx) + Math.abs(dy) > 4) moved.current = true;
+    touch.current.look.dx += dx;
+    touch.current.look.dy += dy;
+  };
+  const onEnd = (e: React.TouchEvent) => {
+    const et = Array.from(e.changedTouches).find((x) => x.identifier === lookId.current);
+    if (!et) return;
+    if (!moved.current && surfaceRef.current) {
+      const r = surfaceRef.current.getBoundingClientRect();
+      touch.current.tap = {
+        x: ((et.clientX - r.left) / r.width) * 2 - 1,
+        y: -((et.clientY - r.top) / r.height) * 2 + 1
+      };
+    }
+    lookId.current = null;
+  };
+
+  return (
+    <>
+      <div
+        ref={surfaceRef}
+        className="fixed inset-0 z-10"
+        style={{ touchAction: "none" }}
+        onTouchStart={onStart}
+        onTouchMove={onMove}
+        onTouchEnd={onEnd}
+        onTouchCancel={onEnd}
+      />
+      <Joystick touch={touch} />
+    </>
+  );
+}
+
+function Joystick({ touch }: { touch: React.RefObject<TouchState> }) {
+  const baseRef = useRef<HTMLDivElement>(null);
+  const knobRef = useRef<HTMLDivElement>(null);
+  const id = useRef<number | null>(null);
+  const R = 46;
+
+  const setKnob = (dx: number, dy: number) => {
+    if (knobRef.current) knobRef.current.style.transform = `translate(${dx}px, ${dy}px)`;
+  };
+  const onStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (id.current === null) id.current = e.changedTouches[0].identifier;
+  };
+  const onMove = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (id.current === null || !baseRef.current) return;
+    const t = Array.from(e.touches).find((x) => x.identifier === id.current);
+    if (!t) return;
+    const r = baseRef.current.getBoundingClientRect();
+    let dx = t.clientX - (r.left + r.width / 2);
+    let dy = t.clientY - (r.top + r.height / 2);
+    const len = Math.hypot(dx, dy);
+    if (len > R) {
+      dx = (dx / len) * R;
+      dy = (dy / len) * R;
+    }
+    setKnob(dx, dy);
+    touch.current.move.x = dx / R;
+    touch.current.move.y = dy / R;
+  };
+  const onEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (!Array.from(e.changedTouches).some((x) => x.identifier === id.current)) return;
+    id.current = null;
+    touch.current.move.x = 0;
+    touch.current.move.y = 0;
+    setKnob(0, 0);
+  };
+
+  return (
+    <div
+      ref={baseRef}
+      className="fixed bottom-6 left-6 z-20 grid h-28 w-28 touch-none place-items-center rounded-full border border-[var(--line)] bg-[rgba(10,16,24,0.45)] backdrop-blur-sm"
+      onTouchStart={onStart}
+      onTouchMove={onMove}
+      onTouchEnd={onEnd}
+      onTouchCancel={onEnd}
+    >
+      <div className="pointer-events-none absolute font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--dim)]">
+        move
+      </div>
+      <div
+        ref={knobRef}
+        className="h-12 w-12 rounded-full border border-[var(--cyan)]/50 bg-[rgba(88,213,240,0.18)]"
+      />
     </div>
   );
 }

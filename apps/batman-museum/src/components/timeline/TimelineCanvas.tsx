@@ -56,20 +56,25 @@ export default function TimelineCanvas({
   const [selected, setSelected] = useState<Item | null>(null);
   const [hint, setHint] = useState(true);
   const [ready, setReady] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    setIsTouch(
+      window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window
+    );
+  }, []);
 
   // ---- d3-zoom: infinite canvas with semantic zoom ----
   useEffect(() => {
     const vp = viewportRef.current!;
     const world = worldRef.current!;
-    const bg = bgRef.current!;
 
     const z = d3zoom<HTMLDivElement, unknown>()
       .scaleExtent([0.16, 2.6])
       .on("zoom", (ev) => {
         const { x, y, k } = ev.transform;
         world.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${k})`;
-        const bk = 0.62 + k * 0.38;
-        bg.style.transform = `translate3d(${x * 0.55}px, ${y * 0.55}px, 0) scale(${bk})`;
+        // Backdrop stays fixed/full-bleed (no parallax), so its edges never show.
         // Semantic-zoom crossfade is driven by classes (no React re-render in hot path).
         world.classList.toggle("zoomed-in", k > 0.62);
         world.classList.toggle("galaxy", k < 0.42);
@@ -194,12 +199,12 @@ export default function TimelineCanvas({
   return (
     <div
       ref={viewportRef}
-      className="relative h-screen w-screen cursor-grab overflow-hidden active:cursor-grabbing"
+      className="relative h-dvh w-screen cursor-grab touch-none select-none overflow-hidden active:cursor-grabbing"
     >
-      {/* far parallax layer */}
+      {/* full-bleed static backdrop (no parallax, so no visible edges) */}
       <div
         ref={bgRef}
-        className="absolute left-0 top-0 origin-top-left will-change-transform"
+        className="absolute inset-0"
         style={{ opacity: ready ? 1 : 0, transition: "opacity 0.7s ease" }}
       >
         <Backdrop />
@@ -296,12 +301,12 @@ export default function TimelineCanvas({
       />
 
       {/* header + filters */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 flex items-start justify-between gap-4 bg-gradient-to-b from-[rgba(2,4,9,0.85)] to-transparent p-5">
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 flex flex-col gap-3 bg-gradient-to-b from-[rgba(2,4,9,0.88)] to-transparent p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:p-5">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-[0.22em] text-[var(--text)]">
+          <h1 className="font-display text-lg font-bold tracking-[0.2em] text-[var(--text)] sm:text-2xl sm:tracking-[0.22em]">
             THE BAT-ARCHIVE
           </h1>
-          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--dim)]">
+          <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--dim)] sm:text-[11px] sm:tracking-[0.3em]">
             a constellation of Gotham history // 1939 - present
           </p>
         </div>
@@ -318,8 +323,10 @@ export default function TimelineCanvas({
       </div>
 
       {hint && (
-        <div className="pointer-events-none fixed bottom-6 left-1/2 z-20 -translate-x-1/2 animate-pulse font-mono text-[11px] uppercase tracking-[0.35em] text-[var(--dim)]">
-          scroll to zoom // drag to explore // click a star
+        <div className="pointer-events-none fixed bottom-6 left-1/2 z-20 w-[92%] max-w-md -translate-x-1/2 animate-pulse text-center font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--dim)] sm:text-[11px] sm:tracking-[0.35em]">
+          {isTouch
+            ? "pinch to zoom // drag to explore // tap a star"
+            : "scroll to zoom // drag to explore // click a star"}
         </div>
       )}
 

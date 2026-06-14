@@ -24,7 +24,7 @@ export default function FilterBar({
           <button
             key={t.key}
             onClick={(e) => onToggle(t.key, e.currentTarget)}
-            className={`chip font-display relative overflow-hidden rounded-sm border px-4 py-1.5 text-xs uppercase tracking-[0.22em] transition-colors duration-300 ${
+            className={`chip font-display relative overflow-hidden rounded-sm border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] transition-colors duration-300 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-[0.22em] ${
               on
                 ? "border-[var(--amber)] bg-[rgba(245,184,28,0.12)] text-[var(--amber)]"
                 : "border-[var(--line)] text-[var(--dim)] hover:text-[var(--text)]"
