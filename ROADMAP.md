@@ -58,3 +58,10 @@ Pick items independently - they are not strictly sequential, but the order withi
 Tracked separately from the DevOps backlog above; same effort/value tags.
 - [x] Increment 4 - flow and polish: pause overlay (P/Esc + on-screen button), main-menu return from game over and pause (survival was a one-way trap before), floating score popups, prefers-reduced-motion damping for shake/flash, cached collision arrays (no per-frame concat), smoke tests for survival entry and pause flow - `M, feature`
 - [x] Increment 5 - Metroidvania multi-room structure: campaign is now a 4-room graph (courtyard -> skybridge -> undercroft -> enforcer hall) with fade transitions on `exits`, per-room persistence (cleared enemies stay dead, loot is once-only), a grapple-gated crossing, a lockable boss arena and a boot-time `validateRoomGraph()` check wired into the smoke tests. Survival still runs on the untouched arena. Closed the last gap vs the original "2.5D Metroidvania" brief - `L, feature`
+
+## Museum backlog (apps/batman-museum)
+Full-stack Next.js + R3F app deployed via the same GitOps path. See [apps/batman-museum/README.md](apps/batman-museum/README.md).
+- [x] Ship the museum: constellation timeline (d3-zoom + GSAP) + first-person Batcave galleries (R3F), Wikipedia-sourced data in a dedicated in-cluster `batman_museum` Postgres DB, standalone non-root CVE-patched image, `ci-batman-museum.yml`, ArgoCD app, public at `museum.batpepe.online` (SHA `699e5ab`) - `L, feature`
+- [x] Full-bleed backdrop fix + mobile support: slice-scaled edge-free backdrop, touch pan/zoom on the timeline, touch look/joystick/tap controls + low-perf tier in the gallery (SHA `c83018c`) - `M, feature`
+- [ ] Add `securityContext` (runAsNonRoot, readOnlyRootFilesystem, drop ALL caps) to the museum Deployment - `S, hardening`
+- [ ] Seed the in-cluster DB from a Job instead of a manual port-forward - `S, resume`

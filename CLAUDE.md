@@ -13,11 +13,12 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 ## Key paths
 - terraform/main.tf                                      single EC2 + SG
 - ansible/setup-server.yml                               Docker + nginx on EC2
-- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 10 apps
+- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 11 apps
 - k8s-infrastructure/argocd-apps/monitoring-stack.yaml   prometheus-stack Helm app
 - k8s-infrastructure/apps/<svc>/*.yaml                   per-workload manifests
 - .github/workflows/ci-*.yml                             per-app build, scan, manifest bump
 - apps/<svc>/                                            source + Dockerfile
+- apps/batman-museum/README.md                           full-stack 3D museum (Next+R3F+Postgres), museum.batpepe.online
 - SECURITY.md                                            threat model, secrets policy
 - ROADMAP.md                                             prioritized DevOps backlog
 - learning/CURRICULUM.md                                 DevOps learning path (theory <-> practice)

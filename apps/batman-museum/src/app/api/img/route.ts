@@ -28,6 +28,11 @@ export async function GET(req: Request) {
   if (!upstream.ok || !upstream.body) {
     return new Response("upstream error", { status: 502 });
   }
+  // Defense-in-depth: fetch follows redirects, so make sure one did not lead
+  // off the allowlist before we stream the body back.
+  if (upstream.url && !ALLOWED_HOSTS.has(new URL(upstream.url).hostname)) {
+    return new Response("forbidden redirect", { status: 403 });
+  }
   return new Response(upstream.body, {
     headers: {
       "Content-Type": upstream.headers.get("content-type") ?? "image/jpeg",
