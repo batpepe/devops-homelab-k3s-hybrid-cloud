@@ -16,6 +16,7 @@ A complete, production-style DevOps platform that combines a **local GitOps-mana
 **Live demo (exposed via Cloudflare Zero Trust, no public ingress):**
 - [cv.batpepe.online](https://cv.batpepe.online) — Nginx-served CV & portfolio
 - [game.batpepe.online](https://game.batpepe.online) — Batman browser game
+- [museum.batpepe.online](https://museum.batpepe.online) - Interactive 3D Batman museum (Next.js + R3F + Postgres)
 
 ## 🏗️ Architecture
 
