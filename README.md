@@ -111,7 +111,8 @@ flowchart LR
 │   ├── nginx-app/            #   Static CV frontend
 │   ├── nodejs-app/           #   API backend (Postgres-backed)
 │   ├── flask-app/            #   Sample Flask service (used for alert demos)
-│   └── batman-app/           #   Batman browser game
+│   ├── batman-app/           #   Batman browser game
+│   └── batman-museum/        #   Interactive 3D Batman museum (Next.js + R3F + Postgres)
 ├── k8s-infrastructure/
 │   ├── core/                 # Cluster-level objects (e.g. ArgoCD ingress)
 │   ├── apps/                 # Manifests per workload (Deployment / Service / Ingress)
