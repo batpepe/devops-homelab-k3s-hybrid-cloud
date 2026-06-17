@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars (gitignored) and fill in real IDs.
+# Both IDs are shown on the batpepe.online zone Overview page in the
+# Cloudflare dashboard, right-hand API section.
+cloudflare_account_id = "<account-id>"
+cloudflare_zone_id    = "<zone-id>"
+
+# The API token is deliberately NOT a variable. Export it instead:
+#   export CLOUDFLARE_API_TOKEN='<token>'
