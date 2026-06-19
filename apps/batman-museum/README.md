@@ -113,13 +113,12 @@ Never commit or print the connection string.
   `Application` in `argocd-apps/my-apps.yaml` (prune + selfHeal).
 - **Database:** dedicated `batman_museum` DB in the in-cluster `postgres-service`,
   seeded once via port-forward + `npm run seed`.
-- **Public routing:** the Cloudflare tunnel `k3s-homelab` maps each host
-  directly to its Service. A proxied `museum` CNAME is added in the Cloudflare
-  DNS, and the per-host tunnel ingress rule is added with
-  [`terraform/cloudflare/add-museum-route.sh`](../../terraform/cloudflare/add-museum-route.sh)
-  (Cloudflare API, no Zero Trust onboarding needed). The tunnel goes
-  service-direct, so `terraform/cloudflare/main.tf` (a wildcard->Traefik design)
-  is NOT applied - it would break `api.batpepe.online`.
+- **Public routing:** the Cloudflare tunnel `k3s-homelab` sends every
+  `*.batpepe.online` host to Traefik in-cluster via one wildcard ingress rule;
+  Traefik then routes `museum` to this Service by the Ingress above. A proxied
+  `museum` CNAME in Cloudflare DNS is the public allowlist entry. Both the
+  wildcard tunnel config and the per-host DNS records are managed in
+  [`terraform/cloudflare/main.tf`](../../terraform/cloudflare/main.tf).
 
 ## Routes
 
