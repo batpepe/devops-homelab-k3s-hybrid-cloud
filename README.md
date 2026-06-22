@@ -105,7 +105,9 @@ flowchart LR
 ## 📁 Repository Layout
 ```
 .
-├── terraform/                # AWS EC2 + security group + SSH key (IaC)
+├── terraform/                # Infrastructure as Code
+│   ├── main.tf               #   AWS EC2 + security group + SSH key
+│   └── cloudflare/           #   Cloudflare tunnel routing + DNS (control plane)
 ├── ansible/                  # Provisions Docker + Nginx on the EC2 host
 ├── apps/                     # Application source code & Dockerfiles
 │   ├── nginx-app/            #   Static CV frontend
