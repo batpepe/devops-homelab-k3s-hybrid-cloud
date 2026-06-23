@@ -187,7 +187,7 @@ ArgoCD now owns every workload listed under `k8s-infrastructure/`.
 ## 🔁 CI/CD Flow
 1. Developer pushes a change under `apps/<service>/**`.
 2. The matching workflow in `.github/workflows/` builds a Docker image, tags it with the commit SHA, and pushes to **GHCR**.
-3. **Trivy** scans the image for CRITICAL CVEs.
+3. **Trivy** scans the image and fails the build on CRITICAL or HIGH CVEs.
 4. The workflow rewrites the `image:` field in the corresponding K8s manifest and commits the change back to `main`.
 5. **ArgoCD** detects the manifest drift and rolls out the new image. Liveness/readiness probes gate the rollout.
 
