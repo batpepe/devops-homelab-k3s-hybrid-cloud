@@ -50,7 +50,7 @@ You will be credited in the commit / release notes unless you ask to remain anon
 - **Public ingress.** No inbound ports are opened on the home network. All external traffic enters through a Cloudflare Tunnel terminated by `cloudflared` running in-cluster. The Cloudflare edge provides WAF, TLS termination, and DDoS mitigation.
 - **SSH to AWS.** The Terraform security group restricts port 22 to a single `/32` defined in `terraform.tfvars` (which is gitignored). HTTP is open to the world only on the cloud demo host.
 - **Cluster access.** ArgoCD is exposed only via an internal `argocd.local` ingress; access requires being on the LAN (or via Pi-hole DNS).
-- **Container supply chain.** Images are built in GitHub Actions, signed by GHCR, and scanned with Trivy for `CRITICAL` CVEs before deployment. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
+- **Container supply chain.** Images are built in GitHub Actions, signed by GHCR, and scanned with Trivy, which fails the build on `CRITICAL` or `HIGH` CVEs before deployment. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
 - **GitOps integrity.** ArgoCD reconciles with `prune: true` and `selfHeal: true`. Any out-of-band change to the cluster is reverted to the Git state.
 
 ## Secrets Policy
@@ -80,7 +80,7 @@ The following items are tracked as ongoing hardening work. PRs welcome.
 - [ ] Move from manual `kubectl create secret` to **sealed-secrets** or **External Secrets Operator**.
 - [ ] Enable image signing & verification with **cosign** + admission policy.
 - [ ] Add **kube-bench** / **kube-hunter** runs as scheduled jobs.
-- [ ] Promote Trivy CI gating from `exit-code: '0'` (report-only) to `exit-code: '1'` on `HIGH+`.
+- [x] Promote Trivy CI gating from `exit-code: '0'` (report-only) to `exit-code: '1'` on `HIGH+`.
 - [ ] Remote Terraform state backend (S3 + DynamoDB lock) instead of local state.
 - [ ] Add `PodSecurity` admission labels (`restricted`) on the `apps` namespace.
 
