@@ -2,4 +2,7 @@
 *.tfstate
 *.tfstate.backup
 terraform.tfvars
+*.tfplan
+crash.log
+.terraform.tfstate.lock.info
 **/.DS_Store
