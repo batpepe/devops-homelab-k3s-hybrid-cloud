@@ -10,6 +10,9 @@
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-%23F38020.svg?style=for-the-badge&logo=Cloudflare&logoColor=white)
 
+[![Lint](https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud/actions/workflows/lint.yml/badge.svg)](https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud/actions/workflows/lint.yml)
+[![CI batman-museum](https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud/actions/workflows/ci-batman-museum.yml/badge.svg)](https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud/actions/workflows/ci-batman-museum.yml)
+
 ## 📌 Overview
 A complete, production-style DevOps platform that combines a **local GitOps-managed K3s cluster** with **AWS cloud infrastructure** provisioned via Terraform and configured with Ansible. The repo is the single source of truth — every change to applications, infrastructure, or alerting flows through Git and is reconciled by ArgoCD.
 
