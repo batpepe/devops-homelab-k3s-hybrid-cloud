@@ -175,6 +175,17 @@ kubectl create secret generic grafana-admin-secret -n monitoring \
 kubectl create secret generic tg-secret -n monitoring \
   --from-literal=bottoken='<telegram-bot-token>' \
   --from-literal=chatid='<telegram-chat-id>'
+
+# Pi-hole admin password
+kubectl create namespace pihole
+kubectl create secret generic pihole-secret -n pihole \
+  --from-literal=WEBPASSWORD='<pihole-admin-password>'
+
+# MinIO root credentials
+kubectl create namespace minio
+kubectl create secret generic minio-secret -n minio \
+  --from-literal=MINIO_ROOT_USER='<minio-admin-user>' \
+  --from-literal=MINIO_ROOT_PASSWORD='<minio-admin-password>'
 ```
 
 ### 5. Hand the cluster over to GitOps
