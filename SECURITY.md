@@ -50,7 +50,7 @@ You will be credited in the commit / release notes unless you ask to remain anon
 - **Public ingress.** No inbound ports are opened on the home network. All external traffic enters through a Cloudflare Tunnel terminated by `cloudflared` running in-cluster. The Cloudflare edge provides WAF, TLS termination, and DDoS mitigation.
 - **SSH to AWS.** The Terraform security group restricts port 22 to a single `/32` defined in `terraform.tfvars` (which is gitignored). HTTP is open to the world only on the cloud demo host.
 - **Cluster access.** ArgoCD is exposed only via an internal `argocd.local` ingress; access requires being on the LAN (or via Pi-hole DNS).
-- **Container supply chain.** Images are built in GitHub Actions, signed by GHCR, and scanned with Trivy, which fails the build on `CRITICAL` or `HIGH` CVEs before deployment. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
+- **Container supply chain.** Images are built in GitHub Actions, pushed to GHCR, and scanned with Trivy, which fails the build on `CRITICAL` or `HIGH` CVEs before deployment. Images are not signed yet (cosign is on the checklist below); every third-party GitHub Action is pinned to a full commit SHA. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
 - **GitOps integrity.** ArgoCD reconciles with `prune: true` and `selfHeal: true`. Any out-of-band change to the cluster is reverted to the Git state.
 
 ## Secrets Policy
