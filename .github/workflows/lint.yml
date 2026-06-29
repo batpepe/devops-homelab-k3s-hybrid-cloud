@@ -60,3 +60,19 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: terraform fmt -check -recursive
         run: terraform fmt -check -recursive -diff
+
+  trivy-iac:
+    name: Terraform misconfig scan (trivy config)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: trivy config terraform/
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        # Report-only for now, like hadolint/kube-linter: gate once findings are triaged.
+        continue-on-error: true
+        with:
+          scan-type: 'config'
+          scan-ref: 'terraform'
+          format: 'table'
+          exit-code: '1'
