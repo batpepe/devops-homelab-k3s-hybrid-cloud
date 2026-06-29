@@ -6,6 +6,7 @@ on:
     paths:
       - 'apps/**/Dockerfile'
       - 'k8s-infrastructure/**'
+      - 'terraform/**'
       - '.github/workflows/lint.yml'
   pull_request:
     branches: [ "main" ]
@@ -50,3 +51,12 @@ jobs:
         with:
           directory: k8s-infrastructure
           format: plain
+
+  terraform-fmt:
+    name: Terraform format (fmt -check)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: terraform fmt -check -recursive
+        run: terraform fmt -check -recursive -diff
