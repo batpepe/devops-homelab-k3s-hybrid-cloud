@@ -60,6 +60,17 @@ resource "aws_instance" "web_server" {
 
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
+  # Require IMDSv2: instance metadata (incl. any instance role creds) is only
+  # reachable with a session token, closing the classic SSRF theft path.
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
+
   tags = {
     Name = "DevOps-Homelab-Cloud"
   }
