@@ -12,6 +12,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Flip Trivy `exit-code` from `'0'` to `'1'` on `HIGH+` to actually gate the pipeline (done in fd879da; gate proved itself by catching CVE-2026-45447, see 8ecbaa7/50081dd for the cache fix it forced) - `S, hardening`
 - [ ] Add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled - `S, quick-win`
 - [ ] Drop `continue-on-error: true` on `lint.yml` once existing violations are cleaned up - `S, hardening`
+- [ ] Finish retiring `api.batpepe.online`: drop `api` from `tunnel_hosts` in terraform/cloudflare and apply (deletes the live DNS record) - `S, hardening`
 
 ## Next sprint - supply chain and GitOps
 - [ ] Enable Renovate (or Dependabot) for Docker, Terraform, GitHub Actions, npm, pip - `S, hardening`
@@ -41,7 +42,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [ ] Install **Kyverno**; ship policies: no `:latest`, require resources, require probes, disallow privileged - `M, resume`
 - [ ] Scheduled CronJob running **kube-bench** with results posted to Telegram - `M, hardening`
 - [ ] Add CIS-aligned audit policy on the K3s API server - `L, hardening`
-- [ ] Add `tfsec` or `checkov` step in the CI workflow that touches `terraform/` - `S, hardening`
+- [x] Add `tfsec` or `checkov` step in the CI workflow that touches `terraform/` (done as a `trivy config` job plus a `terraform fmt -check` job in lint.yml; tfsec's checks merged into trivy) - `S, hardening`
 
 ## DX and docs
 - [ ] Add `CONTRIBUTING.md`, `CODEOWNERS`, and `docs/adr/0001-record-architecture-decisions.md` - `S, resume`
