@@ -198,6 +198,16 @@ kubectl apply -f k8s-infrastructure/argocd-apps/monitoring-stack.yaml
 ```
 ArgoCD now owns every workload listed under `k8s-infrastructure/`.
 
+### 6. Cloudflare control plane (public hostnames)
+```bash
+cd terraform/cloudflare
+cp terraform.tfvars.example terraform.tfvars   # zone + account IDs
+export CLOUDFLARE_API_TOKEN='<token with Tunnel:Edit and DNS:Edit>'
+terraform init
+terraform apply
+```
+One wildcard tunnel rule sends `*.batpepe.online` to Traefik in-cluster; the `tunnel_hosts` set in `main.tf` is the public DNS allowlist. Exposing a new host = one Ingress + one entry there.
+
 ## 🔁 CI/CD Flow
 1. Developer pushes a change under `apps/<service>/**`.
 2. The matching workflow in `.github/workflows/` builds a Docker image, tags it with the commit SHA, and pushes to **GHCR**.
