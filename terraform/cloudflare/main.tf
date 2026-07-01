@@ -30,7 +30,8 @@ locals {
     "game",
     "museum",
     # Imported only to retire it: nodejs has no auth and stays LAN-only.
-    # Remove this entry after the cutover apply succeeds.
+    # Cutover done (2026-06-17); removing "api" deletes its live DNS record,
+    # so do it in a deliberate apply - tracked in ROADMAP.md.
     "api",
   ])
 }
@@ -67,4 +68,9 @@ resource "cloudflare_dns_record" "tunnel" {
   content = local.tunnel_cname
   proxied = true
   ttl     = 1 # 1 = automatic; the field is required in provider v5
+}
+
+output "tunnel_cname" {
+  value       = local.tunnel_cname
+  description = "CNAME target for any new public hostname (see tunnel_hosts)"
 }
