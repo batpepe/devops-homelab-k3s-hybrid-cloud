@@ -19,6 +19,7 @@ How to use it:
 <!-- newest first -->
 | Date | Topic | What landed (paths/SHAs) | Verified by |
 | --- | --- | --- | --- |
+| 2026-06-25 | Post-cutover repo hygiene sweep | Dead add-museum-route.sh removed + stale museum routing doc fixed (b49ab73); tracked .DS_Store files untracked (265a21e); AWS provider + terraform pinned via versions.tf (c8b5515); batman-museum added to the hadolint matrix (4d72dae); README/SECURITY Trivy-gate wording matched to CI (da460d0, f49ec76) | git log 2026-06-19..25; terraform validate; lint workflow green |
 | 2026-06-15 | batman-museum mobile + full-bleed backdrop | Static slice-scaled `Backdrop` (no parallax, no edges); `touch-action:none` + responsive timeline; gallery touch controls (drag-look, thumb joystick, tap-inspect) + low-perf tier; `?touch=1` QA flag. SHA `c83018c` | preview screenshots at 390/1280px; synthetic touch events drive look/move/tap; CI green, ArgoCD Healthy |
 | 2026-06-13 | batman-museum shipped (full-stack on GitOps) | Next standalone + R3F app; dedicated in-cluster `batman_museum` DB seeded via port-forward + `npm run seed`; `ci-batman-museum.yml` (build/Trivy/smoke/bump); ArgoCD app; Cloudflare per-host tunnel route added via API script. SHA `699e5ab` | CI green; pod Healthy/Synced; public 200 over HTTPS at museum.batpepe.online |
 | 2026-06-06 | Trivy gate + image hardening (Phase 5) | Trivy `exit-code 1` on `CRITICAL,HIGH` across 4 `.github/workflows/ci-*.yml`; nginx/batman to `nginx:stable-alpine` + `apk upgrade`; nodejs drops bundled npm (picomatch); manifest push-retry loop. SHAs `fd879da`, `4e0ec5a` | local `docker build`+`trivy` 0 HIGH+ on all 4; nginx+nodejs CI green; batman pending re-run (push race, not gate) |
@@ -31,6 +32,7 @@ How to use it:
 - Cloudflare tunnel routing has TWO layers: a proxied DNS CNAME to `<tunnel-id>.cfargotunnel.com` (the public allowlist) AND tunnel ingress rules. Since the 2026-06-17 cutover a single wildcard rule sends `*.batpepe.online` to Traefik, so a new public host needs BOTH a CNAME in terraform/cloudflare and a Traefik Ingress; missing either shows as in-cluster curl 200 but public 404 with `server: cloudflare`.
 - `pg` parses a DATE column (oid 1082) into a JS `Date` that stringifies as "Thu Mar 30"; register `types.setTypeParser(types.builtins.DATE, v => v)` to keep the raw `YYYY-MM-DD` or year parsing downstream silently breaks.
 - A Docker bind mount on macOS does not propagate inotify, so `next dev` never hot-reloads edited or new files - restart the container to recompile.
+- .gitignore only affects untracked files: anything committed before the rule keeps being tracked until `git rm --cached`; audit with `git ls-files | grep <pattern>`.
 
 ## Open questions for the chat (theory) mentor
 <!-- be specific; paste these into the claude.ai DevOps project -->
