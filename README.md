@@ -122,6 +122,7 @@ flowchart LR
 │   ├── core/                 # Cluster-level objects (e.g. ArgoCD ingress)
 │   ├── apps/                 # Manifests per workload (Deployment / Service / Ingress)
 │   └── argocd-apps/          # ArgoCD Application CRs (the "App of Apps")
+├── learning/                 # Mentor curriculum + shared learning log
 └── .github/workflows/        # CI pipelines (one per app)
 ```
 
