@@ -42,10 +42,12 @@ lint-tf: ## tflint on terraform/.
 validate: validate-tf validate-ansible ## Run every validator.
 
 .PHONY: validate-tf
-validate-tf: ## terraform fmt -check + validate.
-	@terraform -chdir=$(TF_DIR) fmt -check
-	@terraform -chdir=$(TF_DIR) init -backend=false -no-color > /dev/null
-	@terraform -chdir=$(TF_DIR) validate
+validate-tf: ## terraform fmt -check + validate (root AWS module + cloudflare).
+	@terraform fmt -check -recursive
+	@set -e; for d in $(TF_DIR) $(TF_DIR)/cloudflare; do \
+		terraform -chdir=$$d init -backend=false -no-color > /dev/null; \
+		terraform -chdir=$$d validate; \
+	done
 
 .PHONY: validate-ansible
 validate-ansible: ## ansible-playbook --syntax-check.
