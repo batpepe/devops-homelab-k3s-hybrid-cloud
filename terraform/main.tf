@@ -45,6 +45,10 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Open egress is deliberate (AVD-AWS-0104): the host needs apt, GHCR and
+  # the Cloudflare edge, serves only a public demo, and holds no secrets
+  # beyond its own SSH key. Restricting outbound buys nothing here.
+  #trivy:ignore:AVD-AWS-0104
   egress {
     description = "All outbound: apt, GHCR pulls, Cloudflare edge"
     from_port   = 0
