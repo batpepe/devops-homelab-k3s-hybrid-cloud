@@ -46,6 +46,7 @@ resource "aws_security_group" "web_sg" {
   }
 
   egress {
+    description = "All outbound: apt, GHCR pulls, Cloudflare edge"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
