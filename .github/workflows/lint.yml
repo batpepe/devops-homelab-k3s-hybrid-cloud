@@ -75,8 +75,8 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: trivy config terraform/
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        # Report-only for now, like hadolint/kube-linter: gate once findings are triaged.
-        continue-on-error: true
+        # Enforcing since 2026-07-05: findings triaged to zero (fixed or
+        # ignored inline with a written rationale), so new ones now gate.
         with:
           scan-type: 'config'
           scan-ref: 'terraform'
