@@ -71,7 +71,7 @@ Additionally:
 - The SSH key referenced by Terraform (`~/.ssh/aws_ec2_key`) lives only on the operator workstation.
 - The GitHub Actions workflows use the auto-issued `GITHUB_TOKEN` with `packages: write` and `contents: write` scopes — no long-lived PATs.
 
-If you ever spot a secret in Git history, treat it as compromised: rotate it, then file a report following the process above.
+If you ever spot a secret in Git history, treat it as compromised: rotate it, then file a report following the process above. The step-by-step rotation procedure lives in [docs/runbooks/rotate-secrets.md](docs/runbooks/rotate-secrets.md).
 
 ## Hardening Checklist (in progress)
 The following items are tracked as ongoing hardening work. PRs welcome.

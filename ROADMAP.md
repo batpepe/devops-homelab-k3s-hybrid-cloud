@@ -46,7 +46,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 
 ## DX and docs
 - [ ] Add `CONTRIBUTING.md`, `CODEOWNERS`, and `docs/adr/0001-record-architecture-decisions.md` - `S, resume`
-- [ ] Add runbooks under `docs/runbooks/`: rotate-secrets, debug-failing-pod, restore-postgres, lost-tunnel - `M, resume`
+- [x] Add runbooks under `docs/runbooks/`: rotate-secrets, debug-failing-pod, restore-postgres, lost-tunnel - `M, resume`
 - [ ] Add pre-commit hooks: `terraform fmt`, `tflint`, `ansible-lint`, `yamllint`, `hadolint` - `S, hardening`
 - [ ] Enforce Conventional Commits via commitlint in CI - `S, quick-win`
 
