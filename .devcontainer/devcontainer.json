@@ -1,0 +1,20 @@
+{
+  "name": "devops-homelab",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "minikube": "none"
+    }
+  },
+  "postCreateCommand": "arch=$(dpkg --print-architecture) && sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${arch} && sudo chmod +x /usr/local/bin/argocd",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform",
+        "redhat.vscode-yaml",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
+      ]
+    }
+  }
+}

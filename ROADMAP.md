@@ -10,7 +10,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Add `hadolint` step (matrix over every Dockerfile) - `S, quick-win`
 - [x] Add `kube-linter` step against `k8s-infrastructure/` - `S, quick-win`
 - [x] Flip Trivy `exit-code` from `'0'` to `'1'` on `HIGH+` to actually gate the pipeline (done in fd879da; gate proved itself by catching CVE-2026-45447, see 8ecbaa7/50081dd for the cache fix it forced) - `S, hardening`
-- [ ] Add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled - `S, quick-win`
+- [x] Add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled (`.devcontainer/devcontainer.json`: terraform + kubectl/helm features, argocd CLI via postCreate) - `S, quick-win`
 - [ ] Drop `continue-on-error: true` on `lint.yml` once existing violations are cleaned up - `S, hardening`
 - [ ] Finish retiring `api.batpepe.online`: drop `api` from `tunnel_hosts` in terraform/cloudflare and apply (deletes the live DNS record) - `S, hardening`
 
