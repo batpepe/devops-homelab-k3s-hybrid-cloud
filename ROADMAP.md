@@ -45,7 +45,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Add `tfsec` or `checkov` step in the CI workflow that touches `terraform/` (done as a `trivy config` job plus a `terraform fmt -check` job in lint.yml; tfsec's checks merged into trivy) - `S, hardening`
 
 ## DX and docs
-- [ ] Add `CONTRIBUTING.md`, `CODEOWNERS`, and `docs/adr/0001-record-architecture-decisions.md` - `S, resume`
+- [x] Add `CONTRIBUTING.md`, `CODEOWNERS`, and `docs/adr/0001-record-architecture-decisions.md` (plus ADR-0002 tunnel routing, ADR-0003 CI bump pattern) - `S, resume`
 - [x] Add runbooks under `docs/runbooks/`: rotate-secrets, debug-failing-pod, restore-postgres, lost-tunnel - `M, resume`
 - [ ] Add pre-commit hooks: `terraform fmt`, `tflint`, `ansible-lint`, `yamllint`, `hadolint` - `S, hardening`
 - [ ] Enforce Conventional Commits via commitlint in CI - `S, quick-win`
