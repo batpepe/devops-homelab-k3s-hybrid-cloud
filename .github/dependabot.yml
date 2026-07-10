@@ -1,0 +1,45 @@
+# Weekly dependency PRs, grouped per ecosystem. Actions stay SHA-pinned:
+# dependabot updates the SHA and keeps the version comment.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: terraform
+    directories:
+      - /terraform
+      - /terraform/cloudflare
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directories:
+      - /apps/nginx-app
+      - /apps/nodejs-app
+      - /apps/flask-app
+      - /apps/batman-app
+      - /apps/batman-museum
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: npm
+    directories:
+      - /apps/nodejs-app
+      - /apps/batman-museum
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: pip
+    directory: /apps/flask-app
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: devcontainers
+    directory: /
+    schedule:
+      interval: monthly

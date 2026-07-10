@@ -15,7 +15,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [ ] Finish retiring `api.batpepe.online`: drop `api` from `tunnel_hosts` in terraform/cloudflare and apply (deletes the live DNS record) - `S, hardening`
 
 ## Next sprint - supply chain and GitOps
-- [ ] Enable Renovate (or Dependabot) for Docker, Terraform, GitHub Actions, npm, pip - `S, hardening`
+- [x] Enable Renovate (or Dependabot) for Docker, Terraform, GitHub Actions, npm, pip (.github/dependabot.yml, weekly, plus devcontainers monthly) - `S, hardening`
 - [ ] Generate SBOM with syft and attach to each GHCR release - `M, resume`
 - [ ] Sign images with cosign; add Kyverno `verifyImages` policy - `M, resume`
 - [ ] Move Terraform state to S3 + DynamoDB lock; split into `modules/ec2` and `modules/network` - `M, resume`
