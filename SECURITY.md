@@ -81,6 +81,7 @@ The following items are tracked as ongoing hardening work. PRs welcome.
 - [ ] Enable image signing & verification with **cosign** + admission policy.
 - [ ] Add **kube-bench** / **kube-hunter** runs as scheduled jobs.
 - [x] Promote Trivy CI gating from `exit-code: '0'` (report-only) to `exit-code: '1'` on `HIGH+`.
+- [x] Secret scanning in CI: **gitleaks** runs on every push and pull request (full history on first scan).
 - [ ] Remote Terraform state backend (S3 + DynamoDB lock) instead of local state.
 - [ ] Add `PodSecurity` admission labels (`restricted`) on the `apps` namespace.
 
