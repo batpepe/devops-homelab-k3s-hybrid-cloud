@@ -1,0 +1,16 @@
+# Shared config for local (make lint-yaml) and CI yamllint runs.
+extends: default
+
+rules:
+  line-length: disable
+  document-start: disable
+  comments:
+    min-spaces-from-content: 1
+  truthy:
+    # Ansible and GitHub workflows use yes/no and on: as keys.
+    allowed-values: ["true", "false", "yes", "no"]
+    check-keys: false
+
+ignore: |
+  .terraform/
+  node_modules/

@@ -25,8 +25,8 @@ lint-docker: ## hadolint every Dockerfile under apps/.
 	@set -e; for f in $(DOCKERFILES); do echo "==> $$f"; docker run --rm -i $(HADOLINT_IMG) < $$f; done
 
 .PHONY: lint-yaml
-lint-yaml: ## yamllint Kubernetes manifests.
-	@docker run --rm -v $(REPO):/data $(YAMLLINT_IMG) $(K8S_DIR)
+lint-yaml: ## yamllint manifests, ansible and workflows (shared config).
+	@docker run --rm -v $(REPO):/data $(YAMLLINT_IMG) -c .yamllint.yml $(K8S_DIR) ansible .github/workflows
 
 .PHONY: lint-k8s
 lint-k8s: ## kube-linter on all Kubernetes manifests.
