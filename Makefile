@@ -10,6 +10,8 @@ HADOLINT_IMG    := hadolint/hadolint:2.12.0
 YAMLLINT_IMG    := cytopia/yamllint:latest
 KUBELINTER_IMG  := stackrox/kube-linter:0.6.8
 TFLINT_IMG      := ghcr.io/terraform-linters/tflint:v0.50.3
+ACTIONLINT_IMG  := rhysd/actionlint:1.7.12
+TRIVY_IMG       := aquasec/trivy:0.72.0
 
 .PHONY: help
 help: ## Show this help.
@@ -18,7 +20,15 @@ help: ## Show this help.
 # ---- lint ----
 
 .PHONY: lint
-lint: lint-docker lint-yaml lint-k8s lint-tf ## Run every linter.
+lint: lint-docker lint-yaml lint-k8s lint-tf lint-actions scan-tf ## Run every linter.
+
+.PHONY: lint-actions
+lint-actions: ## actionlint on .github/workflows.
+	@docker run --rm -v $(REPO):/repo -w /repo $(ACTIONLINT_IMG) -color
+
+.PHONY: scan-tf
+scan-tf: ## trivy config on terraform/ (the CI gate, locally).
+	@docker run --rm -v $(REPO)/$(TF_DIR):/src $(TRIVY_IMG) config --exit-code 1 /src
 
 .PHONY: lint-docker
 lint-docker: ## hadolint every Dockerfile under apps/.
