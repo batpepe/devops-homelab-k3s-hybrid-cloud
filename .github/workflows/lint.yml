@@ -83,6 +83,17 @@ jobs:
           format: 'table'
           exit-code: '1'
 
+  yamllint:
+    name: YAML lint (yamllint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: yamllint
+        # Report-only while existing findings are triaged, like the other linters.
+        continue-on-error: true
+        run: docker run --rm -v "$PWD":/data cytopia/yamllint:latest -c .yamllint.yml k8s-infrastructure ansible .github/workflows
+
   actionlint:
     name: Workflow lint (actionlint)
     runs-on: ubuntu-latest
