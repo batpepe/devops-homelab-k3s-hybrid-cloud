@@ -19,7 +19,7 @@ Legend for practice items: they mirror `ROADMAP.md`. `[R]` = exists in roadmap, 
 - **Theory:** image layers, build cache, multi-stage builds, distroless/non-root, OCI, registries and digests vs tags.
 - **Practice:**
   - `[X]` hadolint over every Dockerfile (already in CI - `/explain .github/workflows`).
-  - `[R]` add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled.
+  - `[X]` add `devcontainer.json` with terraform, kubectl, argocd, helm preinstalled (`.devcontainer/`, 2026-07-09).
   - Rebuild one app image multi-stage + non-root; compare size and Trivy findings.
 - **Done when:** an app image runs as non-root with a read-only root filesystem and passes Trivy HIGH.
 
@@ -28,8 +28,8 @@ Legend for practice items: they mirror `ROADMAP.md`. `[R]` = exists in roadmap, 
 - **Practice:**
   - `[R]` move Terraform state to S3 + DynamoDB lock.
   - `[R]` split Terraform into `modules/ec2` and `modules/network`.
-  - `[R]` add `tfsec` or `checkov` to the Terraform CI job.
-- **Done when:** `terraform plan` is clean from a fresh checkout using remote state, and a security scan gates the IaC job.
+  - `[X]` add `tfsec` or `checkov` to the Terraform CI job (trivy config in lint.yml, enforcing since 2026-07-05).
+- **Done when:** `terraform plan` is clean from a fresh checkout using remote state, and a security scan gates the IaC job. (Second half done: the scan gates.)
 
 ## Phase 3 - Kubernetes core (K3s)
 - **Theory:** API server/etcd/scheduler/kubelet, the reconcile loop, Deployment vs ReplicaSet vs Pod, Services and kube-proxy, probes, requests/limits and QoS, scheduling.
