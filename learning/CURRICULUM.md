@@ -52,10 +52,10 @@ Legend for practice items: they mirror `ROADMAP.md`. `[R]` = exists in roadmap, 
 - **Theory:** pipeline stages, artifact promotion, SLSA, SBOM, image signing and verification, provenance, least-privilege CI tokens.
 - **Practice:**
   - `[X]` actions pinned to SHAs; kube-linter in CI.
-  - `[R]` flip Trivy `exit-code` to `1` on HIGH+ to actually gate.
+  - `[X]` flip Trivy `exit-code` to `1` on HIGH+ to actually gate (fd879da, 2026-06-06; it has caught a real CVE since).
   - `[R]` generate SBOM with syft, attach to each GHCR release.
   - `[R]` sign images with cosign; add Kyverno `verifyImages`.
-  - `[R]` enable Renovate/Dependabot across Docker, Terraform, Actions, npm, pip.
+  - `[X]` enable Renovate/Dependabot across Docker, Terraform, Actions, npm, pip (.github/dependabot.yml, 2026-07-10; secret scanning via gitleaks landed the same week).
 - **Done when:** an unsigned or HIGH-CVE image cannot reach the cluster.
 
 ## Phase 6 - Observability and SLOs
