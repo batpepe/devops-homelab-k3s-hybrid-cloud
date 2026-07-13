@@ -213,6 +213,14 @@ terraform apply
 ```
 One wildcard tunnel rule sends `*.batpepe.online` to Traefik in-cluster; the `tunnel_hosts` set in `main.tf` is the public DNS allowlist. Exposing a new host = one Ingress + one entry there.
 
+## 🧰 Local development
+```bash
+make lint          # hadolint, yamllint, kube-linter, tflint, actionlint, trivy config
+make validate-tf   # terraform fmt -check + validate (root module + cloudflare)
+make diff          # kubectl diff on every workload manifest
+```
+The [devcontainer](.devcontainer/devcontainer.json) ships the whole toolchain (terraform, kubectl, helm, argocd CLI) if you would rather not install it locally. Conventions live in [CONTRIBUTING.md](CONTRIBUTING.md); operational procedures in [docs/runbooks/](docs/runbooks/README.md).
+
 ## 🔁 CI/CD Flow
 1. Developer pushes a change under `apps/<service>/**`.
 2. The matching workflow in `.github/workflows/` builds a Docker image, tags it with the commit SHA, and pushes to **GHCR**.
