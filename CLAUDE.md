@@ -22,6 +22,8 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 - apps/batman-museum/README.md                           full-stack 3D museum (Next+R3F+Postgres), museum.batpepe.online
 - SECURITY.md                                            threat model, secrets policy
 - ROADMAP.md                                             prioritized DevOps backlog
+- docs/runbooks/                                         ops procedures (pod, tunnel, secrets, postgres)
+- docs/adr/                                              architecture decision records
 - learning/CURRICULUM.md                                 DevOps learning path (theory <-> practice)
 - learning/LEARNING_LOG.md                               shared log between chat mentor and code mentor
 
