@@ -123,7 +123,11 @@ flowchart LR
 │   ├── apps/                 # Manifests per workload (Deployment / Service / Ingress)
 │   └── argocd-apps/          # ArgoCD Application CRs (the "App of Apps")
 ├── learning/                 # Mentor curriculum + shared learning log
-└── .github/workflows/        # CI pipelines (one per app)
+├── docs/
+│   ├── adr/                  # Architecture decision records
+│   └── runbooks/             # Operational procedures (debug, rotate, restore, tunnel)
+├── .devcontainer/            # Reproducible toolchain (terraform, kubectl, helm, argocd)
+└── .github/workflows/        # CI pipelines (one per app + lint + secret scan)
 ```
 
 ## 🚀 Getting Started
