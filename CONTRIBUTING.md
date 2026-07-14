@@ -13,7 +13,8 @@ future-me both rely on them.
 
 ## Before you push
 ```bash
-make lint          # hadolint, yamllint, kube-linter, tflint
+make hooks         # once per clone: installs pre-commit hooks
+make lint          # hadolint, yamllint, kube-linter, tflint, actionlint, trivy config
 make validate-tf   # fmt -check + validate, root module and cloudflare
 ```
 - Terraform: `terraform plan` must show zero destructive AWS changes

@@ -81,3 +81,10 @@ diff: ## kubectl diff on every workload manifest.
 .PHONY: argo-sync
 argo-sync: ## Sync every ArgoCD app.
 	@argocd app list -o name | xargs -n1 argocd app sync
+
+# ---- dev setup ----
+
+.PHONY: hooks
+hooks: ## Install the pre-commit hooks (one-time per clone).
+	@command -v pre-commit >/dev/null || { echo "pre-commit not found: pipx install pre-commit (or brew install pre-commit)"; exit 1; }
+	@pre-commit install
