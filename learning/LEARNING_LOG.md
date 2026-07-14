@@ -33,6 +33,7 @@ How to use it:
 - `pg` parses a DATE column (oid 1082) into a JS `Date` that stringifies as "Thu Mar 30"; register `types.setTypeParser(types.builtins.DATE, v => v)` to keep the raw `YYYY-MM-DD` or year parsing downstream silently breaks.
 - A Docker bind mount on macOS does not propagate inotify, so `next dev` never hot-reloads edited or new files - restart the container to recompile.
 - .gitignore only affects untracked files: anything committed before the rule keeps being tracked until `git rm --cached`; audit with `git ls-files | grep <pattern>`.
+- Runner images are a moving target: ubuntu-24.04 (image 20260628.225) dropped preinstalled terraform, so a bare `run: terraform fmt` died with exit 127 `command not found`. Every CLI a job shells out to must be provisioned by the job itself (SHA-pinned setup action or a container image); "works locally" includes the toolchain, not just the code.
 
 ## Open questions for the chat (theory) mentor
 <!-- be specific; paste these into the claude.ai DevOps project -->
@@ -49,3 +50,4 @@ How to use it:
 - 2026-06-13: batman-museum uses a dedicated `batman_museum` database inside the existing cluster Postgres (not `homelab_db`, not a new StatefulSet). Why: clean data isolation with zero extra infra; the app reads `PG*` vars from the shared `postgres-secret`.
 - 2026-06-13: museum tunnel route added with a Cloudflare API script, not `terraform/cloudflare apply`. Why: the live tunnel is per-host service-direct, while the terraform module is a wildcard->Traefik design whose apply would break `api.batpepe.online` (no Traefik route for `api`). Superseded by the 2026-06-17 cutover.
 - 2026-06-17: cut the live tunnel over to the repo's wildcard->Traefik design with terraform/cloudflare (import existing DNS records, then apply; tunnel config v8). Why: ends live-vs-IaC drift and moves per-host routing into Ingress objects next to each workload; `api.batpepe.online` now 404s by design pending retirement (ROADMAP).
+- 2026-07-04: lint.yml provisions terraform via SHA-pinned hashicorp/setup-terraform (wrapper off) instead of trusting the runner image. Why: the image dropped terraform and the fmt gate went red on push; an explicit toolchain is the only reproducible one.
