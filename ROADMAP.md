@@ -51,9 +51,10 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Enforce Conventional Commits via commitlint in CI (commitlint.yml + commitlint.config.mjs; type-enum extended with `gitops` for the bot bumps) - `S, quick-win`
 
 ## Top three picks if time is limited
-1. **Makefile + pinned action SHAs + hadolint/kube-linter** - one PR, ~1h, massive DX and supply-chain story for the resume.
-2. **sealed-secrets + Kyverno baseline policies** - one PR, ~3h, removes the biggest missing GitOps pattern (secrets in Git) and shows admission control.
-3. **Loki + 2 SLOs** - one PR, ~4h, lifts observability from "metrics-only" to "logs + reliability targets".
+(The 2026-06 list - Makefile, pinned SHAs, hadolint/kube-linter - is done, as is the July CI/DX sweep: IaC gate, dependabot, gitleaks, runbooks, ADRs, pre-commit, commitlint.)
+1. **sealed-secrets + Kyverno baseline policies** - one change-set, ~3h, removes the biggest missing GitOps pattern (secrets outside Git) and shows admission control.
+2. **securityContext + resources everywhere, PodSecurity restricted** - ~2h, turns the kube-linter report-only findings into fixes and lets lint.yml gates tighten.
+3. **Loki + 2 SLOs** - ~4h, lifts observability from "metrics-only" to "logs + reliability targets".
 
 ## Game backlog (apps/batman-app)
 Tracked separately from the DevOps backlog above; same effort/value tags.
