@@ -38,6 +38,7 @@ How to use it:
 
 ## Open questions for the chat (theory) mentor
 <!-- be specific; paste these into the claude.ai DevOps project -->
+- CI ceremony for a solo repo: this month added actionlint, yamllint, gitleaks, commitlint, pre-commit, dependabot. Which report-only linters deserve promotion to gates, which should be deleted, and what is the mature heuristic for "enough" pipeline on a one-person project?
 - Image CVE policy at scale: is "block HIGH+ with `--ignore-unfixed`, zero ignores" realistic, or is the mature pattern block-CRITICAL + warn-HIGH + time-boxed `.trivyignore`/VEX burndown? When is accepting a CVE with justification the right call vs chasing zero?
 - Distroless tradeoffs: `gcr.io/distroless/nodejs22-debian12` shipped a CRITICAL openssl we could not patch (no apt/shell). When does distroless actually lower risk vs a patched alpine (`apk upgrade`)? How do teams keep distroless current (rebuild cadence, digest pinning, Renovate)?
 - GitOps "CI writes image SHAs back to main": anti-pattern or fine? Alternatives (Argo CD Image Updater, separate config repo, write to a branch + auto-merge) and how is push-contention handled in mature setups?
