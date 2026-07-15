@@ -48,7 +48,7 @@ Pick items independently - they are not strictly sequential, but the order withi
 - [x] Add `CONTRIBUTING.md`, `CODEOWNERS`, and `docs/adr/0001-record-architecture-decisions.md` (plus ADR-0002 tunnel routing, ADR-0003 CI bump pattern) - `S, resume`
 - [x] Add runbooks under `docs/runbooks/`: rotate-secrets, debug-failing-pod, restore-postgres, lost-tunnel - `M, resume`
 - [x] Add pre-commit hooks: `terraform fmt`, `tflint`, `ansible-lint`, `yamllint`, `hadolint` (.pre-commit-config.yaml + `make hooks`) - `S, hardening`
-- [ ] Enforce Conventional Commits via commitlint in CI - `S, quick-win`
+- [x] Enforce Conventional Commits via commitlint in CI (commitlint.yml + commitlint.config.mjs; type-enum extended with `gitops` for the bot bumps) - `S, quick-win`
 
 ## Top three picks if time is limited
 1. **Makefile + pinned action SHAs + hadolint/kube-linter** - one PR, ~1h, massive DX and supply-chain story for the resume.
