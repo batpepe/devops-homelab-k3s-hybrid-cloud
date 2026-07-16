@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/* Catppuccin Mocha, carried over from the previous version of this site. */
+@theme {
+  --color-*: initial;
+  --color-base: #1e1e2e;
+  --color-mantle: #181825;
+  --color-crust: #11111b;
+  --color-surface0: #313244;
+  --color-surface1: #45475a;
+  --color-ink: #cdd6f4;
+  --color-sub: #a6adc8;
+  --color-overlay: #6c7086;
+  --color-blue: #89b4fa;
+  --color-green: #a6e3a1;
+  --color-teal: #94e2d5;
+  --color-yellow: #f9e2af;
+  --color-peach: #fab387;
+  --color-red: #f38ba8;
+  --color-lavender: #b4befe;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-blue);
+  color: var(--color-crust);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
