@@ -1,5 +1,9 @@
-# Weekly dependency PRs, grouped per ecosystem. Actions stay SHA-pinned:
-# dependabot updates the SHA and keeps the version comment.
+# Weekly dependency PRs, grouped per ecosystem to keep the noise down:
+# minor+patch bumps arrive as ONE combined PR per ecosystem, majors stay
+# individual (they are the ones that need real review). Security updates
+# are grouped separately so a fix never waits on the weekly batch.
+# Actions stay SHA-pinned: dependabot updates the SHA and keeps the
+# version comment.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -7,6 +11,10 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: terraform
     directories:
@@ -14,6 +22,10 @@ updates:
       - /terraform/cloudflare
     schedule:
       interval: weekly
+    groups:
+      terraform:
+        patterns:
+          - "*"
 
   - package-ecosystem: docker
     directories:
@@ -25,6 +37,18 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      docker-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      docker-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: npm
     directories:
@@ -33,13 +57,41 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: /apps/flask-app
     schedule:
       interval: weekly
+    groups:
+      pip-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+      pip-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: devcontainers
     directory: /
     schedule:
       interval: monthly
+    groups:
+      devcontainers:
+        patterns:
+          - "*"
