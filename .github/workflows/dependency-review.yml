@@ -1,0 +1,23 @@
+name: Dependency review
+
+# Gates pull requests (in practice: dependabot's) on known-vulnerable or
+# denied-license dependency changes. Complements Dependabot alerts, which
+# only report; this blocks at PR time.
+on:
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: dependency-review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Dependency review
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
