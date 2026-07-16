@@ -113,7 +113,7 @@ flowchart LR
 │   └── cloudflare/           #   Cloudflare tunnel routing + DNS (control plane)
 ├── ansible/                  # Provisions Docker + Nginx on the EC2 host
 ├── apps/                     # Application source code & Dockerfiles
-│   ├── nginx-app/            #   Static CV frontend
+│   ├── nginx-app/            #   CV/promo site (Next.js static export served by nginx)
 │   ├── nodejs-app/           #   API backend (Postgres-backed)
 │   ├── flask-app/            #   Sample Flask service (used for alert demos)
 │   ├── batman-app/           #   Batman browser game
