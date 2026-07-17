@@ -17,7 +17,8 @@
 A complete, production-style DevOps platform that combines a **local GitOps-managed K3s cluster** with **AWS cloud infrastructure** provisioned via Terraform and configured with Ansible. The repo is the single source of truth — every change to applications, infrastructure, or alerting flows through Git and is reconciled by ArgoCD.
 
 **Live demo (exposed via Cloudflare Zero Trust, no public ingress):**
-- [cv.batpepe.online](https://cv.batpepe.online) — Nginx-served CV & portfolio
+- [batpepe.online](https://batpepe.online) - Portal hub with live status of every workload
+- [cv.batpepe.online](https://cv.batpepe.online) - CV, case studies, engineering notes and a live platform status page
 - [game.batpepe.online](https://game.batpepe.online) — Batman browser game
 - [museum.batpepe.online](https://museum.batpepe.online) - Interactive 3D Batman museum (Next.js + R3F + Postgres)
 
@@ -113,8 +114,9 @@ flowchart LR
 │   └── cloudflare/           #   Cloudflare tunnel routing + DNS (control plane)
 ├── ansible/                  # Provisions Docker + Nginx on the EC2 host
 ├── apps/                     # Application source code & Dockerfiles
-│   ├── nginx-app/            #   CV/promo site (Next.js static export served by nginx)
-│   ├── nodejs-app/           #   API backend (Postgres-backed)
+│   ├── nginx-app/            #   CV site: case studies, notes, live status (Next.js static export served by nginx)
+│   ├── nodejs-app/           #   API backend: visits, stats, platform status (Express + Postgres)
+│   ├── portal/               #   Apex hub at batpepe.online (static, no build step)
 │   ├── flask-app/            #   Sample Flask service (used for alert demos)
 │   ├── batman-app/           #   Batman browser game
 │   └── batman-museum/        #   Interactive 3D Batman museum (Next.js + R3F + Postgres)

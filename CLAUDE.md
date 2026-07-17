@@ -14,7 +14,7 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 - terraform/main.tf                                      single EC2 + SG
 - terraform/cloudflare/main.tf                           tunnel wildcard->Traefik + DNS allowlist
 - ansible/setup-server.yml                               Docker + nginx on EC2
-- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 11 apps
+- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 13 apps
 - k8s-infrastructure/argocd-apps/monitoring-stack.yaml   prometheus-stack Helm app
 - k8s-infrastructure/apps/<svc>/*.yaml                   per-workload manifests
 - .github/workflows/ci-*.yml                             per-app build, scan, manifest bump
