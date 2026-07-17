@@ -52,6 +52,12 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         hostname = "*.${local.domain}"
         service  = "http://traefik.kube-system.svc.cluster.local:80"
       },
+      # The wildcard does not match the zone apex, so the portal at
+      # batpepe.online needs its own rule ahead of the 404 catch-all.
+      {
+        hostname = local.domain
+        service  = "http://traefik.kube-system.svc.cluster.local:80"
+      },
       {
         service = "http_status:404"
       },
@@ -68,6 +74,19 @@ resource "cloudflare_dns_record" "tunnel" {
   content = local.tunnel_cname
   proxied = true
   ttl     = 1 # 1 = automatic; the field is required in provider v5
+}
+
+# The apex portal (apps/portal). Deliberately NOT in tunnel_hosts: the
+# for_each name expression cannot express the zone root, and a separate
+# resource keeps existing record addresses untouched. Cloudflare flattens
+# the proxied apex CNAME automatically.
+resource "cloudflare_dns_record" "apex" {
+  zone_id = var.cloudflare_zone_id
+  name    = local.domain
+  type    = "CNAME"
+  content = local.tunnel_cname
+  proxied = true
+  ttl     = 1
 }
 
 output "tunnel_cname" {
