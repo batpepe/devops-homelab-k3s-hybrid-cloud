@@ -41,15 +41,17 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+          # Probes hit the DB-free /health route; the old catch-all server
+          # inserted a visit row on every probe tick and inflated the counter.
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: 80
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
