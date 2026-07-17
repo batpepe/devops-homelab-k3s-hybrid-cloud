@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
 # 1) install deps against the lockfile
-FROM node:22-alpine AS deps
+FROM node:26-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # 2) build the standalone server (pages are force-dynamic, so no DB at build)
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -15,7 +15,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # 3) minimal non-root runtime
-FROM node:22-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
