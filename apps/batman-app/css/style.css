@@ -141,6 +141,12 @@ body { position: fixed; inset: 0; }
   background: var(--gold); color: #05060d;
   box-shadow: 0 0 24px rgba(229, 169, 16, 0.6);
 }
+/* Keyboard players get the same affordance as hover. */
+.menu-box button:focus-visible,
+#btn-mute:focus-visible, #btn-pause:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+}
 .menu-box button + button { margin-left: 12px; }
 .controls { margin-top: 26px; color: #8ea3c6; font-size: 14px; line-height: 1.9; }
 .controls .dim { color: #56688a; margin-top: 8px; }
