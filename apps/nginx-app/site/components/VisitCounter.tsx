@@ -21,8 +21,8 @@ export default function VisitCounter() {
   }, []);
 
   return (
-    <span className="rounded-full border border-surface0 bg-base px-3 py-1 text-sub">
-      views <span className="text-overlay">·</span> <span className="text-yellow">{label}</span>
+    <span className="chip">
+      views <span className="text-faint">·</span> <span className="text-cyan">{label}</span>
     </span>
   );
 }

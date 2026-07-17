@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jbMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jbmono" });
@@ -9,7 +11,10 @@ const SITE_URL = "https://cv.batpepe.online";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Kostiantyn Osmakov - Junior DevOps Engineer",
+  title: {
+    default: "Kostiantyn Osmakov - Junior DevOps Engineer",
+    template: "%s | Kostiantyn Osmakov"
+  },
   description:
     "Junior DevOps engineer from Kyiv. This site is served from a self-hosted K3s cluster: GitOps with ArgoCD, Terraform on AWS, CI/CD with GitHub Actions and Trivy, monitored by Prometheus.",
   openGraph: {
@@ -18,17 +23,19 @@ export const metadata: Metadata = {
       "GitOps homelab in production: K3s + ArgoCD, Terraform, GitHub Actions CI with Trivy, kube-prometheus-stack. This page is one of its workloads.",
     url: SITE_URL,
     siteName: "Kostiantyn Osmakov",
-    type: "website"
+    type: "website",
+    images: ["/og/home.png"]
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Kostiantyn Osmakov - Junior DevOps Engineer",
-    description: "GitOps homelab in production: K3s + ArgoCD, Terraform, GitHub Actions, Prometheus."
+    description: "GitOps homelab in production: K3s + ArgoCD, Terraform, GitHub Actions, Prometheus.",
+    images: ["/og/home.png"]
   }
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1e1e2e"
+  themeColor: "#050510"
 };
 
 const personJsonLd = {
@@ -63,7 +70,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <div className="aurora" aria-hidden="true">
+          <div className="aurora-spot" />
+        </div>
+        <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );

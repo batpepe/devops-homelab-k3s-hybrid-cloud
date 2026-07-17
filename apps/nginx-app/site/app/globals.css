@@ -1,26 +1,32 @@
 @import "tailwindcss";
 
-/* Catppuccin Mocha, carried over from the previous version of this site. */
+/* Aurora / product-dark design language: deep space background, violet ->
+   blue -> cyan gradient glows, glass panels with thin light borders. */
 @theme {
   --color-*: initial;
-  --color-base: #1e1e2e;
-  --color-mantle: #181825;
-  --color-crust: #11111b;
-  --color-surface0: #313244;
-  --color-surface1: #45475a;
-  --color-ink: #cdd6f4;
-  --color-sub: #a6adc8;
-  --color-overlay: #6c7086;
-  --color-blue: #89b4fa;
-  --color-green: #a6e3a1;
-  --color-teal: #94e2d5;
-  --color-yellow: #f9e2af;
-  --color-peach: #fab387;
-  --color-red: #f38ba8;
-  --color-lavender: #b4befe;
+  --color-bg: #050510;
+  --color-bg2: #0b0b1e;
+  --color-ink: #e8ecf8;
+  --color-sub: #9aa5bd;
+  --color-faint: #5d6880;
+  --color-line: #232a44;
+  --color-violet: #a78bfa;
+  --color-blue: #60a5fa;
+  --color-cyan: #22d3ee;
+  --color-green: #34d399;
+  --color-amber: #fbbf24;
+  --color-red: #f87171;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* Raw gradient stops used by glows and gradient text; kept out of @theme so
+   Tailwind color utilities stay a small semantic set. */
+:root {
+  --aurora-violet: #7c3aed;
+  --aurora-blue: #3b82f6;
+  --aurora-cyan: #22d3ee;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -30,17 +36,275 @@
 }
 
 body {
-  background-color: var(--color-base);
+  background-color: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
 
 ::selection {
-  background-color: var(--color-blue);
-  color: var(--color-crust);
+  background-color: var(--aurora-blue);
+  color: #050510;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-blue);
+  outline: 2px solid var(--color-cyan);
   outline-offset: 2px;
+}
+
+/* Fixed backdrop glows. Pure CSS, sits behind everything. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.32;
+}
+.aurora::before {
+  width: 55vw;
+  height: 55vw;
+  left: -12vw;
+  top: -18vw;
+  background: radial-gradient(closest-side, var(--aurora-violet), transparent 70%);
+}
+.aurora::after {
+  width: 50vw;
+  height: 50vw;
+  right: -15vw;
+  top: 8vw;
+  background: radial-gradient(closest-side, var(--aurora-blue), transparent 70%);
+}
+.aurora-spot {
+  position: absolute;
+  width: 40vw;
+  height: 40vw;
+  left: 30vw;
+  bottom: -25vw;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.2;
+  background: radial-gradient(closest-side, var(--aurora-cyan), transparent 70%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .aurora::before {
+    animation: drift-a 26s ease-in-out infinite alternate;
+  }
+  .aurora::after {
+    animation: drift-b 32s ease-in-out infinite alternate;
+  }
+}
+@keyframes drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6vw, 4vw, 0) scale(1.12);
+  }
+}
+@keyframes drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-5vw, 6vw, 0) scale(0.95);
+  }
+}
+
+/* Glass panel: translucent fill, thin light border, blur. */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1rem;
+}
+
+/* Card with edge-glow hover. */
+.glow-card {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+.glow-card:hover {
+  border-color: rgba(96, 165, 250, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.18),
+    0 8px 40px -12px rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Gradient text. */
+.grad-text {
+  background: linear-gradient(
+    92deg,
+    var(--color-violet) 0%,
+    var(--color-blue) 45%,
+    var(--color-cyan) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Small mono chip. */
+.chip {
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-sub);
+}
+
+/* Status dots. */
+.dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: var(--color-faint);
+}
+.dot-ok {
+  background: var(--color-green);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+}
+.dot-warn {
+  background: var(--color-amber);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+}
+.dot-err {
+  background: var(--color-red);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.7);
+}
+
+/* Scroll reveal, driven by components/Reveal.tsx. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Rendered markdown (notes and project case studies). */
+.prose-aurora {
+  color: var(--color-sub);
+  line-height: 1.75;
+}
+.prose-aurora h2 {
+  color: var(--color-ink);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 2.25rem 0 0.75rem;
+}
+.prose-aurora h3 {
+  color: var(--color-ink);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+}
+.prose-aurora p {
+  margin: 0.9rem 0;
+}
+.prose-aurora a {
+  color: var(--color-cyan);
+  text-decoration: underline;
+  text-decoration-color: rgba(34, 211, 238, 0.4);
+  text-underline-offset: 3px;
+}
+.prose-aurora a:hover {
+  text-decoration-color: var(--color-cyan);
+}
+.prose-aurora strong {
+  color: var(--color-ink);
+}
+.prose-aurora ul,
+.prose-aurora ol {
+  margin: 0.9rem 0;
+  padding-left: 1.4rem;
+}
+.prose-aurora ul {
+  list-style: disc;
+}
+.prose-aurora ol {
+  list-style: decimal;
+}
+.prose-aurora li {
+  margin: 0.35rem 0;
+}
+.prose-aurora li::marker {
+  color: var(--color-faint);
+}
+.prose-aurora code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-line);
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.35rem;
+}
+.prose-aurora pre {
+  background: var(--color-bg2);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+.prose-aurora pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-sub);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.prose-aurora blockquote {
+  border-left: 2px solid var(--aurora-blue);
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: var(--color-faint);
+}
+.prose-aurora hr {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 2rem 0;
+}
+.prose-aurora table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+.prose-aurora th,
+.prose-aurora td {
+  border: 1px solid var(--color-line);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-aurora th {
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.03);
 }

@@ -17,25 +17,25 @@ const ROLES = [
     period: "Apr 2026 - now",
     place: "Homelab",
     title: "Hybrid-cloud GitOps platform",
-    body: "The platform that runs this page and everything in the live section: K3s + ArgoCD, Terraform on AWS, CI/CD with GitHub Actions and Trivy, kube-prometheus-stack."
+    body: "The platform that runs this page and everything in the projects section: K3s + ArgoCD, Terraform on AWS, CI/CD with GitHub Actions and Trivy, kube-prometheus-stack."
   }
 ];
 
 export default function Experience() {
   return (
-    <section id="experience" className="scroll-mt-8 border-b border-surface0">
+    <section id="experience" className="scroll-mt-16 border-t border-line/70">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <SectionHeader tag="experience" title="Where I have worked" />
-        <ol className="relative border-l border-surface0 pl-6 space-y-10">
+        <ol className="relative border-l border-line pl-6 space-y-10">
           {ROLES.map((role) => (
             <li key={role.place} className="relative">
               <span
                 aria-hidden="true"
-                className="absolute -left-[1.85rem] top-1.5 h-2.5 w-2.5 rounded-full border border-blue bg-base"
+                className="absolute -left-[1.85rem] top-1.5 h-2.5 w-2.5 rounded-full border border-blue bg-bg shadow-[0_0_8px_rgba(96,165,250,0.6)]"
               />
-              <p className="font-mono text-xs text-overlay">{role.period}</p>
+              <p className="font-mono text-xs text-faint">{role.period}</p>
               <h3 className="mt-1 font-semibold text-ink">
-                {role.title} <span className="text-overlay">·</span>{" "}
+                {role.title} <span className="text-faint">·</span>{" "}
                 <span className="text-blue">{role.place}</span>
               </h3>
               <p className="mt-2 max-w-2xl text-sm text-sub">{role.body}</p>
@@ -43,9 +43,9 @@ export default function Experience() {
           ))}
         </ol>
         <p className="mt-10 font-mono text-xs text-sub">
-          <span className="text-overlay">education:</span> BSc, Cybersecurity and Information Protection - Kyiv
+          <span className="text-faint">education:</span> BSc, Cybersecurity and Information Protection - Kyiv
           Aviation Institute
-          <span className="text-overlay"> · english:</span> Upper-Intermediate (B2)
+          <span className="text-faint"> · english:</span> Upper-Intermediate (B2)
         </p>
       </div>
     </section>
