@@ -309,6 +309,12 @@ export default function TimelineCanvas({
           <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--dim)] sm:text-[11px] sm:tracking-[0.3em]">
             a constellation of Gotham history // 1939 - present
           </p>
+          <a
+            href="/about"
+            className="pointer-events-auto mt-1 inline-block font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--dim)] underline decoration-[var(--line)] underline-offset-4 transition-colors hover:text-[var(--cyan)] sm:text-[10px]"
+          >
+            about this museum
+          </a>
         </div>
         <div className="pointer-events-auto">
           <FilterBar active={active} onToggle={toggle} />

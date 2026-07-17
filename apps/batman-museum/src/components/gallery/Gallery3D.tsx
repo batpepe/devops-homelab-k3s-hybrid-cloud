@@ -8,6 +8,7 @@ import {
   MeshReflectorMaterial,
   SpotLight,
   useTexture,
+  useProgress,
   Sparkles
 } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
@@ -474,6 +475,9 @@ export default function Gallery3D({ era, exhibits }: { era: Era; exhibits: Item[
   const [isTouch, setIsTouch] = useState(false);
   const touch = useRef<TouchState>({ look: { dx: 0, dy: 0 }, move: { x: 0, y: 0 }, tap: null });
   const lowPerf = isTouch;
+  // Texture-loading progress for the boot overlay; useProgress reads the
+  // default THREE loading manager, so it works here outside the Canvas.
+  const { active: loading, progress } = useProgress();
 
   useEffect(() => {
     // ?touch=1 forces the touch UI (handy for QA or touch-screen laptops).
@@ -540,23 +544,52 @@ export default function Gallery3D({ era, exhibits }: { era: Era; exhibits: Item[
         </Link>
       </div>
 
-      {/* enter prompt */}
+      {/* Batcomputer boot overlay: shows texture-stream progress, then arms
+          the enter button (the click is also the PointerLock gesture). */}
       {!entered && (
-        <button
-          onClick={() => setEntered(true)}
-          className="fixed inset-0 z-30 grid place-items-center bg-[rgba(2,4,9,0.6)] px-6 backdrop-blur-sm"
-        >
-          <div className="text-center">
-            <p className="font-display text-base uppercase tracking-[0.3em] text-[var(--text)] sm:text-lg">
-              Enter {era.name}
+        <div className="fixed inset-0 z-30 grid place-items-center bg-[rgba(2,4,9,0.66)] px-6 backdrop-blur-sm">
+          <div className="relative w-full max-w-md border border-[var(--line)] bg-[rgba(6,10,16,0.92)] p-6">
+            <span className="hud-corner left-0 top-0 border-l-2 border-t-2" style={{ borderColor: era.accent }} />
+            <span className="hud-corner right-0 top-0 border-r-2 border-t-2" style={{ borderColor: era.accent }} />
+            <span className="hud-corner bottom-0 left-0 border-b-2 border-l-2" style={{ borderColor: era.accent }} />
+            <span className="hud-corner bottom-0 right-0 border-b-2 border-r-2" style={{ borderColor: era.accent }} />
+            <div className="scanlines pointer-events-none absolute inset-0" aria-hidden="true" />
+
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--cyan)]">
+              batcomputer // gallery interface
             </p>
-            <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--dim)] sm:text-[11px] sm:tracking-[0.25em]">
+            <h2 className="font-display mt-2 text-2xl font-bold tracking-[0.14em]" style={{ color: era.accent }}>
+              {era.name}
+            </h2>
+            <div className="mt-3 space-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--dim)] sm:text-[11px]">
+              <p>&gt; mount /archive/{era.slug} ... ok</p>
+              <p>&gt; exhibit manifest ... {exhibits.length} records</p>
+              <p>&gt; lighting rig ... calibrated</p>
+              <p>
+                &gt; texture stream ...{" "}
+                {loading ? `${Math.round(progress)}%` : "complete"}
+              </p>
+            </div>
+            <div className="mt-4 h-1 w-full bg-[rgba(255,255,255,0.08)]">
+              <div
+                className="h-full transition-[width] duration-300"
+                style={{ width: `${loading ? Math.max(4, progress) : 100}%`, background: era.accent }}
+              />
+            </div>
+            <button
+              onClick={() => setEntered(true)}
+              disabled={loading}
+              className="font-display mt-5 w-full border border-[var(--line)] px-4 py-2.5 text-[12px] uppercase tracking-[0.25em] text-[var(--text)] transition-colors enabled:hover:border-[var(--cyan)] enabled:hover:text-[var(--cyan)] disabled:opacity-50"
+            >
+              {loading ? "decrypting archive..." : `enter ${era.name}`}
+            </button>
+            <p className="mt-3 text-center font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--dim)] sm:text-[10px]">
               {isTouch
                 ? "drag to look // joystick to move // tap art to inspect"
                 : "click to look // WASD to walk // click art to inspect // esc to release"}
             </p>
           </div>
-        </button>
+        </div>
       )}
 
       {isTouch && entered && <TouchControls touch={touch} />}

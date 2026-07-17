@@ -9,9 +9,30 @@ const rajdhani = Rajdhani({
   variable: "--font-rajdhani"
 });
 
+const SITE_URL = "https://museum.batpepe.online";
+
 export const metadata: Metadata = {
-  title: "Batman Museum",
-  description: "An interactive 3D museum of Batman history, 1939 to today"
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Batman Museum",
+    template: "%s | Batman Museum"
+  },
+  description: "An interactive 3D museum of Batman history, 1939 to today",
+  openGraph: {
+    title: "Batman Museum",
+    description:
+      "Walk a 3D Batcave archive: 7 eras, 49 real exhibits sourced from Wikipedia, from 1939 to today.",
+    url: SITE_URL,
+    siteName: "Batman Museum",
+    type: "website",
+    images: ["/og.png"]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Batman Museum",
+    description: "Walk a 3D Batcave archive: 7 eras, 49 real exhibits, 1939 to today.",
+    images: ["/og.png"]
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
