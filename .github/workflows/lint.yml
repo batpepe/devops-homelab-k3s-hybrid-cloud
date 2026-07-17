@@ -28,6 +28,7 @@ jobs:
           - apps/flask-app/Dockerfile
           - apps/batman-app/Dockerfile
           - apps/batman-museum/Dockerfile
+          - apps/portal/Dockerfile
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>batpepe.online - one cluster, everything GitOps</title>
+  <meta name="description" content="The front door of a self-hosted K3s homelab: a DevOps CV, a 3D Batman museum and a canvas game, all deployed the GitOps way through one Cloudflare tunnel.">
+  <link rel="canonical" href="https://batpepe.online/">
+  <meta name="theme-color" content="#050510">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://batpepe.online/">
+  <meta property="og:site_name" content="batpepe.online">
+  <meta property="og:title" content="batpepe.online - one cluster, everything GitOps">
+  <meta property="og:description" content="A self-hosted K3s homelab with zero open inbound ports: CV, 3D museum, browser game. Pick a door.">
+  <meta property="og:image" content="https://batpepe.online/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="batpepe.online - one cluster, everything GitOps">
+  <meta name="twitter:description" content="A self-hosted K3s homelab with zero open inbound ports: CV, 3D museum, browser game.">
+  <meta name="twitter:image" content="https://batpepe.online/img/og.png">
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <header class="top">
+    <span class="brand mono">batpepe<span class="faint">.</span><span class="grad">online</span></span>
+    <a class="mono ghost" href="https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud" target="_blank" rel="noopener noreferrer">github</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="mono kicker">$ kubectl get ingress</p>
+      <h1>One domain, one cluster,<br><span class="grad">everything GitOps.</span></h1>
+      <p class="sub">
+        Everything below is served from a self-hosted K3s homelab through an
+        outbound-only Cloudflare tunnel - zero open inbound ports, every deploy
+        a git push. Pick a door.
+      </p>
+      <p class="mono cluster-line">
+        cluster <span id="dot-api" class="dot" aria-hidden="true"></span>
+        <span id="api-state" class="faint">checking...</span>
+      </p>
+    </section>
+
+    <section class="cards" aria-label="Sites on this domain">
+      <a class="card" href="https://cv.batpepe.online">
+        <div class="card-head">
+          <h2>CV &amp; case studies</h2>
+          <span id="dot-cv" class="dot" title="live status"></span>
+        </div>
+        <p>Kostiantyn Osmakov, junior DevOps engineer. The platform write-ups, engineering notes and a live status page.</p>
+        <span class="mono go">cv.batpepe.online -&gt;</span>
+      </a>
+      <a class="card" href="https://museum.batpepe.online">
+        <div class="card-head">
+          <h2>Batman Museum</h2>
+          <span id="dot-museum" class="dot" title="live status"></span>
+        </div>
+        <p>A walkable 3D museum: 7 eras, 49 real exhibits from Wikipedia, stored in PostgreSQL, rendered in your browser.</p>
+        <span class="mono go">museum.batpepe.online -&gt;</span>
+      </a>
+      <a class="card" href="https://game.batpepe.online">
+        <div class="card-head">
+          <h2>Shadows of Gotham</h2>
+          <span id="dot-game" class="dot" title="live status"></span>
+        </div>
+        <p>A canvas beat-em-up with parries, gadgets and a boss fight - vanilla JavaScript, tested by Playwright in CI.</p>
+        <span class="mono go">game.batpepe.online -&gt;</span>
+      </a>
+      <a class="card" href="https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud" target="_blank" rel="noopener noreferrer">
+        <div class="card-head">
+          <h2>The source</h2>
+          <span class="dot dot-neutral" title="repository"></span>
+        </div>
+        <p>Terraform, Ansible, K3s manifests, CI pipelines and runbooks - the single repository this whole domain deploys from.</p>
+        <span class="mono go">github.com/batpepe -&gt;</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="mono">
+    (c) 2026 Kostiantyn Osmakov · K3s + ArgoCD + Terraform · outbound-only tunnel
+  </footer>
+
+  <script src="/js/status.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+# Apex hub at batpepe.online. The Ingress mirrors the cv.batpepe.online
+# same-origin pattern: /api goes to the nodejs backend so the portal's status
+# dots need no CORS; everything else is the static portal itself.
+# Public reachability additionally requires the apex DNS record and tunnel
+# ingress rule in terraform/cloudflare (the wildcard does not match the apex).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal
+  template:
+    metadata:
+      labels:
+        app: portal
+    spec:
+      containers:
+        - name: portal
+          image: ghcr.io/batpepe/portal:bootstrap
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-svc
+  namespace: apps
+spec:
+  selector:
+    app: portal
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portal-ingress
+  namespace: apps
+spec:
+  rules:
+  - host: batpepe.online
+    http:
+      paths:
+      # Longest prefix wins in Traefik: /api goes to the backend, everything
+      # else to the portal. Keeps the status API same-origin with the hub.
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: nodejs-svc
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: portal-svc
+            port:
+              number: 80
