@@ -27,7 +27,7 @@
     "@tailwindcss/postcss": "^4.1.8",
     "@types/d3-selection": "^3.0.11",
     "@types/d3-zoom": "^3.0.8",
-    "@types/node": "^22.15.0",
+    "@types/node": "^26.1.1",
     "@types/pg": "^8.15.2",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
