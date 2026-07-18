@@ -17,21 +17,21 @@
     "d3-selection": "^3.0.0",
     "d3-zoom": "^3.0.0",
     "gsap": "^3.13.0",
-    "next": "^15.3.3",
-    "pg": "^8.16.0",
+    "next": "^15.5.20",
+    "pg": "^8.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "three": "^0.177.0"
+    "three": "^0.185.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/d3-selection": "^3.0.11",
     "@types/d3-zoom": "^3.0.8",
-    "@types/node": "^22.15.0",
+    "@types/node": "^22.20.1",
     "@types/pg": "^8.15.2",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "@types/three": "^0.177.0",
+    "@types/three": "^0.185.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3"
   }
