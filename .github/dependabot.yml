@@ -37,6 +37,10 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # Runtime majors are deliberate upgrades (LTS policy), not bot PRs.
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
     groups:
       docker-minor-patch:
         applies-to: version-updates
@@ -54,9 +58,19 @@ updates:
     directories:
       - /apps/nodejs-app
       - /apps/batman-museum
+      - /apps/nginx-app/site
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # TS 7 broke next's tsconfig-paths resolution (2026-07-18); framework
+      # majors get upgraded by hand with a real test pass.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-minor-patch:
         applies-to: version-updates
