@@ -57,6 +57,16 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 
+      - name: Smoke test the image
+        run: |
+          docker run -d --rm --name nodejs-smoke -p 8080:80 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          for _ in $(seq 1 15); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health || true)
+            if [ "$code" = "200" ]; then echo "health ok"; docker stop nodejs-smoke; exit 0; fi
+            sleep 2
+          done
+          echo "health check failed"; docker logs nodejs-smoke; docker stop nodejs-smoke; exit 1
+
       - name: Update K8s manifest
         run: |
           sed -i -E "s|image: ghcr.io/batpepe/nodejs-app:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" k8s-infrastructure/apps/nodejs/nodejs-app.yaml
