@@ -20,18 +20,21 @@ export async function GET(req: Request) {
   }
 
   const upstream = await fetch(url, {
+    // Never follow redirects. Inspecting upstream.url afterwards was too late:
+    // fetch had already issued the request to wherever the redirect pointed,
+    // which is the SSRF this allowlist exists to prevent. Wikimedia serves
+    // upload URLs directly, so a redirect is unexpected and fails closed.
+    redirect: "manual",
     headers: {
       "User-Agent":
         "batman-museum-homelab/0.1 (+https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud)"
     }
   });
+  if (upstream.status >= 300 && upstream.status < 400) {
+    return new Response("forbidden redirect", { status: 403 });
+  }
   if (!upstream.ok || !upstream.body) {
     return new Response("upstream error", { status: 502 });
-  }
-  // Defense-in-depth: fetch follows redirects, so make sure one did not lead
-  // off the allowlist before we stream the body back.
-  if (upstream.url && !ALLOWED_HOSTS.has(new URL(upstream.url).hostname)) {
-    return new Response("forbidden redirect", { status: 403 });
   }
   return new Response(upstream.body, {
     headers: {
