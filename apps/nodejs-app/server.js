@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { rateLimit } = require('express-rate-limit');
 const { Pool } = require('pg');
 
 const SERVICE_NAME = 'Node.js + PostgreSQL API';
@@ -68,6 +69,21 @@ async function checkSiblings() {
 const app = express();
 app.disable('x-powered-by');
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*', methods: ['GET'] }));
+
+// Every /api route touches Postgres, and /api/visit writes a row per call, so
+// an unthrottled client can inflate the counter and grow the table for free.
+// Public traffic arrives through the Cloudflare tunnel, which means the socket
+// address is always the in-cluster ingress; CF-Connecting-IP is set by the
+// edge and cannot be spoofed by the client. Fall back to the socket address
+// for in-cluster callers (probes, /api/status siblings), which are not public.
+const apiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 120,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req) => req.headers['cf-connecting-ip'] || req.ip
+});
+app.use('/api', apiLimiter);
 
 // Probe target: no database access, so liveness/readiness ticks stop
 // inflating the visit counter (the old catch-all server inserted a row
