@@ -68,7 +68,18 @@ async function checkSiblings() {
 
 const app = express();
 app.disable('x-powered-by');
-app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*', methods: ['GET'] }));
+// Traefik routes cv.batpepe.online/api to this service, so the CV frontend
+// calls /api/* on its own host and never needs CORS at all. The allowlist only
+// governs genuine cross-origin callers, where '*' let any site on the internet
+// read the API. Comma-separated ALLOWED_ORIGIN overrides it for local runs.
+const ALLOWED_ORIGINS = (
+    process.env.ALLOWED_ORIGIN ||
+    'https://cv.batpepe.online,https://museum.batpepe.online,https://game.batpepe.online'
+)
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+app.use(cors({ origin: ALLOWED_ORIGINS, methods: ['GET'] }));
 
 // Every /api route touches Postgres, and /api/visit writes a row per call, so
 // an unthrottled client can inflate the counter and grow the table for free.
