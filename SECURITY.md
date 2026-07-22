@@ -52,6 +52,17 @@ You will be credited in the commit / release notes unless you ask to remain anon
 - **Cluster access.** ArgoCD is exposed only via an internal `argocd.local` ingress; access requires being on the LAN (or via Pi-hole DNS).
 - **Container supply chain.** Images are built in GitHub Actions, pushed to GHCR, and scanned with Trivy, which fails the build on `CRITICAL` or `HIGH` CVEs before deployment. Images are not signed yet (cosign is on the checklist below); every third-party GitHub Action is pinned to a full commit SHA. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
 - **GitOps integrity.** ArgoCD reconciles with `prune: true` and `selfHeal: true`. Any out-of-band change to the cluster is reverted to the Git state.
+- **Application code.** CodeQL runs on every push to `main` (default setup: JavaScript/TypeScript, Python, Actions). Findings are triaged rather than accumulated; see below.
+
+## Code Scanning Triage
+Every open CodeQL alert is either fixed or dismissed with a written reason. State as of 2026-07-22:
+
+| Finding | Severity | Outcome |
+| --- | --- | --- |
+| `js/request-forgery` in the museum image proxy | Critical | **Fixed.** The host allowlist gated the initial URL, but `fetch` follows redirects by default, so a 302 off the allowlist was already requested before the destination was checked. Now `redirect: "manual"`; a 3xx fails closed with 403. |
+| `js/missing-rate-limiting` on three `/api` routes | High | **Fixed.** `express-rate-limit` at 120 req/min, keyed on `CF-Connecting-IP` (public traffic arrives through the tunnel, so the socket address is always the in-cluster ingress and the edge-set header cannot be spoofed by the client). |
+| `js/cors-permissive-configuration` | Medium | **Fixed.** The wildcard default is replaced by an explicit origin allowlist. Every real caller is same-origin, so nothing changed functionally. |
+| `js/stored-xss` in two site components | High | **Dismissed (false positive).** The tainted value is a markdown filename from `content/`, which is first-party and committed to this repo, rendered during `next build` into a static export. Producing the "attack" requires commit access, at which point XSS is not the interesting threat. Revisit if the site ever renders content it does not own. |
 
 ## Secrets Policy
 **No secret is ever committed to this repository.** The following objects are created manually with `kubectl create secret` and referenced by name from manifests; they are explicitly *not* managed by ArgoCD:
