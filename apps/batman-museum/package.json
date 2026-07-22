@@ -23,6 +23,9 @@
     "react-dom": "^19.1.0",
     "three": "^0.185.1"
   },
+  "overrides": {
+    "sharp": "^0.35.0"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/d3-selection": "^3.0.11",
