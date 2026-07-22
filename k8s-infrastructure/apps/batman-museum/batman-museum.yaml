@@ -16,7 +16,7 @@ spec:
       containers:
         - name: batman-museum
           # Bumped to an immutable commit SHA by ci-batman-museum.yml on each build.
-          image: ghcr.io/batpepe/batman-museum:265c80070860c5ed46be42cecc23dcce4afd1894
+          image: ghcr.io/batpepe/batman-museum:17355a04d087e17722fc0b2831dea6448b7334b7
           ports:
             - containerPort: 3000
           env:
