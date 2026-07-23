@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: ghcr.io/batpepe/nginx-app:1284f41d0c8282f99536aa5f5f04d8ac55946e8d
+          image: ghcr.io/batpepe/nginx-app:eaadf2cdc45fe5050dc5cb294bdbd2a2226ade47
           ports:
             - containerPort: 80
           resources:
