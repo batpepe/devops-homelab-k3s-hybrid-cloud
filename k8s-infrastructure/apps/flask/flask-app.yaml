@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: ghcr.io/batpepe/flask-app:aff654547c11c6f3fb76177b0c9a67b99312ea3d
+        image: ghcr.io/batpepe/flask-app:eaadf2cdc45fe5050dc5cb294bdbd2a2226ade47
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
