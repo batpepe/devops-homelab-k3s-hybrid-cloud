@@ -30,7 +30,7 @@ spec:
             hosts:
               - grafana.local
               - grafana.batpepe.online
-          
+
           # The chart's sidecar provisions its own default Prometheus
           # datasource; two defaults make Grafana refuse to start, so it is
           # disabled in favor of the explicit one below (dashboards pin its

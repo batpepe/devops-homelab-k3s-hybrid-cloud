@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
   labels:
     # ЦЯ ЛІБЛА ВАЖЛИВА: вона каже Прометеусу звернути увагу на цей файл
-    release: monitoring 
+    release: monitoring
 spec:
   groups:
     - name: custom.rules
