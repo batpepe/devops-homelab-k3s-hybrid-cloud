@@ -10,6 +10,16 @@ rules:
     # Ansible and GitHub workflows use yes/no and on: as keys.
     allowed-values: ["true", "false", "yes", "no"]
     check-keys: false
+  indentation:
+    # Kubernetes manifests write sequences both flush with the parent key and
+    # indented under it, often inside the same file (8 of them here). Both are
+    # valid YAML and render identical objects, so this is a house-style
+    # question the linter should not have an opinion on.
+    indent-sequences: whatever
+  brackets:
+    # `branches: [ "main" ]` is the spacing GitHub's own workflow docs use and
+    # every workflow here follows it consistently.
+    max-spaces-inside: 1
 
 ignore: |
   .terraform/

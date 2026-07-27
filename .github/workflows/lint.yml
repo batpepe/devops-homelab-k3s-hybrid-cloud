@@ -91,8 +91,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: yamllint
-        # Report-only while existing findings are triaged, like the other linters.
-        continue-on-error: true
+        # Enforcing since 2026-07-27: two real findings fixed, the rest were
+        # house style and are now settled in .yamllint.yml, so the tree is
+        # clean and a new finding gates.
         run: docker run --rm -v "$PWD":/data cytopia/yamllint:latest -c .yamllint.yml k8s-infrastructure ansible .github/workflows
 
   actionlint:
