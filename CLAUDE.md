@@ -19,6 +19,7 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 - k8s-infrastructure/apps/<svc>/*.yaml                   per-workload manifests
 - .github/workflows/ci-*.yml                             per-app build, scan, manifest bump
 - apps/<svc>/                                            source + Dockerfile
+- apps/portal/                                           apex hub at batpepe.online (static; apex needs its own DNS record, the wildcard misses it)
 - apps/batman-museum/README.md                           full-stack 3D museum (Next+R3F+Postgres), museum.batpepe.online
 - SECURITY.md                                            threat model, secrets policy
 - ROADMAP.md                                             prioritized DevOps backlog
