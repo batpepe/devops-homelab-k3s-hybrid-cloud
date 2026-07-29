@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 // Same-origin image proxy, restricted to Wikimedia uploads. Keeps the browser
 // away from cross-origin texture restrictions and never follows other hosts.
 const ALLOWED_HOSTS = new Set(["upload.wikimedia.org"]);
+const ALLOWED_PATH_PREFIX = "/wikipedia/";
 
 export async function GET(req: Request) {
   const raw = new URL(req.url).searchParams.get("url");
@@ -15,11 +16,19 @@ export async function GET(req: Request) {
   } catch {
     return new Response("bad url", { status: 400 });
   }
-  if (url.protocol !== "https:" || !ALLOWED_HOSTS.has(url.hostname)) {
+  const hostname = url.hostname.toLowerCase();
+  if (
+    url.protocol !== "https:" ||
+    !ALLOWED_HOSTS.has(hostname) ||
+    url.port !== "" ||
+    url.username !== "" ||
+    url.password !== "" ||
+    !url.pathname.startsWith(ALLOWED_PATH_PREFIX)
+  ) {
     return new Response("forbidden host", { status: 403 });
   }
 
-  const upstream = await fetch(url, {
+  const upstream = await fetch(url.toString(), {
     // Never follow redirects. Inspecting upstream.url afterwards was too late:
     // fetch had already issued the request to wherever the redirect pointed,
     // which is the SSRF this allowlist exists to prevent. Wikimedia serves
