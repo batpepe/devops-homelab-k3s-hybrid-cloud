@@ -24,7 +24,8 @@
     "three": "^0.185.1"
   },
   "overrides": {
-    "sharp": "^0.35.0"
+    "sharp": "^0.35.0",
+    "postcss": "^8.5.18"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
