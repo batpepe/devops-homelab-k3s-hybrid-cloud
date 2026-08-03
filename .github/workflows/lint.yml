@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
     paths:
       - 'apps/**/Dockerfile'
+      - 'apps/**/package-lock.json'
+      - 'apps/**/requirements.txt'
       - 'k8s-infrastructure/**'
       - 'terraform/**'
       - '.github/workflows/lint.yml'
@@ -83,6 +85,28 @@ jobs:
           scan-ref: 'terraform'
           format: 'table'
           exit-code: '1'
+
+  trivy-deps:
+    name: Dependency scan (trivy fs)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # The per-app Trivy steps scan the built image, which for these apps
+      # holds no node_modules at all (nginx ships a static export, the museum
+      # a Next standalone bundle). Build-time dependency CVEs were therefore
+      # invisible to CI and only Dependabot saw them - and Dependabot reports,
+      # it does not gate. This scans the lockfiles themselves.
+      - name: trivy fs (lockfiles)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          scanners: 'vuln'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
 
   yamllint:
     name: YAML lint (yamllint)

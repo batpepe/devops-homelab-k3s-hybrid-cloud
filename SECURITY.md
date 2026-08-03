@@ -51,6 +51,7 @@ You will be credited in the commit / release notes unless you ask to remain anon
 - **SSH to AWS.** The Terraform security group restricts port 22 to a single `/32` defined in `terraform.tfvars` (which is gitignored). HTTP is open to the world only on the cloud demo host.
 - **Cluster access.** ArgoCD is exposed only via an internal `argocd.local` ingress; access requires being on the LAN (or via Pi-hole DNS).
 - **Container supply chain.** Images are built in GitHub Actions, pushed to GHCR, and scanned with Trivy, which fails the build on `CRITICAL` or `HIGH` CVEs before deployment. Images are not signed yet (cosign is on the checklist below); every third-party GitHub Action is pinned to a full commit SHA. Image tags are immutable commit SHAs — `latest` is published but never referenced by manifests.
+- **Build-time dependencies.** An image scan only sees what ships. Two apps ship no `node_modules` at all (the CV site is a static export served by nginx, the museum a Next standalone bundle), so build-time CVEs never appeared in the image scan and only Dependabot saw them. A separate `trivy fs` job scans the lockfiles themselves and gates on `HIGH+`, so that class fails CI instead of waiting for a bot PR.
 - **GitOps integrity.** ArgoCD reconciles with `prune: true` and `selfHeal: true`. Any out-of-band change to the cluster is reverted to the Git state.
 - **Application code.** CodeQL runs on every push to `main` (default setup: JavaScript/TypeScript, Python, Actions). Findings are triaged rather than accumulated; see below.
 
