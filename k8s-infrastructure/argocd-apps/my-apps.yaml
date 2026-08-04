@@ -246,3 +246,25 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+# Cross-cutting Traefik middleware, not a workload. Owns the security response
+# headers every public Ingress references. Separate Application so the policy
+# has one home instead of a copy inside each app it applies to.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-security
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/batpepe/devops-homelab-k3s-hybrid-cloud'
+    targetRevision: HEAD
+    path: k8s-infrastructure/apps/platform-security
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

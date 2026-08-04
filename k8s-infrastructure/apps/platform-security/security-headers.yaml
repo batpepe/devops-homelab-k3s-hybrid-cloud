@@ -1,0 +1,70 @@
+# Shared security response headers for every public host.
+#
+# Fixes BUG-001 (no security headers on any of the four public hostnames).
+# Reported in batpepe/qa-engineering-lab, manual/bug-reports/BUG-001.
+#
+# Defined once and referenced by annotation from each public Ingress, rather
+# than configured per application. That choice is the actual fix: BUG-005 in the
+# same report is a control that WAS applied per application, got applied to
+# three services and missed on the fourth. One definition cannot drift from
+# itself.
+#
+# The middleware is namespaced. Ingresses reference it as
+#   traefik.ingress.kubernetes.io/router.middlewares: apps-security-headers@kubernetescrd
+# where the prefix is the namespace and the suffix is the provider.
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  namespace: apps
+spec:
+  headers:
+    # HSTS. 180 days is the floor for preload list eligibility. Only meaningful
+    # once plain HTTP redirects rather than serving content, which is BUG-002
+    # and is fixed at the Cloudflare edge in terraform/cloudflare/main.tf.
+    stsSeconds: 15552000
+    stsIncludeSubdomains: true
+    # Not preload: true. Submitting to the preload list is effectively
+    # irreversible and would commit every current and future subdomain of
+    # batpepe.online to HTTPS forever, including LAN-only names. Deliberate.
+    forceSTSHeader: true
+
+    # Stops a browser re-interpreting a response as a different content type
+    # than the one declared.
+    contentTypeNosniff: true
+
+    # Clickjacking. DENY rather than SAMEORIGIN: nothing here frames itself.
+    frameDeny: true
+
+    referrerPolicy: strict-origin-when-cross-origin
+
+    customResponseHeaders:
+      # Starting policy, permissive on purpose. The museum is Next.js with React
+      # Three Fiber and the CV is a Next.js static export; both need inline
+      # styles, and Next injects inline bootstrap scripts. Tightening this to
+      # nonces is a real piece of work and blocking on it would mean shipping no
+      # CSP at all, which is how sites end up with none for years.
+      #
+      # frame-ancestors is the part that carries weight today: it is the modern
+      # replacement for X-Frame-Options and, unlike it, cannot be overridden by
+      # a permissive ALLOW-FROM.
+      Content-Security-Policy: >-
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: blob:;
+        font-src 'self' data:;
+        connect-src 'self';
+        frame-ancestors 'none';
+        base-uri 'self';
+        form-action 'self'
+
+      # No camera, microphone or geolocation is used anywhere on the platform,
+      # so denying them costs nothing and removes the surface entirely.
+      Permissions-Policy: "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+      # Emptying a header removes it in Traefik. Belt and braces against a
+      # workload that reintroduces it: the museum did exactly that (BUG-005),
+      # and the application-level fix in next.config.mjs is the primary one.
+      X-Powered-By: ""

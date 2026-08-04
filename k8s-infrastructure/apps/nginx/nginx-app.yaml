@@ -60,6 +60,9 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   namespace: apps
+  annotations:
+    # Shared security headers, defined once in apps/platform-security.
+    traefik.ingress.kubernetes.io/router.middlewares: apps-security-headers@kubernetescrd
 spec:
   rules:
   - host: nginx.local
