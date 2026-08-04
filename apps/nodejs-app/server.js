@@ -179,6 +179,35 @@ app.get('/api/status', async (req, res) => {
     });
 });
 
+// Every path this service serves, with the methods it supports. Only the
+// non-2xx paths consult it, so it costs nothing on a normal request.
+const ROUTES = {
+    '/': ['GET'],
+    '/health': ['GET'],
+    '/favicon.ico': ['GET'],
+    '/api/visit': ['GET'],
+    '/api/stats': ['GET'],
+    '/api/status': ['GET']
+};
+
+// A known path reached with an unsupported method is 405, not 404. Without
+// this, Express falls through to the catch-all below and answers 404, which
+// asserts something false: that there is no resource at this URI. RFC 9110
+// 15.5.6 also requires the Allow header, so a client learns what it should
+// have sent instead of re-checking the URL it already had right (BUG-004).
+//
+// OPTIONS never reaches here. The cors() middleware above is mounted globally
+// and answers every OPTIONS request with 204 and Access-Control-Allow-Methods,
+// not only genuine preflights. Reordering to add Allow to that response would
+// risk working CORS for a cosmetic gain, so OPTIONS is left to cors().
+app.use((req, res, next) => {
+    const allowed = ROUTES[req.path];
+    if (!allowed) return next();
+
+    res.set('Allow', [...allowed, 'HEAD', 'OPTIONS'].join(', '));
+    return res.status(405).json({ error: 'Method not allowed' });
+});
+
 app.use((req, res) => {
     res.status(404).json({ error: 'Not found' });
 });
