@@ -8,7 +8,10 @@
   --color-bg2: #0b0b1e;
   --color-ink: #e8ecf8;
   --color-sub: #9aa5bd;
-  --color-faint: #5d6880;
+  /* 5.1:1 against --color-bg. The previous #5d6880 measured 3.62:1 and failed
+     WCAG 2.1 AA, which requires 4.5:1 below 18pt (BUG-006). Kept in step with
+     --faint in apps/portal/css/style.css: same token, two applications. */
+  --color-faint: #7d8aa6;
   --color-line: #232a44;
   --color-violet: #a78bfa;
   --color-blue: #60a5fa;

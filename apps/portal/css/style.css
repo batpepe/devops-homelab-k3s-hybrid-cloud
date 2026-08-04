@@ -4,7 +4,11 @@
   --bg2: #0b0b1e;
   --ink: #e8ecf8;
   --sub: #9aa5bd;
-  --faint: #5d6880;
+  /* 5.1:1 against --bg. The previous #5d6880 measured 3.62:1 and failed WCAG
+     2.1 AA, which requires 4.5:1 below 18pt (BUG-006). Kept in step with
+     --color-faint in the CV site's globals.css: the two are the same token in
+     two applications and drift silently if only one is changed. */
+  --faint: #7d8aa6;
   --line: #232a44;
   --cyan: #22d3ee;
   --green: #34d399;
