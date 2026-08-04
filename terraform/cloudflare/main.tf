@@ -89,6 +89,38 @@ resource "cloudflare_dns_record" "apex" {
   ttl     = 1
 }
 
+# Zone-level transport settings.
+#
+# Fixes BUG-002: port 80 was answering 200 with a body instead of redirecting,
+# so the first request after typing a bare hostname was served in clear text and
+# no browser showed a warning. Reported in batpepe/qa-engineering-lab,
+# manual/bug-reports/BUG-002.
+#
+# Managed here rather than clicked in the dashboard: the Cloudflare control
+# plane for this domain is already Terraform-owned, and a setting that exists
+# only in a UI is invisible to the repository that claims to be the single
+# source of truth.
+
+# Redirects every http:// request to https:// at the edge, before it reaches
+# the tunnel. This is also the precondition for the HSTS header set by the
+# Traefik middleware in k8s-infrastructure/apps/platform-security: HSTS only
+# takes effect after one successful HTTPS response, so without the redirect the
+# header can never be delivered to a first-time visitor.
+resource "cloudflare_zone_setting" "always_use_https" {
+  zone_id    = var.cloudflare_zone_id
+  setting_id = "always_use_https"
+  value      = "on"
+}
+
+# Rewrites http:// asset URLs in served HTML to https://. Complements the
+# redirect above: the redirect fixes the navigation request, this fixes
+# subresources that would otherwise be mixed content and get blocked.
+resource "cloudflare_zone_setting" "automatic_https_rewrites" {
+  zone_id    = var.cloudflare_zone_id
+  setting_id = "automatic_https_rewrites"
+  value      = "on"
+}
+
 output "tunnel_cname" {
   value       = local.tunnel_cname
   description = "CNAME target for any new public hostname (see tunnel_hosts)"
