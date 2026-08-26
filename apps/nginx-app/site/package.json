@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "next": "^15.5.22",
+    "next": "^15.5.23",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "remark": "^15.0.1",
