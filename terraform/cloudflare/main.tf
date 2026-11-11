@@ -27,6 +27,7 @@ locals {
   # in-cluster via Traefik Ingress rules (k8s-infrastructure/apps/*).
   tunnel_hosts = toset([
     "cv",
+    "findex",
     "game",
     "museum",
     # Imported only to retire it: nodejs has no auth and stays LAN-only.

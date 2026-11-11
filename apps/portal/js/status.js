@@ -17,7 +17,7 @@
         state.style.color = d.status === "ok" ? "var(--green)" : "var(--red)";
       }
       var services = d.services || {};
-      ["cv", "museum", "game"].forEach(function (name) {
+      ["cv", "museum", "game", "findex"].forEach(function (name) {
         if (services[name]) setDot("dot-" + name, services[name].ok);
       });
     })

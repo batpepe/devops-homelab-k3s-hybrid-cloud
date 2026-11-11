@@ -14,13 +14,14 @@ kube-prometheus-stack chart 58.2.2 | Cloudflare Tunnel | PostgreSQL 15
 - terraform/main.tf                                      single EC2 + SG
 - terraform/cloudflare/main.tf                           tunnel wildcard->Traefik + DNS allowlist
 - ansible/setup-server.yml                               Docker + nginx on EC2
-- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 13 apps
+- k8s-infrastructure/argocd-apps/my-apps.yaml            App-of-Apps root, 14 apps
 - k8s-infrastructure/argocd-apps/monitoring-stack.yaml   prometheus-stack Helm app
 - k8s-infrastructure/apps/<svc>/*.yaml                   per-workload manifests
 - .github/workflows/ci-*.yml                             per-app build, scan, manifest bump
 - apps/<svc>/                                            source + Dockerfile
 - apps/portal/                                           apex hub at batpepe.online (static; apex needs its own DNS record, the wildcard misses it)
 - apps/batman-museum/README.md                           full-stack 3D museum (Next+R3F+Postgres), museum.batpepe.online
+- k8s-infrastructure/apps/findex/                         findex search engine, image from batpepe/findex (GHCR), findex.batpepe.online
 - SECURITY.md                                            threat model, secrets policy
 - ROADMAP.md                                             prioritized DevOps backlog
 - docs/runbooks/                                         ops procedures (pod, tunnel, secrets, postgres)

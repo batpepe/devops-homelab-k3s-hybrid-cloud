@@ -1,0 +1,104 @@
+# findex: full-text + semantic search over the Python docs and PEPs (batpepe/findex).
+# Public at findex.batpepe.online through the Cloudflare Tunnel wildcard and Traefik;
+# the hostname is allowlisted in terraform/cloudflare (tunnel_hosts).
+# The image is built, Trivy-gated and pushed by batpepe/findex .github/workflows/image.yml;
+# the tag is that repo's commit SHA (immutable), bumped here by hand on a new release.
+# Everything the service needs (index, vectors, model) is baked into the image: no volumes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: findex
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: findex
+  template:
+    metadata:
+      labels:
+        app: findex
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: findex
+          image: ghcr.io/batpepe/findex:fc3d4991963b64875eb2f546127e4c960cfc5668
+          ports:
+            - containerPort: 8000
+          env:
+            # 12-factor config: the same image runs locally and here, only the environment differs
+            - name: LOG_JSON
+              value: "true"
+            - name: LOG_LEVEL
+              value: info
+            - name: SEARCH_CACHE_SIZE
+              value: "1024"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              cpu: 1000m
+              memory: 768Mi
+          # Readiness = /health: 503 until the index and the model are loaded, so no traffic
+          # reaches a pod that cannot answer. Liveness is only "the process accepts TCP": if the
+          # index failed to load, /health stays 503 by design, and restarting would not fix it.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: findex-svc
+  namespace: apps
+spec:
+  selector:
+    app: findex
+  ports:
+    - port: 80
+      targetPort: 8000
+---
+# Public host routed by the Cloudflare Tunnel wildcard through Traefik.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: findex-ingress
+  namespace: apps
+spec:
+  rules:
+    - host: findex.batpepe.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: findex-svc
+                port:
+                  number: 80

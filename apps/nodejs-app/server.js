@@ -41,7 +41,8 @@ const MIGRATIONS = [
 const SIBLINGS = {
     cv: process.env.CV_URL || 'http://nginx-svc/',
     museum: process.env.MUSEUM_URL || 'http://batman-museum-svc/api/health',
-    game: process.env.GAME_URL || 'http://batman-svc/'
+    game: process.env.GAME_URL || 'http://batman-svc/',
+    findex: process.env.FINDEX_URL || 'http://findex-svc/health'
 };
 const SIBLING_CACHE_MS = 10000;
 let siblingCache = { at: 0, data: null };

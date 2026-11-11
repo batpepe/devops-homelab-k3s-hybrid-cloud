@@ -21,6 +21,7 @@ A complete, production-style DevOps platform that combines a **local GitOps-mana
 - [cv.batpepe.online](https://cv.batpepe.online) - CV, case studies, engineering notes and a live platform status page
 - [game.batpepe.online](https://game.batpepe.online) — Batman browser game
 - [museum.batpepe.online](https://museum.batpepe.online) - Interactive 3D Batman museum (Next.js + R3F + Postgres)
+- [findex.batpepe.online](https://findex.batpepe.online) - Search engine over the Python docs and PEPs (FastAPI, BM25 + semantic), source in [batpepe/findex](https://github.com/batpepe/findex)
 
 ## 🏗️ Architecture
 
