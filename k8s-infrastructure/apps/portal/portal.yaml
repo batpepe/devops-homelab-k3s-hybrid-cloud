@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: portal
-          image: ghcr.io/batpepe/portal:b97991feee355cac8b511fe457c63aae69aba9c8
+          image: ghcr.io/batpepe/portal:d920f76eee1f0dbce5784127c232d1bb0452922e
           ports:
             - containerPort: 80
           resources:
