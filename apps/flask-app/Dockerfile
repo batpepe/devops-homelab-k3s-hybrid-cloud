@@ -1,5 +1,5 @@
 # using a lightweight version of Python
-FROM python:3.14-alpine
+FROM python:3.15-alpine
 
 # Pull in security updates for base packages
 RUN apk upgrade --no-cache
